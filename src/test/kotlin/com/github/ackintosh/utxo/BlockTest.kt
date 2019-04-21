@@ -1,5 +1,6 @@
 package com.github.ackintosh.utxo
 
+import com.github.ackintosh.utxo.transaction.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

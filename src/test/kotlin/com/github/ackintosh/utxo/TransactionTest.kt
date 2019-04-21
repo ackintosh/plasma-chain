@@ -1,5 +1,6 @@
 package com.github.ackintosh.utxo
 
+import com.github.ackintosh.utxo.transaction.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -8,8 +9,16 @@ class TransactionTest {
     fun inputCount() {
         val transaction = Transaction(
             inputs = listOf(
-                TransactionInput(TransactionHash("xxx"), OutputIndex(0u)),
-                TransactionInput(TransactionHash("yyy"), OutputIndex(1u))
+                TransactionInput(
+                    TransactionHash(
+                        "xxx"
+                    ), OutputIndex(0u)
+                ),
+                TransactionInput(
+                    TransactionHash(
+                        "yyy"
+                    ), OutputIndex(1u)
+                )
             ),
             outputs = emptyList()
         )
@@ -21,7 +30,10 @@ class TransactionTest {
     fun outputCount() {
         val transaction = Transaction(
             inputs = emptyList(),
-            outputs = listOf(TransactionOutput(100), TransactionOutput(200))
+            outputs = listOf(
+                TransactionOutput(100),
+                TransactionOutput(200)
+            )
         )
 
         assertEquals(2, transaction.outputCount())

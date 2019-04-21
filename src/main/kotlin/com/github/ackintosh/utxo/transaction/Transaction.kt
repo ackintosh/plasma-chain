@@ -1,4 +1,4 @@
-package com.github.ackintosh.utxo
+package com.github.ackintosh.utxo.transaction
 
 class Transaction(
     private val inputs: List<TransactionInput>,
