@@ -7,7 +7,10 @@ class TransactionTest {
     @Test
     fun inputCount() {
         val transaction = Transaction(
-            inputs = listOf(TransactionInput("xxx"), TransactionInput("yyy")),
+            inputs = listOf(
+                TransactionInput(TransactionHash("xxx")),
+                TransactionInput(TransactionHash("yyy"))
+            ),
             outputs = emptyList()
         )
 
