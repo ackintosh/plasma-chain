@@ -9,12 +9,12 @@ class TransactionTest {
     fun inputCount() {
         val transaction = Transaction(
             inputs = listOf(
-                TransactionInput(
+                Input(
                     Hash(
                         "xxx"
                     ), OutputIndex(0u)
                 ),
-                TransactionInput(
+                Input(
                     Hash(
                         "yyy"
                     ), OutputIndex(1u)
@@ -31,8 +31,8 @@ class TransactionTest {
         val transaction = Transaction(
             inputs = emptyList(),
             outputs = listOf(
-                TransactionOutput(100),
-                TransactionOutput(200)
+                Output(100),
+                Output(200)
             )
         )
 
