@@ -6,10 +6,13 @@ import org.junit.jupiter.api.Test
 class BlockTest {
     @Test
     fun transactionCounter() {
-        val block = Block(listOf(
-            Transaction(inputs = emptyList(), outputs = emptyList()),
-            Transaction(inputs = emptyList(), outputs = emptyList())
-        ))
+        val block = Block(
+            header = BlockHeader(PreviousBlockHash("xxx")),
+            transactions = listOf(
+                Transaction(inputs = emptyList(), outputs = emptyList()),
+                Transaction(inputs = emptyList(), outputs = emptyList())
+            )
+        )
 
         assertEquals(2, block.transactionCounter())
     }
