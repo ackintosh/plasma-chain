@@ -8,8 +8,8 @@ class TransactionTest {
     fun inputCount() {
         val transaction = Transaction(
             inputs = listOf(
-                TransactionInput(TransactionHash("xxx")),
-                TransactionInput(TransactionHash("yyy"))
+                TransactionInput(TransactionHash("xxx"), OutputIndex(0u)),
+                TransactionInput(TransactionHash("yyy"), OutputIndex(1u))
             ),
             outputs = emptyList()
         )
