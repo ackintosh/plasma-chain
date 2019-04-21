@@ -8,7 +8,7 @@ class GenerationTransactionTest {
     fun transactionHash() {
         assertEquals(
             Hash.GENERATION,
-            GenerationTransaction().transactionHash()
+            GenerationTransaction(CoinbaseData("x")).transactionHash()
         )
     }
 
@@ -16,7 +16,7 @@ class GenerationTransactionTest {
     fun outputIndex() {
         assertEquals(
             OutputIndex.GENERATION,
-            GenerationTransaction().outputIndex()
+            GenerationTransaction(CoinbaseData("x")).outputIndex()
         )
     }
 }
