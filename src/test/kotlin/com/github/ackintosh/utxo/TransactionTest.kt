@@ -10,12 +10,12 @@ class TransactionTest {
         val transaction = Transaction(
             inputs = listOf(
                 TransactionInput(
-                    TransactionHash(
+                    Hash(
                         "xxx"
                     ), OutputIndex(0u)
                 ),
                 TransactionInput(
-                    TransactionHash(
+                    Hash(
                         "yyy"
                     ), OutputIndex(1u)
                 )
