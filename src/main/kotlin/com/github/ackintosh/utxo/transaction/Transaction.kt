@@ -1,9 +1,23 @@
 package com.github.ackintosh.utxo.transaction
 
+import com.google.common.hash.Hashing
+import java.nio.charset.StandardCharsets
+
 class Transaction(
     private val inputs: List<Input>,
     private val outputs: List<Output>
 ) {
     fun inputCount() = inputs.count()
     fun outputCount() = outputs.count()
+
+    fun transactionHash() : Hash {
+        val inputs = inputs.map { it.toHexString() }.joinToString("")
+        val outputs = outputs.map { it.toHexString() }.joinToString("")
+        return Hash(
+            Hashing
+                .sha256()
+                .hashString("$inputs$outputs", StandardCharsets.UTF_8)
+                .toString()
+        )
+    }
 }
