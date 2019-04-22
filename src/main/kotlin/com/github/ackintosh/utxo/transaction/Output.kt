@@ -1,3 +1,5 @@
 package com.github.ackintosh.utxo.transaction
 
-data class Output(val amount: Int)
+class Output(val amount: Int) {
+    fun toHexString() = amount.toString(16).padStart(16, '0')
+}
