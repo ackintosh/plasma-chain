@@ -1,6 +1,6 @@
 package com.github.ackintosh.utxo.transaction
 
-data class Hash(private val hash: String) {
+data class Hash(val hash: String) {
     companion object {
         // TODO
         val GENERATION = Hash("0")

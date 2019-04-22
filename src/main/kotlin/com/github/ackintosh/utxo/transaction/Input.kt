@@ -1,6 +1,8 @@
 package com.github.ackintosh.utxo.transaction
 
-data class Input(
+class Input(
     val transactionHash: Hash,
     val outputIndex: OutputIndex
-)
+) {
+    fun toHexString() = "${transactionHash.hash}${outputIndex.toHexString()}"
+}
