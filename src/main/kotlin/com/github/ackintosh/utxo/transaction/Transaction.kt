@@ -13,11 +13,17 @@ class Transaction(
     fun transactionHash() : Hash {
         val inputs = inputs.map { it.toHexString() }.joinToString("")
         val outputs = outputs.map { it.toHexString() }.joinToString("")
-        return Hash(
-            Hashing
+
+        val sha256Encoded = Hashing
                 .sha256()
                 .hashString("$inputs$outputs", StandardCharsets.UTF_8)
-                .toString()
+
+        return Hash(sha256Encoded
+            .asBytes()
+            .reversed()
+            .map { String.format("%02X", it) }
+            .joinToString("")
+            .toLowerCase()
         )
     }
 }

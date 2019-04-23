@@ -59,8 +59,9 @@ class TransactionTest {
             )
         )
 
+        // a hash of "c6953f7acce538d848770075a0f847eccb7c5eaecf30e5696e63ef9ec3ecb8ac" with little-endian order.
         assertEquals(
-            Hash("c6953f7acce538d848770075a0f847eccb7c5eaecf30e5696e63ef9ec3ecb8ac"),
+            Hash("acb8ecc39eef636e69e530cfae5e7ccbec47f8a075007748d838e5cc7a3f95c6"),
             transaction.transactionHash()
         )
     }
