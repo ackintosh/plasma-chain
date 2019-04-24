@@ -11,10 +11,28 @@ class MerkleTree {
 
     companion object {
         fun build(hashes: List<Hash>) : Node {
-            // TODO: pad with zero-hash if number of the leaves is not a power of 2
-            val leaves = hashes.map { Leaf(it) }
+            val leaves = padWithZeroHash(hashes).map { Leaf(it) }
             return buildTree(leaves)
         }
+
+        private fun padWithZeroHash(hashes: List<Hash>) =
+            if (isPowerOfTwo(hashes.size)) {
+                hashes
+            } else {
+                var n = hashes.size
+                val padded = ArrayList<Hash>()
+                padded.addAll(hashes)
+                while (!isPowerOfTwo(n)) {
+                    padded.add(Hash.ZERO)
+                    n++
+                }
+                padded
+            }
+
+        // http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
+        // > 9. Decrement and Compare
+        private fun isPowerOfTwo(n: Int) =
+            n and (n - 1) == 0
 
         private fun buildTree(nodes: List<MerkleNode>) : Node =
             if (nodes.size == 1) {

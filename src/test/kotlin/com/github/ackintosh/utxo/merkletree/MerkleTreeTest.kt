@@ -32,5 +32,18 @@ class MerkleTreeTest {
                 rootNode.hash
             )
         }
+
+        @Test
+        fun paddingWithZeroHash() {
+            val rootNode = MerkleTree.build(listOf(
+                Hash("xxx"), Hash("yyy"),
+                Hash("aaa")
+            ))
+
+            assertEquals(
+                Hash("9519fa38c80d077015424640b82fbcab0cb81167f5aaac2e1ae85962acf9e534"),
+                rootNode.hash
+            )
+        }
     }
 }
