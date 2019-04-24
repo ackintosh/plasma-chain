@@ -16,13 +16,22 @@ class MerkleTree {
             return buildTree(leaves)
         }
 
-        private fun buildTree(nodes: List<MerkleNode>) =
+        private fun buildTree(nodes: List<MerkleNode>) : Node =
             if (nodes.size == 1) {
                 nodes.first() as Node
             } else {
-                val left = nodes[0]
-                val right = nodes[1]
-                Node(concatHash(left, right), left, right)
+                val n = nodes.size
+                val combined: MutableList<MerkleNode> = ArrayList()
+                for (i in 0..n - 2 step 2) {
+                    val left = nodes[i]
+                    val right = nodes[i + 1]
+                    combined.add(Node(
+                        hash = concatHash(left, right),
+                        left = left,
+                        right = right
+                    ))
+                }
+                buildTree(combined)
             }
 
         private fun concatHash(left: MerkleNode, right: MerkleNode) =
