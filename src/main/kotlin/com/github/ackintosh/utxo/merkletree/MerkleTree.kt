@@ -32,7 +32,7 @@ class MerkleTree {
         // http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
         // > 9. Decrement and Compare
         private fun isPowerOfTwo(n: Int) =
-            n and (n - 1) == 0
+            (n != 0) and (n and (n - 1) == 0)
 
         private fun buildTree(nodes: List<MerkleNode>) : Node =
             if (nodes.size == 1) {
