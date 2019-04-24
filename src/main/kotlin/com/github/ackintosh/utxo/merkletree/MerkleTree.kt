@@ -1,6 +1,8 @@
 package com.github.ackintosh.utxo.merkletree
 
 import com.github.ackintosh.utxo.transaction.Hash
+import com.google.common.hash.Hashing
+import java.nio.charset.StandardCharsets
 
 class MerkleTree {
     data class Leaf(override val hash: Hash) : MerkleNode
@@ -20,9 +22,19 @@ class MerkleTree {
             } else {
                 val left = nodes[0]
                 val right = nodes[1]
-                val hash = "${left.hash.hash}${right.hash.hash}"
-                Node(Hash(hash), left, right)
+                Node(concatHash(left, right), left, right)
             }
+
+        private fun concatHash(left: MerkleNode, right: MerkleNode) =
+            Hash(
+                Hashing
+                    .sha256()
+                    .hashString(
+                        "${left.hash.hash}${right.hash.hash}",
+                        StandardCharsets.UTF_8
+                    )
+                    .toString()
+            )
     }
 }
 
