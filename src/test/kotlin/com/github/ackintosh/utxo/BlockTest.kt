@@ -23,4 +23,22 @@ class BlockTest {
 
         assertEquals(2, block.transactionCounter())
     }
+
+    @Test
+    fun blockHash() {
+        val transactions = listOf(
+            Transaction(inputs = emptyList(), outputs = emptyList()),
+            Transaction(inputs = emptyList(), outputs = emptyList())
+        )
+
+        val block = Block(
+            header = BlockHeader(
+                previousBlockHash = PreviousBlockHash("xxx"),
+                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
+            ),
+            transactions = transactions
+        )
+
+        assertEquals("90c5ddbc0a88ea749b48e0c07ff66381abbaddce2f076bb1055112348135bb1a", block.blockHash())
+    }
 }
