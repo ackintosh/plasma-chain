@@ -1,2 +1,4 @@
-rootProject.name = 'utxo'
+//rootProject.name = 'plasmachain'
 
+//include("utxo", "web")
+include 'utxo'
