@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.github.ackintosh.plasmachain.proto";
+option java_outer_classname = "HelloWorldProto";
+
+package plasmachain;
+
+service TransactionService {
+  rpc Submit (Transaction) returns (Response) {}
+}
+
+message Transaction {
+  repeated Input inputs = 1;
+  repeated Output outputs = 2;
+}
+
+message Input {
+  string transactionHash = 1;
+  int32 outputIndex = 2;
+}
+
+message Output {
+  int32 amount = 1;
+}
+
+message Response {
+  string message = 1;
+}
