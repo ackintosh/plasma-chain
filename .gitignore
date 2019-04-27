@@ -19,4 +19,9 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 
+# ################################################################
+
+utxo/build
+utxo/out
+classes
 /out/
