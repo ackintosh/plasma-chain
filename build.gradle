@@ -18,6 +18,7 @@ buildscript {
 }
 
 plugins {
+    id 'idea'
     id 'java'
     id "org.jetbrains.kotlin.plugin.spring" version '1.3.31' apply false
     id 'org.jetbrains.kotlin.jvm' version '1.3.31' apply false
@@ -68,6 +69,7 @@ project(':utxo') {
 }
 
 project(':web') {
+    apply plugin: 'idea'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.kotlin.plugin.spring'
@@ -79,6 +81,10 @@ project(':web') {
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
         implementation project(':utxo')
+        // gRPC
+        implementation 'io.grpc:grpc-netty-shaded:1.20.0'
+        implementation 'io.grpc:grpc-protobuf:1.20.0'
+        implementation 'io.grpc:grpc-stub:1.20.0'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
@@ -86,11 +92,13 @@ project(':web') {
         protoc {
             artifact = "com.google.protobuf:protoc:$protoc_version"
         }
-
         plugins {
             grpc {
                 artifact = "io.grpc:protoc-gen-grpc-java:$grpc_java_version"
             }
+        }
+        generateProtoTasks {
+            all()*.plugins { grpc {} }
         }
     }
 }
