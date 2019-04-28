@@ -2,12 +2,10 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "com.github.ackintosh.plasmachain.web.proto";
-option java_outer_classname = "HelloWorldProto";
+option java_outer_classname = "PlasmaChainProto";
 
-package plasmachain;
-
-service TransactionService {
-  rpc Submit (Transaction) returns (Response) {}
+service PlasmaChain {
+  rpc SubmitTransaction (Transaction) returns (Response) {}
 }
 
 message Transaction {
