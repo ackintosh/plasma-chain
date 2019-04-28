@@ -4,7 +4,7 @@ buildscript {
     ext.guava_version = '27.1-jre'
     ext.springboot_version = '2.1.4.RELEASE'
     ext.protoc_version = '3.7.1'
-    ext.grpc_java_version = '1.20.0'
+    ext.grpc_version = '1.20.0'
 
     repositories {
         mavenCentral()
@@ -77,16 +77,18 @@ project(':web') {
     apply plugin: 'com.google.protobuf'
 
     dependencies {
+        implementation project(':utxo')
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-        implementation project(':utxo')
+
         // gRPC
-        implementation 'io.grpc:grpc-netty-shaded:1.20.0'
-        implementation 'io.grpc:grpc-protobuf:1.20.0'
-        implementation 'io.grpc:grpc-stub:1.20.0'
+        implementation "io.grpc:grpc-netty-shaded:$grpc_version"
+        implementation "io.grpc:grpc-protobuf:$grpc_version"
+        implementation "io.grpc:grpc-stub:$grpc_version"
         implementation "io.github.lognet:grpc-spring-boot-starter:3.2.1"
 
+        // testing
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
@@ -96,7 +98,7 @@ project(':web') {
         }
         plugins {
             grpc {
-                artifact = "io.grpc:protoc-gen-grpc-java:$grpc_java_version"
+                artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
             }
         }
         generateProtoTasks {
