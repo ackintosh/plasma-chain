@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.logging.Logger
 
 @SpringBootApplication
 class WebApplication
@@ -21,8 +22,13 @@ class Index {
 
 @GRpcService
 class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
-    override fun submitTransaction(request: Transaction?, responseObserver: StreamObserver<Response>?) {
+    override fun submitTransaction(request: Transaction, responseObserver: StreamObserver<Response>?) {
+        logger.info(request.toString())
         super.submitTransaction(request, responseObserver)
+    }
+
+    companion object {
+        private val logger = Logger.getLogger(PlasmaChainGRpcService::class.java.name)
     }
 }
 
