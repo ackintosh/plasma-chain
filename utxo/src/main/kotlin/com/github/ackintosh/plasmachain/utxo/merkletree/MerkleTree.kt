@@ -19,17 +19,19 @@ class MerkleTree {
         }
 
         private fun padWithZeroHash(hashes: List<Hash>) =
-            if (isPowerOfTwo(hashes.size)) {
-                hashes
-            } else {
-                var n = hashes.size
-                val padded = ArrayList<Hash>()
-                padded.addAll(hashes)
-                while (!isPowerOfTwo(n)) {
-                    padded.add(Hash.ZERO)
-                    n++
+            when {
+                hashes.size == 1 -> listOf(hashes.first(), Hash.ZERO)
+                isPowerOfTwo(hashes.size) -> hashes
+                else -> {
+                    var n = hashes.size
+                    val padded = ArrayList<Hash>()
+                    padded.addAll(hashes)
+                    while (!isPowerOfTwo(n)) {
+                        padded.add(Hash.ZERO)
+                        n++
+                    }
+                    padded
                 }
-                padded
             }
 
         // http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
