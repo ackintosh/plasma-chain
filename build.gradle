@@ -64,6 +64,8 @@ project(':utxo') {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         implementation "com.google.guava:guava:$guava_version"
+        implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+        implementation 'org.bitcoinj:bitcoinj-core:0.15'
         testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     }
 }
