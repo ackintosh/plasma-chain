@@ -19,7 +19,9 @@ class MerkleTree {
         }
 
         private fun padWithZeroHash(hashes: List<Hash>) =
-            if (isPowerOfTwo(hashes.size)) {
+            if (hashes.size == 1) {
+                listOf(hashes.first(), Hash.ZERO)
+            } else if (isPowerOfTwo(hashes.size)) {
                 hashes
             } else {
                 var n = hashes.size

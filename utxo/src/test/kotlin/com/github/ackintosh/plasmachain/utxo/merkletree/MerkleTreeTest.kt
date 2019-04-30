@@ -9,6 +9,15 @@ class MerkleTreeTest {
     @Nested
     inner class `build()` {
         @Test
+        fun singleHash() {
+            val rootNode = MerkleTree.build(listOf(Hash("xxx")))
+            assertEquals(
+                Hash("29cc108c95c365c77fc086d68387762181c1ef7d378ebb670c598b007263a555"),
+                rootNode.hash
+            )
+        }
+
+        @Test
         fun onlyTwoHashes() {
             val rootNode = MerkleTree.build(
                 listOf(
