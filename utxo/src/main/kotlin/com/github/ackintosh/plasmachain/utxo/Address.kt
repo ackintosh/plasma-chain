@@ -41,24 +41,26 @@ class Address(val value: String) {
                 "04$x$y"
             }
 
+            // SHA-256
             val s1 = Hashing.sha256().hashString(publicKeyString, StandardCharsets.UTF_8)
-
+            // RIPEMD-160
             Security.addProvider(BouncyCastleProvider())
             val rmd = MessageDigest.getInstance("RipeMD160", BouncyCastleProvider.PROVIDER_NAME)
             val r1 = rmd.digest(s1.asBytes())
 
+            // 0 + 20-bytes-public-key-hash
             val r2 = ByteArray(r1.size + 1)
             r2[0] = 0
             for ((i, b) in r1.withIndex()) {
                 r2[i + 1] = b
             }
 
-
+            // checksum (4bytes)
             val s2 = Hashing.sha256().hashString(s1.toString(), StandardCharsets.UTF_8)
             val s3 = Hashing.sha256().hashString(s2.toString(), StandardCharsets.UTF_8)
-
             val checksum = s3.asBytes().copyOfRange(0, 4)
 
+            // encode the 25-byte address using base58
             return Address(Base58.encode(r2 + checksum))
         }
 
