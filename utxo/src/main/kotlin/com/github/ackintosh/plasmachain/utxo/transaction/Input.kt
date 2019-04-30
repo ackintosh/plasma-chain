@@ -18,3 +18,13 @@ class Input(
 
     override fun toHexString() = "${transactionHash.hash}${outputIndex.toHexString()}"
 }
+
+class GenerationInput(
+    private val coinbaseData: CoinbaseData
+) : TransactionInput() {
+    override fun transactionHash() = Hash.GENERATION
+
+    override fun outputIndex()= OutputIndex.GENERATION
+
+    override fun toHexString() = "${Hash.GENERATION}${OutputIndex.GENERATION.toHexString()}"
+}
