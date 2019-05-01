@@ -67,7 +67,7 @@ class MerkleTree {
                 Hashing
                     .sha256()
                     .hashString(
-                        "${left.hash.hash}${right.hash.hash}",
+                        "${left.hash.value}${right.hash.value}",
                         StandardCharsets.UTF_8
                     )
                     .toString()
