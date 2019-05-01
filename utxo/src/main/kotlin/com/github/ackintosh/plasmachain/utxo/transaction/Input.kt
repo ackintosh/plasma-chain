@@ -16,7 +16,7 @@ class Input(
 
     override fun outputIndex() = outputIndex
 
-    override fun toHexString() = "${transactionHash.hash}${outputIndex.toHexString()}"
+    override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
 }
 
 class GenerationInput(
