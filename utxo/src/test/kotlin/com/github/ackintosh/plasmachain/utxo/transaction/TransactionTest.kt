@@ -1,9 +1,12 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import com.github.ackintosh.plasmachain.utxo.Address
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class TransactionTest {
+    val address = Address.from(Address.generateKeyPair())
+
     @Test
     fun inputCount() {
         val transaction = Transaction(
@@ -30,8 +33,8 @@ class TransactionTest {
         val transaction = Transaction(
             inputs = emptyList(),
             outputs = listOf(
-                Output(100),
-                Output(200)
+                Output(100, address),
+                Output(200, address)
             )
         )
 
@@ -54,8 +57,8 @@ class TransactionTest {
                 )
             ),
             outputs = listOf(
-                Output(100),
-                Output(200)
+                Output(100, address),
+                Output(200, address)
             )
         )
 
