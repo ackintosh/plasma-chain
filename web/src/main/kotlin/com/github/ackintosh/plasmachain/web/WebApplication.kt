@@ -1,13 +1,5 @@
 package com.github.ackintosh.plasmachain.web
 
-import com.github.ackintosh.plasmachain.utxo.Address
-import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.Hash
-import com.github.ackintosh.plasmachain.utxo.block.Header
-import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
-import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
-import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
-import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.web.proto.PlasmaChainGrpc
 import com.github.ackintosh.plasmachain.web.proto.Response
 import com.github.ackintosh.plasmachain.web.proto.Transaction
