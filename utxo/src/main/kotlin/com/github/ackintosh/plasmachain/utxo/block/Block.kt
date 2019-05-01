@@ -10,7 +10,7 @@ class Block(
 ) {
     fun transactionCounter() = transactions.count()
 
-    fun blockHash() =
+    fun blockHash() = Hash(
         Hashing.sha256()
             .hashString(
                 Hashing.sha256()
@@ -19,4 +19,5 @@ class Block(
                 StandardCharsets.UTF_8
             )
             .toString()
+    )
 }
