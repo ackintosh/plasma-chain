@@ -15,7 +15,7 @@ class BlockTest {
 
         val block = Block(
             header = Header(
-                previousBlockHash = PreviousBlockHash("xxx"),
+                previousBlockHash = Hash("xxx"),
                 merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
             ),
             transactions = transactions
@@ -33,12 +33,12 @@ class BlockTest {
 
         val block = Block(
             header = Header(
-                previousBlockHash = PreviousBlockHash("xxx"),
+                previousBlockHash = Hash("xxx"),
                 merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
             ),
             transactions = transactions
         )
 
-        assertEquals("90c5ddbc0a88ea749b48e0c07ff66381abbaddce2f076bb1055112348135bb1a", block.blockHash().value)
+        assertEquals("25f2632f62d243fdbd1835601642521ddccb556a90ac12faf330b0a2268d42d5", block.blockHash().value)
     }
 }
