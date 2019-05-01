@@ -40,29 +40,6 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
     }
 }
 
-class Chain {
-    companion object {
-        private val ALICE = Address.from(Address.generateKeyPair())
-
-        private val GENESIS_BLOCK = {
-            val transactions = listOf(com.github.ackintosh.plasmachain.utxo.transaction.Transaction(
-                inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-                outputs = listOf(Output(100, ALICE))
-            ))
-
-            Block(
-                header = Header(
-                    previousBlockHash = Hash.zero(),
-                    merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
-                ),
-                transactions = transactions
-            )
-        }.invoke()
-
-        val CHAIN = listOf(GENESIS_BLOCK)
-    }
-}
-
 fun main(args: Array<String>) {
     runApplication<WebApplication>(*args)
 }
