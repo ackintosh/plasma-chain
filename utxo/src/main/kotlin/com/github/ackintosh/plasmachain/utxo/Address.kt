@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo
 
+import com.github.ackintosh.plasmachain.utxo.transaction.PublicKey
 import com.google.common.hash.Hashing
 import org.bitcoinj.core.Base58
 import org.bouncycastle.jce.provider.BouncyCastleProvider
@@ -36,12 +37,7 @@ class Address(val value: String) {
             // Address.generateFrom(keyPair)
 
             val publicKey = keyPair.public as ECPublicKey
-            val publicKeyString = publicKey.let {
-                val point = it.w
-                val x = adjustTo64(point.affineX.toString(16).toUpperCase())
-                val y = adjustTo64(point.affineY.toString(16).toUpperCase())
-                "04$x$y"
-            }
+            val publicKeyString = PublicKey.toString(publicKey)
 
             // SHA-256
             val s1 = Hashing.sha256().hashString(publicKeyString, StandardCharsets.UTF_8)
