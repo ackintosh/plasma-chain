@@ -6,6 +6,7 @@ interface TransactionInterface {
     fun transactionHash() : Hash
     fun outputIndex() : OutputIndex
     fun toHexString() : String
+    fun unlockingScript() : String
 }
 
 class Input(
@@ -17,6 +18,10 @@ class Input(
     override fun outputIndex() = outputIndex
 
     override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
+
+    override fun unlockingScript(): String {
+        TODO("not implemented")
+    }
 }
 
 class GenerationInput(
@@ -27,4 +32,8 @@ class GenerationInput(
     override fun outputIndex()= OutputIndex.GENERATION
 
     override fun toHexString() = "${Hash.GENERATION}${OutputIndex.GENERATION.toHexString()}"
+
+    override fun unlockingScript(): String {
+        TODO("not implemented")
+    }
 }
