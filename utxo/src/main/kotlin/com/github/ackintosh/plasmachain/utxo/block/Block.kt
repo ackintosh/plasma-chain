@@ -1,4 +1,4 @@
-package com.github.ackintosh.plasmachain.utxo
+package com.github.ackintosh.plasmachain.utxo.block
 
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.google.common.hash.Hashing
