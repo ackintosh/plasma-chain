@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.web
 
+import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Block
 import com.github.ackintosh.plasmachain.utxo.BlockHeader
 import com.github.ackintosh.plasmachain.utxo.PreviousBlockHash
@@ -41,10 +42,12 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 
 class Chain {
     companion object {
+        private val ALICE = Address.from(Address.generateKeyPair())
+
         private val GENESIS_BLOCK = {
             val transactions = listOf(com.github.ackintosh.plasmachain.utxo.transaction.Transaction(
                 inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-                outputs = listOf(Output(100))
+                outputs = listOf(Output(100, ALICE))
             ))
 
             Block(
