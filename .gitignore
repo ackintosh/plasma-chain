@@ -23,5 +23,8 @@ gradle-app.setting
 
 utxo/build
 utxo/out
+
+web/build
+
 classes
 /out/
