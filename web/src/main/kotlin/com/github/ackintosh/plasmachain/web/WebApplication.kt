@@ -2,7 +2,7 @@ package com.github.ackintosh.plasmachain.web
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.BlockHeader
+import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.block.PreviousBlockHash
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -51,7 +51,7 @@ class Chain {
             ))
 
             Block(
-                header = BlockHeader(
+                header = Header(
                     previousBlockHash = PreviousBlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),

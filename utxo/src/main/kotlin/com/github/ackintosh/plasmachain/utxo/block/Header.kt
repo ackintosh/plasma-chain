@@ -2,7 +2,7 @@ package com.github.ackintosh.plasmachain.utxo.block
 
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 
-class BlockHeader(
+class Header(
     val previousBlockHash: PreviousBlockHash,
     val merkleRoot: MerkleTree.Node
 )
