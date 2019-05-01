@@ -65,4 +65,12 @@ class TransactionTest {
             transaction.transactionHash()
         )
     }
+
+    @Test
+    fun generationTransaction() {
+        val transaction = Transaction(
+            inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
+            outputs = emptyList()
+        )
+    }
 }
