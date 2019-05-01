@@ -1,13 +1,5 @@
 package com.github.ackintosh.plasmachain.web
 
-import com.github.ackintosh.plasmachain.utxo.Address
-import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.Hash
-import com.github.ackintosh.plasmachain.utxo.block.Header
-import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
-import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
-import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
-import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.web.proto.PlasmaChainGrpc
 import com.github.ackintosh.plasmachain.web.proto.Response
 import com.github.ackintosh.plasmachain.web.proto.Transaction
@@ -37,29 +29,6 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 
     companion object {
         private val logger = Logger.getLogger(PlasmaChainGRpcService::class.java.name)
-    }
-}
-
-class Chain {
-    companion object {
-        private val ALICE = Address.from(Address.generateKeyPair())
-
-        private val GENESIS_BLOCK = {
-            val transactions = listOf(com.github.ackintosh.plasmachain.utxo.transaction.Transaction(
-                inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-                outputs = listOf(Output(100, ALICE))
-            ))
-
-            Block(
-                header = Header(
-                    previousBlockHash = Hash.zero(),
-                    merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
-                ),
-                transactions = transactions
-            )
-        }.invoke()
-
-        val CHAIN = listOf(GENESIS_BLOCK)
     }
 }
 
