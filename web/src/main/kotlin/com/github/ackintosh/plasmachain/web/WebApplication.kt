@@ -52,7 +52,7 @@ class Chain {
 
             Block(
                 header = BlockHeader(
-                    previousBlockHash = PreviousBlockHash("0"),
+                    previousBlockHash = PreviousBlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),
                 transactions = transactions
