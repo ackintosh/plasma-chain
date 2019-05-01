@@ -1,5 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import java.security.interfaces.ECPublicKey
+
 sealed class TransactionInput : TransactionInterface
 
 interface TransactionInterface {
@@ -11,7 +13,9 @@ interface TransactionInterface {
 
 class Input(
     private val transactionHash: Hash,
-    private val outputIndex: OutputIndex
+    private val outputIndex: OutputIndex,
+    private val signature: String, // TODO: investigate how create the signature
+    private val publicKey: ECPublicKey
 ) : TransactionInput() {
     override fun transactionHash() = transactionHash
 
@@ -19,9 +23,7 @@ class Input(
 
     override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
 
-    override fun unlockingScript(): String {
-        TODO("not implemented")
-    }
+    override fun unlockingScript() = "$signature${PublicKey.toString(publicKey)}"
 }
 
 class GenerationInput(
