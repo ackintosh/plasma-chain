@@ -3,12 +3,12 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class GenerationTransactionTest {
+class GenerationInputTest {
     @Test
     fun transactionHash() {
         assertEquals(
             Hash.GENERATION,
-            GenerationTransaction(
+            GenerationInput(
                 CoinbaseData(
                     "x"
                 )
@@ -20,7 +20,7 @@ class GenerationTransactionTest {
     fun outputIndex() {
         assertEquals(
             OutputIndex.GENERATION,
-            GenerationTransaction(
+            GenerationInput(
                 CoinbaseData(
                     "x"
                 )

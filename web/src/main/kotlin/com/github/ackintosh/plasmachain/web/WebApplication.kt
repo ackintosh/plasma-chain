@@ -1,9 +1,12 @@
 package com.github.ackintosh.plasmachain.web
 
+import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Block
 import com.github.ackintosh.plasmachain.utxo.BlockHeader
 import com.github.ackintosh.plasmachain.utxo.PreviousBlockHash
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
+import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
+import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.web.proto.PlasmaChainGrpc
 import com.github.ackintosh.plasmachain.web.proto.Response
@@ -39,15 +42,17 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 
 class Chain {
     companion object {
+        private val ALICE = Address.from(Address.generateKeyPair())
+
         private val GENESIS_BLOCK = {
             val transactions = listOf(com.github.ackintosh.plasmachain.utxo.transaction.Transaction(
-                inputs = listOf(),
-                outputs = listOf(Output(100))
+                inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
+                outputs = listOf(Output(100, ALICE))
             ))
 
             Block(
                 header = BlockHeader(
-                    previousBlockHash = PreviousBlockHash("0"),
+                    previousBlockHash = PreviousBlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),
                 transactions = transactions
