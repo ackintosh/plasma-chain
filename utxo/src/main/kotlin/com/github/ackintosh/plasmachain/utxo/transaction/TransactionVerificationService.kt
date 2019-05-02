@@ -33,7 +33,7 @@ class TransactionVerificationService {
                     "OP_EQUALVERIFY" -> {
                         val elem1 = stack.pop()
                         val elem2 = stack.pop()
-                        // TODO: return failure result if the elements are not equal
+                        if (elem1 != elem2) return Result.Failure()
                     }
                     "OP_CHECKSIG" -> {
                         val publicKeyString = stack.pop()

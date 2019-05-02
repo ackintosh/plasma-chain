@@ -38,4 +38,36 @@ class TransactionVerificationServiceTest {
 
         Assertions.assertTrue(result is TransactionVerificationService.Result.Success)
     }
+
+    @Test
+    fun verifyTransactionScriptReturnsFailureResult() {
+        val keyPair = Address.generateKeyPair()
+        val address = Address.from(keyPair)
+
+        val output = Output(
+            amount = 100,
+            address = address
+        )
+
+        val transactionHash = Hash("xxx")
+        val outputIndex = OutputIndex(10u)
+        val otherKeyPair = Address.generateKeyPair()
+        val input = Input(
+            transactionHash = transactionHash,
+            outputIndex = outputIndex,
+            signature = SignatureService.create(
+                otherKeyPair.private as ECPrivateKey,
+                transactionHash,
+                outputIndex
+            ),
+            publicKey = otherKeyPair.public as ECPublicKey
+        )
+
+        val result = TransactionVerificationService.verifyTransactionScript(
+            input = input,
+            utxo = output
+        )
+
+        Assertions.assertTrue(result is TransactionVerificationService.Result.Failure)
+    }
 }
