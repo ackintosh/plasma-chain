@@ -1,6 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
+import com.github.ackintosh.plasmachain.utxo.SignatureService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.security.interfaces.ECPrivateKey
@@ -16,7 +17,7 @@ class TransactionTest {
         Input(
             transactionHash = transactionHash,
             outputIndex = outputIndex,
-            signature = Signature.create(
+            signature = SignatureService.create(
                 keyPair.private as ECPrivateKey,
                 transactionHash,
                 outputIndex
@@ -31,7 +32,7 @@ class TransactionTest {
         Input(
             transactionHash = transactionHash,
             outputIndex = outputIndex,
-            signature = Signature.create(
+            signature = SignatureService.create(
                 keyPair.private as ECPrivateKey,
                 transactionHash,
                 outputIndex
