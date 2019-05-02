@@ -9,7 +9,7 @@ import java.util.*
 
 class TransactionVerificationService {
     companion object {
-        fun verifyInput(input: TransactionInput, utxo: Output) : Result {
+        fun verifyTransactionScript(input: TransactionInput, utxo: Output) : Result {
             val stack = ArrayDeque<String>()
 
             val unlockingScript = input.unlockingScript()

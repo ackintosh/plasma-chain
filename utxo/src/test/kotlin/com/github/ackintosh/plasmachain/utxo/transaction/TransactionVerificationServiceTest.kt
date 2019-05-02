@@ -9,7 +9,7 @@ import java.security.interfaces.ECPublicKey
 
 class TransactionVerificationServiceTest {
     @Test
-    fun verifyInput() {
+    fun verifyTransactionScript() {
         val keyPair = Address.generateKeyPair()
         val address = Address.from(keyPair)
 
@@ -31,7 +31,7 @@ class TransactionVerificationServiceTest {
             publicKey = keyPair.public as ECPublicKey
         )
 
-        val result = TransactionVerificationService.verifyInput(
+        val result = TransactionVerificationService.verifyTransactionScript(
             input = input,
             utxo = output
         )
