@@ -46,7 +46,7 @@ class InputTest {
         )
 
         Assertions.assertTrue(
-            input.unlockingScript().matches("\\A[0-9A-Z]+\\s[0-9A-Z]+\\Z".toRegex())
+            input.unlockingScript().matches("\\A.+\\s[0-9A-Z]+\\Z".toRegex())
         )
     }
 }

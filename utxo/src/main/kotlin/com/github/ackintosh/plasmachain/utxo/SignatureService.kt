@@ -3,6 +3,7 @@ package com.github.ackintosh.plasmachain.utxo
 import com.github.ackintosh.plasmachain.utxo.transaction.Hash
 import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Signature
+import org.bouncycastle.util.encoders.Base64
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
@@ -19,7 +20,7 @@ class SignatureService {
             instance.update(d.toByteArray())
 
             return Signature(
-                instance.sign().map { String.format("%02X", it) }.joinToString("")
+                Base64.toBase64String(instance.sign())
             )
         }
 
