@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.google.common.hash.Hashing
 import org.bouncycastle.jce.provider.BouncyCastleProvider
@@ -44,7 +45,7 @@ class TransactionVerificationService {
                         val signature = Base64.decode(signatureString)
                         val instance = Signature.getInstance("NONEwithECDSA")
 
-                        val publicKeyByteArray = publicKeyString.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+                        val publicKeyByteArray = publicKeyString.hexStringToByteArray()
                         val publicKeySpec = X509EncodedKeySpec(publicKeyByteArray)
                         val keyfactory = KeyFactory.getInstance("EC")
                         val publicKey = keyfactory.generatePublic(publicKeySpec)
