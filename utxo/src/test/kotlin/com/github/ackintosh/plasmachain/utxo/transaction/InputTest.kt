@@ -28,4 +28,24 @@ class InputTest {
             ).toHexString()
         )
     }
+
+    @Test
+    fun unlockingScript() {
+        val transactionHash = Hash("xxx")
+        val outputIndex = OutputIndex(10u)
+        val input = Input(
+            transactionHash = transactionHash,
+            outputIndex = outputIndex,
+            signature = Signature.create(
+                keyPair.private as ECPrivateKey,
+                transactionHash,
+                outputIndex
+            ),
+            publicKey = keyPair.public as ECPublicKey
+        )
+
+        Assertions.assertTrue(
+            input.unlockingScript().matches("\\A[0-9A-Z]+\\s[0-9A-Z]+\\Z".toRegex())
+        )
+    }
 }

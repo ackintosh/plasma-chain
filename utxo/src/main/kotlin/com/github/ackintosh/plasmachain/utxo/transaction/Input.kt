@@ -23,7 +23,7 @@ class Input(
 
     override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
 
-    override fun unlockingScript() = "${signature.value}${PublicKey.toString(publicKey)}"
+    override fun unlockingScript() = "${signature.value} ${PublicKey.toString(publicKey)}"
 }
 
 class GenerationInput(
