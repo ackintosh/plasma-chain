@@ -3,29 +3,47 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 import com.github.ackintosh.plasmachain.utxo.Address
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
 class TransactionTest {
     private val keyPair = Address.generateKeyPair()
     private val address = Address.from(keyPair)
 
+    private val inputX = {
+        val transactionHash = Hash("xxx")
+        val outputIndex = OutputIndex(0u)
+        Input(
+            transactionHash = transactionHash,
+            outputIndex = outputIndex,
+            signature = Signature.create(
+                keyPair.private as ECPrivateKey,
+                transactionHash,
+                outputIndex
+            ),
+            publicKey = keyPair.public as ECPublicKey
+        )
+    }.invoke()
+
+    private val inputY = {
+        val transactionHash = Hash("yyy")
+        val outputIndex = OutputIndex(1u)
+        Input(
+            transactionHash = transactionHash,
+            outputIndex = outputIndex,
+            signature = Signature.create(
+                keyPair.private as ECPrivateKey,
+                transactionHash,
+                outputIndex
+            ),
+            publicKey = keyPair.public as ECPublicKey
+        )
+    }.invoke()
+
     @Test
     fun inputCount() {
         val transaction = Transaction(
-            inputs = listOf(
-                Input(
-                    transactionHash = Hash("xxx"),
-                    outputIndex = OutputIndex(0u),
-                    signature = "x",
-                    publicKey = keyPair.public as ECPublicKey
-                ),
-                Input(
-                    transactionHash = Hash("yyy"),
-                    outputIndex = OutputIndex(0u),
-                    signature = "x",
-                    publicKey = keyPair.public as ECPublicKey
-                )
-            ),
+            inputs = listOf(inputX, inputY),
             outputs = emptyList()
         )
 
@@ -48,20 +66,7 @@ class TransactionTest {
     @Test
     fun transactionHash() {
         val transaction = Transaction(
-            inputs = listOf(
-                Input(
-                    transactionHash = Hash("xxx"),
-                    outputIndex = OutputIndex(0u),
-                    signature = "x",
-                    publicKey = keyPair.public as ECPublicKey
-                ),
-                Input(
-                    transactionHash = Hash("yyy"),
-                    outputIndex = OutputIndex(0u),
-                    signature = "x",
-                    publicKey = keyPair.public as ECPublicKey
-                )
-            ),
+            inputs = listOf(inputX, inputY),
             outputs = listOf(
                 Output(100, address),
                 Output(200, address)
@@ -69,7 +74,7 @@ class TransactionTest {
         )
 
         assertEquals(
-            Hash("b6103b98170f7587c62c5314ccc81d38a479fe469f419c6ce89e46f8d87188fa"),
+            Hash("acb8ecc39eef636e69e530cfae5e7ccbec47f8a075007748d838e5cc7a3f95c6"),
             transaction.transactionHash()
         )
     }

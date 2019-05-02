@@ -14,7 +14,7 @@ interface TransactionInterface {
 class Input(
     private val transactionHash: Hash,
     private val outputIndex: OutputIndex,
-    private val signature: String, // TODO: investigate how create the signature
+    private val signature: Signature, // TODO: investigate how create the signature
     private val publicKey: ECPublicKey
 ) : TransactionInput() {
     override fun transactionHash() = transactionHash
@@ -23,7 +23,7 @@ class Input(
 
     override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
 
-    override fun unlockingScript() = "$signature${PublicKey.toString(publicKey)}"
+    override fun unlockingScript() = "${signature.value}${PublicKey.toString(publicKey)}"
 }
 
 class GenerationInput(
