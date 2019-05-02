@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.google.common.hash.Hashing
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Base64
@@ -29,10 +30,7 @@ class TransactionVerificationService {
                         Security.addProvider(BouncyCastleProvider())
                         val rmd = MessageDigest.getInstance("RipeMD160", BouncyCastleProvider.PROVIDER_NAME)
                         val r = rmd.digest(s.asBytes())
-                        stack.push(
-                            r.map { byte -> String.format("%02X", byte) }
-                                .joinToString("")
-                        )
+                        stack.push(r.toHexString())
                     }
                     "OP_EQUALVERIFY" -> {
                         val elem1 = stack.pop()

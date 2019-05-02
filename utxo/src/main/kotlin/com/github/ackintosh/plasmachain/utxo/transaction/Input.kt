@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import java.security.interfaces.ECPublicKey
 
 sealed class TransactionInput : TransactionInterface
@@ -23,7 +24,7 @@ class Input(
 
     override fun toHexString() = "${transactionHash.value}${outputIndex.toHexString()}"
 
-    override fun unlockingScript() = "${signature.value} ${publicKey.encoded.map { String.format("%02X", it) }.joinToString("")}"
+    override fun unlockingScript() = "${signature.value} ${publicKey.encoded.toHexString()}"
 }
 
 class GenerationInput(

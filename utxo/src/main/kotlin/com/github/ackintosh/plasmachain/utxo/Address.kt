@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo
 
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.transaction.PublicKey
 import com.google.common.hash.Hashing
 import org.bitcoinj.core.Base58
@@ -13,7 +14,7 @@ import java.security.interfaces.ECPublicKey
 import java.security.spec.ECGenParameterSpec
 
 class Address(val value: String) {
-    fun to20BytePublicKeyHash() : String = Base58.decode(value).copyOfRange(1, 21).map { String.format("%02X", it) }.joinToString("")
+    fun to20BytePublicKeyHash() : String = Base58.decode(value).copyOfRange(1, 21).toHexString()
 
     companion object {
         fun generateKeyPair() : KeyPair {
@@ -37,7 +38,7 @@ class Address(val value: String) {
             // Address.generateFrom(keyPair)
 
             val publicKey = keyPair.public as ECPublicKey
-            val publicKeyString = publicKey.encoded.map { String.format("%02X", it) }.joinToString("")
+            val publicKeyString = publicKey.encoded.toHexString()
 
             // SHA-256
             val s1 = Hashing.sha256().hashString(publicKeyString, StandardCharsets.UTF_8)
