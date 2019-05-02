@@ -37,7 +37,7 @@ class Address(val value: String) {
             // Address.generateFrom(keyPair)
 
             val publicKey = keyPair.public as ECPublicKey
-            val publicKeyString = PublicKey.toString(publicKey)
+            val publicKeyString = publicKey.encoded.map { String.format("%02X", it) }.joinToString("")
 
             // SHA-256
             val s1 = Hashing.sha256().hashString(publicKeyString, StandardCharsets.UTF_8)
