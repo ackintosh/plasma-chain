@@ -74,6 +74,7 @@ project(':node') {
     dependencies {
         implementation project(':utxo')
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     }
 }
 
