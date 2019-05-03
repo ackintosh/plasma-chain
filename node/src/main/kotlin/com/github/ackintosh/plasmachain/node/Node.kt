@@ -6,6 +6,7 @@ import com.github.ackintosh.plasmachain.utxo.block.Block
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
+import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import java.util.logging.Logger
 
@@ -62,14 +63,14 @@ class Node : Runnable {
 
     companion object {
         private val logger = Logger.getLogger(Node::class.java.name)
-        private val TRANSACTION_POOL : MutableList<com.github.ackintosh.plasmachain.utxo.transaction.Transaction> = mutableListOf()
+        private val TRANSACTION_POOL : MutableList<Transaction> = mutableListOf()
         val ALICE_KEY_PAIR = Address.generateKeyPair()
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
         private val CHAIN = Chain(ALICE_ADDRESS)
 
         fun getGenesisBlock() = CHAIN.data.first()
 
-        fun addTransaction(transaction: com.github.ackintosh.plasmachain.utxo.transaction.Transaction) =
+        fun addTransaction(transaction: Transaction) =
             when (TransactionVerificationService.verify(CHAIN, transaction)) {
                 is TransactionVerificationService.Result.Success -> TRANSACTION_POOL.add(transaction)
                 is TransactionVerificationService.Result.Failure -> false
