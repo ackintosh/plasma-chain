@@ -23,7 +23,7 @@ class Block(
             .toString()
     )
 
-    fun findOutput(transactionHash: Hash, outputIndex: OutputIndex) : Output? {
+    fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
         return transactions.filter { tx -> tx.transactionHash().equals(transactionHash) }
             .first()
             .findOutput(outputIndex)
