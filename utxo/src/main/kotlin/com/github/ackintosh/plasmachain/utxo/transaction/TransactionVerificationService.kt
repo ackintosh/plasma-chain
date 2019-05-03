@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
+import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.google.common.hash.Hashing
@@ -15,6 +16,22 @@ import java.util.*
 
 class TransactionVerificationService {
     companion object {
+        fun verify(chain: Chain, transaction: Transaction) : Result {
+            transaction.inputs.forEach {
+                val output = chain.findOutput(it.transactionHash(), it.outputIndex())
+                if (output == null) {
+                    return Result.Failure()
+                }
+
+                val result = verifyTransactionScript(it, output)
+                if (result is Result.Failure) {
+                    return result
+                }
+            }
+
+            return Result.Success()
+        }
+
         fun verifyTransactionScript(input: TransactionInput, utxo: Output) : Result {
             val stack = ArrayDeque<String>()
 

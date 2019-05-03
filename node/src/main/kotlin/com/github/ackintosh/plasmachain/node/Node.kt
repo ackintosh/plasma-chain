@@ -3,6 +3,7 @@ package com.github.ackintosh.plasmachain.node
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import java.util.logging.Logger
 
 class Node : Runnable {
@@ -26,6 +27,11 @@ class Node : Runnable {
         private val CHAIN = Chain(ALICE_ADDRESS)
 
         fun getGenesisBlock() = CHAIN.data.first()
-        fun addTransaction(transaction: com.github.ackintosh.plasmachain.utxo.transaction.Transaction) = TRANSACTION_POOL.add(transaction)
+
+        fun addTransaction(transaction: com.github.ackintosh.plasmachain.utxo.transaction.Transaction) =
+            when (TransactionVerificationService.verify(CHAIN, transaction)) {
+                is TransactionVerificationService.Result.Success -> TRANSACTION_POOL.add(transaction)
+                is TransactionVerificationService.Result.Failure -> false
+            }
     }
 }
