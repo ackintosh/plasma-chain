@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets
 
 class Block(
     private val header: Header,
-    private val transactions: List<Transaction>
+    val transactions: List<Transaction>
 ) {
     fun transactionCounter() = transactions.count()
 

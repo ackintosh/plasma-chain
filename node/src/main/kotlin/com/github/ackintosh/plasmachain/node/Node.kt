@@ -21,7 +21,7 @@ class Node : Runnable {
     companion object {
         private val logger = Logger.getLogger(Node::class.java.name)
         private val TRANSACTION_POOL : MutableList<com.github.ackintosh.plasmachain.utxo.transaction.Transaction> = mutableListOf()
-        private val ALICE_KEY_PAIR = Address.generateKeyPair()
+        val ALICE_KEY_PAIR = Address.generateKeyPair()
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
         private val CHAIN = Chain(ALICE_ADDRESS)
 
