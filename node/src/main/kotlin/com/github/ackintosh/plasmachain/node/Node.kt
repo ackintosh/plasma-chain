@@ -30,13 +30,11 @@ class Node : Runnable {
         logger.info("Creating a new block...")
         val transactions = TRANSACTION_POOL.subList(0, TRANSACTION_POOL.size)
         // TODO: verify transactions
-        val merkleRootNode = MerkleTree.build(transactions.map { it.transactionHash() })
-        val header = Header(
-            previousBlockHash = CHAIN.latestBlock().blockHash(),
-            merkleRoot = merkleRootNode
-        )
         val block = Block(
-            header = header,
+            header = Header(
+                previousBlockHash = CHAIN.latestBlock().blockHash(),
+                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
+            ),
             transactions = transactions
         )
         logger.info("New block: ${block.blockHash()}")
