@@ -25,7 +25,7 @@ class Block(
 
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
         return transactions.filter { tx -> tx.transactionHash().equals(transactionHash) }
-            .first()
-            .findOutput(outputIndex)
+            .firstOrNull()
+            ?.findOutput(outputIndex)
     }
 }
