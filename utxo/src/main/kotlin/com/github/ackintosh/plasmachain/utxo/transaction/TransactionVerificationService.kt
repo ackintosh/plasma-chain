@@ -51,7 +51,7 @@ class TransactionVerificationService {
                         val publicKey = keyfactory.generatePublic(publicKeySpec)
 
                         instance.initVerify(publicKey)
-                        instance.update("${input.transactionHash().value}${input.outputIndex().toHexString()}".toByteArray())
+                        instance.update("${input.transactionHash().value}${input.outputIndex().toHexString()}".hexStringToByteArray())
                         if (instance.verify(signature)) {
                             stack.push("TRUE")
                         }
