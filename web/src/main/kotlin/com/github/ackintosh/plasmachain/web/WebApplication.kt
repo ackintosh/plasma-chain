@@ -1,6 +1,6 @@
 package com.github.ackintosh.plasmachain.web
 
-import com.github.ackintosh.plasmachain.utxo.Chain
+import com.github.ackintosh.plasmachain.node.Node
 import com.github.ackintosh.plasmachain.web.proto.PlasmaChainGrpc
 import com.github.ackintosh.plasmachain.web.proto.Response
 import com.github.ackintosh.plasmachain.web.proto.Transaction
@@ -30,28 +30,6 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 
     companion object {
         private val logger = Logger.getLogger(PlasmaChainGRpcService::class.java.name)
-    }
-}
-
-// TODO: This will be an individual module
-class Node : Runnable {
-    override fun run() {
-        onStart()
-    }
-
-    private fun onStart() {
-        logger.info("Started Plasma Chain node")
-        CHAIN.dumpAliceInformation().forEach({k, v -> logger.info("$k: $v")})
-        logger.info("Genesis block hash: ${getGenesisBlock().blockHash().value}")
-    }
-
-    companion object {
-        private val logger = Logger.getLogger(Node::class.java.name)
-        private val TRANSACTION_POOL : MutableList<com.github.ackintosh.plasmachain.utxo.transaction.Transaction> = mutableListOf()
-        private val CHAIN = Chain()
-
-        fun getGenesisBlock() = CHAIN.data.first()
-        fun addTransaction(transaction: com.github.ackintosh.plasmachain.utxo.transaction.Transaction) = TRANSACTION_POOL.add(transaction)
     }
 }
 
