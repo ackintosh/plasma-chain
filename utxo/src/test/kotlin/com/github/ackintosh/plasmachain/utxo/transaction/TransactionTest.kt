@@ -2,6 +2,7 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.security.interfaces.ECPrivateKey
@@ -10,9 +11,11 @@ import java.security.interfaces.ECPublicKey
 class TransactionTest {
     private val keyPair = Address.generateKeyPair()
     private val address = Address.from(keyPair)
+    private val hashX = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+    private val hashY = Hash(ByteArray(32) { 2.toByte() }.toHexString())
 
     private val inputX = {
-        val transactionHash = Hash("xxx")
+        val transactionHash = hashX
         val outputIndex = OutputIndex(0u)
         Input(
             transactionHash = transactionHash,
@@ -27,7 +30,7 @@ class TransactionTest {
     }.invoke()
 
     private val inputY = {
-        val transactionHash = Hash("yyy")
+        val transactionHash = hashY
         val outputIndex = OutputIndex(1u)
         Input(
             transactionHash = transactionHash,
@@ -75,7 +78,7 @@ class TransactionTest {
         )
 
         assertEquals(
-            Hash("acb8ecc39eef636e69e530cfae5e7ccbec47f8a075007748d838e5cc7a3f95c6"),
+            Hash("caa6ed633715c8fd497cbea71060a0c8708b2820a226dcefb0af3e6e729608b2"),
             transaction.transactionHash()
         )
     }
