@@ -1,5 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.block
 
+import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
@@ -20,4 +22,10 @@ class Block(
             )
             .toString()
     )
+
+    fun findOutput(transactionHash: Hash, outputIndex: OutputIndex) : Output? {
+        return transactions.filter { tx -> tx.transactionHash().equals(transactionHash) }
+            .first()
+            .findOutput(outputIndex)
+    }
 }

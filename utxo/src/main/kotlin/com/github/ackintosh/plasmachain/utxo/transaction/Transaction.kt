@@ -26,4 +26,6 @@ class Transaction(
             .toLowerCase()
         )
     }
+
+    fun findOutput(outputIndex: OutputIndex) = outputs[outputIndex.index.toInt()]
 }
