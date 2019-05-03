@@ -36,7 +36,13 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 // TODO: This will be an individual module
 class Node : Runnable {
     override fun run() {
+        onStart()
+    }
+
+    private fun onStart() {
         logger.info("Started Plasma Chain node")
+        CHAIN.dumpAliceInformation().forEach({k, v -> logger.info("$k: $v")})
+        logger.info("Genesis block hash: ${getGenesisBlock().blockHash().value}")
     }
 
     companion object {
