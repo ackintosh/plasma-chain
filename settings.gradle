@@ -1,1 +1,4 @@
-include 'utxo', 'web'
+include 'utxo'
+include 'web'
+include 'node'
+

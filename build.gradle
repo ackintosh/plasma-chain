@@ -70,6 +70,13 @@ project(':utxo') {
     }
 }
 
+project(':node') {
+    dependencies {
+        implementation project(':utxo')
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
+}
+
 project(':web') {
     apply plugin: 'idea'
     apply plugin: 'org.springframework.boot'
@@ -80,6 +87,7 @@ project(':web') {
 
     dependencies {
         implementation project(':utxo')
+        implementation project(':node')
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.jetbrains.kotlin:kotlin-reflect'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'

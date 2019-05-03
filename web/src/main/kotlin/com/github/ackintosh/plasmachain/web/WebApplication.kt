@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.web
 
+import com.github.ackintosh.plasmachain.node.Node
 import com.github.ackintosh.plasmachain.web.proto.PlasmaChainGrpc
 import com.github.ackintosh.plasmachain.web.proto.Response
 import com.github.ackintosh.plasmachain.web.proto.Transaction
@@ -34,4 +35,5 @@ class PlasmaChainGRpcService : PlasmaChainGrpc.PlasmaChainImplBase() {
 
 fun main(args: Array<String>) {
     runApplication<WebApplication>(*args)
+    Thread(Node()).start()
 }
