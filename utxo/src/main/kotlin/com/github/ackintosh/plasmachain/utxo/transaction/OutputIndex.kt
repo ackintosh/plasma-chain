@@ -1,7 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
 // 4byte
-class OutputIndex(@UseExperimental(ExperimentalUnsignedTypes::class) private val index: UInt) {
+class OutputIndex(@UseExperimental(ExperimentalUnsignedTypes::class) val index: UInt) {
     fun toHexString() = index.toString(16).padStart(8, '0')
 
     companion object {

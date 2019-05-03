@@ -2,6 +2,7 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.security.interfaces.ECPrivateKey
@@ -9,14 +10,15 @@ import java.security.interfaces.ECPublicKey
 
 class InputTest {
     private val keyPair = Address.generateKeyPair()
+    private val hash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
 
     @Test
     fun toHexString() {
-        val transactionHash = Hash("xxx")
+        val transactionHash = hash
         val outputIndex = OutputIndex(10u)
 
         Assertions.assertEquals(
-            "xxx0000000a",
+            "01010101010101010101010101010101010101010101010101010101010101010000000a",
             Input(
                 transactionHash = transactionHash,
                 outputIndex = outputIndex,
@@ -32,7 +34,7 @@ class InputTest {
 
     @Test
     fun unlockingScript() {
-        val transactionHash = Hash("xxx")
+        val transactionHash = hash
         val outputIndex = OutputIndex(10u)
         val input = Input(
             transactionHash = transactionHash,

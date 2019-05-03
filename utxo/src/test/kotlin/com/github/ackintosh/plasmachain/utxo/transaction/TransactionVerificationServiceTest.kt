@@ -2,6 +2,7 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -9,6 +10,8 @@ import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
 class TransactionVerificationServiceTest {
+    private val hash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+
     @Nested
     inner class `verifyTransactionScript()` {
         @Nested
@@ -23,7 +26,7 @@ class TransactionVerificationServiceTest {
                     address = address
                 )
 
-                val transactionHash = Hash("xxx")
+                val transactionHash = hash
                 val outputIndex = OutputIndex(10u)
                 val input = Input(
                     transactionHash = transactionHash,
@@ -57,7 +60,7 @@ class TransactionVerificationServiceTest {
                     address = address
                 )
 
-                val transactionHash = Hash("xxx")
+                val transactionHash = hash
                 val outputIndex = OutputIndex(10u)
                 val otherKeyPair = Address.generateKeyPair()
                 val input = Input(

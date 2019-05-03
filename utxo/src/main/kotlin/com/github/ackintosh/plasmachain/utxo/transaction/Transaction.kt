@@ -4,7 +4,7 @@ import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class Transaction(
-    private val inputs: List<TransactionInput>,
+    val inputs: List<TransactionInput>,
     private val outputs: List<Output>
 ) {
     fun inputCount() = inputs.count()
@@ -26,4 +26,6 @@ class Transaction(
             .toLowerCase()
         )
     }
+
+    fun findOutput(outputIndex: OutputIndex) = outputs[outputIndex.index.toInt()]
 }
