@@ -69,4 +69,35 @@ class NodeTest {
 
         Assertions.assertFalse(Node.addTransaction(transaction))
     }
+
+    @Test
+    fun createNewBlock() {
+        val genesisTransaction = Node.getGenesisBlock().transactions.first()
+
+        val input = Input(
+            transactionHash = genesisTransaction.transactionHash(),
+            outputIndex = OutputIndex(0u),
+            signature = SignatureService.create(
+                privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
+                transactionHash = genesisTransaction.transactionHash(),
+                outputIndex = OutputIndex(0u)
+            ),
+            publicKey = Node.ALICE_KEY_PAIR.public as ECPublicKey
+        )
+
+        val bob = Address.from(Address.generateKeyPair())
+
+        val output = Output(
+            amount = 10,
+            address = bob
+        )
+
+        val transaction = Transaction(
+            inputs = listOf(input),
+            outputs = listOf(output)
+        )
+
+        Assertions.assertTrue(Node.addTransaction(transaction))
+        Assertions.assertTrue(Node().createNewBlock())
+    }
 }

@@ -2,13 +2,54 @@ package com.github.ackintosh.plasmachain.node
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Chain
+import com.github.ackintosh.plasmachain.utxo.block.Block
+import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
+import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import java.util.logging.Logger
 
 class Node : Runnable {
     override fun run() {
         onStart()
+
+        while (true) {
+            Thread.sleep(3000)
+            createNewBlock()
+        }
+    }
+
+    // TODO: race condition
+    fun createNewBlock() : Boolean {
+        if (TRANSACTION_POOL.isEmpty()) {
+            logger.info("transaction pool is empty")
+            return true
+        }
+
+        logger.info("Creating a new block...")
+        val transactions = TRANSACTION_POOL.subList(0, TRANSACTION_POOL.size)
+        // TODO: verify transactions
+        val merkleRootNode = MerkleTree.build(transactions.map { it.transactionHash() })
+        val header = Header(
+            previousBlockHash = CHAIN.latestBlock().blockHash(),
+            merkleRoot = merkleRootNode
+        )
+        val block = Block(
+            header = header,
+            transactions = transactions
+        )
+        logger.info("New block: ${block.blockHash()}")
+
+        if (CHAIN.add(block)) {
+            logger.info("New block has been added into the chain")
+            TRANSACTION_POOL.clear()
+            logger.info("Transaction pool has been cleared")
+        } else {
+            logger.warning("Failed to add new block")
+            return false
+        }
+
+        return true
     }
 
     private fun onStart() {

@@ -7,7 +7,11 @@ import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 
 class Chain(address: Address) {
-    val data = listOf(generateGenesisBlock(address))
+    val data = mutableListOf(generateGenesisBlock(address))
+
+    fun add(block: Block) = data.add(block)
+
+    fun latestBlock() = data.last()
 
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
         val output = data.forEach {
