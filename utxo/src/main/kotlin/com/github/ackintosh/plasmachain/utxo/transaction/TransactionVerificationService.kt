@@ -19,9 +19,7 @@ class TransactionVerificationService {
         fun verify(chain: Chain, transaction: Transaction) : Result {
             transaction.inputs.forEach {
                 val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
-                if (output == null) {
-                    return Result.Failure()
-                }
+                output ?: return Result.Failure()
 
                 val result = verifyTransactionScript(it, output)
                 if (result is Result.Failure) {
