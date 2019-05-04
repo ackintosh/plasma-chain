@@ -64,7 +64,7 @@ class Node : Runnable {
         private val TRANSACTION_POOL : MutableList<Transaction> = mutableListOf()
         val ALICE_KEY_PAIR = Address.generateKeyPair()
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
-        private val CHAIN = Chain(ALICE_ADDRESS)
+        private val CHAIN = Chain.from(ALICE_ADDRESS)
 
         fun getGenesisBlock() = CHAIN.data.first()
 

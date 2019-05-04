@@ -6,9 +6,7 @@ import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 
-class Chain(address: Address) {
-    val data = mutableListOf(generateGenesisBlock(address))
-
+class Chain(val data: MutableList<Block>) {
     fun add(block: Block) = data.add(block)
 
     fun latestBlock() = data.last()
@@ -25,6 +23,8 @@ class Chain(address: Address) {
     }
 
     companion object {
+        fun from(address: Address) = Chain(mutableListOf(generateGenesisBlock(address)))
+
         private fun generateGenesisBlock(address: Address): Block {
             val transactions = listOf(
                 Transaction(
