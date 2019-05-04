@@ -8,6 +8,10 @@ import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
+import org.web3j.protocol.Web3j
+import org.web3j.protocol.core.DefaultBlockParameterName
+import org.web3j.protocol.core.methods.request.EthFilter
+import org.web3j.protocol.http.HttpService
 import java.util.logging.Logger
 
 class Node : Runnable {
@@ -68,11 +72,26 @@ class Node : Runnable {
         logger.info("private key (hex encoded): ${ALICE_KEY_PAIR.private.encoded.toHexString()}")
         logger.info("public key (hex encoded): ${ALICE_KEY_PAIR.public.encoded.toHexString()}")
         logger.info("Genesis block hash: ${getGenesisBlock().blockHash().value}")
+
+        subscribeRootChainEvents()
+    }
+
+    private fun subscribeRootChainEvents() {
+        val web3 = Web3j.build(HttpService())
+        val filter = EthFilter(
+            DefaultBlockParameterName.EARLIEST,
+            DefaultBlockParameterName.LATEST,
+            ROOT_CHAIN_CONTRACT_ADDRESS
+        )
+
+        // TODO
+        web3.ethLogFlowable(filter).subscribe { println(it) }
     }
 
     companion object {
         private val logger = Logger.getLogger(Node::class.java.name)
         val ALICE_KEY_PAIR = Address.generateKeyPair()
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
+        private const val ROOT_CHAIN_CONTRACT_ADDRESS = "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da"
     }
 }

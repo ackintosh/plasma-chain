@@ -19,3 +19,13 @@ $ ganache-cli --mnemonic 'candy maple cake sugar pudding cream honey rich smooth
 $ cd contract
 $ truffle migrate --network development
 ```
+
+### Deposit
+
+```sh
+$ truffle console --network=development
+
+truffle(development)> let instance = await RootChain.deployed()
+truffle(development)> let accounts = await web3.eth.getAccounts()
+truffle(development)> instance.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
+```

@@ -73,6 +73,7 @@ project(':utxo') {
 project(':node') {
     dependencies {
         implementation project(':utxo')
+        implementation 'org.web3j:core:4.2.0'
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     }
