@@ -66,7 +66,7 @@ class Node : Runnable {
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
         private val CHAIN = Chain.from(ALICE_ADDRESS)
 
-        fun getGenesisBlock() = CHAIN.data.first()
+        fun getGenesisBlock() = CHAIN.genesisBlock()
 
         fun addTransaction(transaction: Transaction) =
             when (TransactionVerificationService.verify(CHAIN, transaction)) {

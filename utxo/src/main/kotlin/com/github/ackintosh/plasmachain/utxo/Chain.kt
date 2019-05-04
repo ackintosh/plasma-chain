@@ -6,9 +6,10 @@ import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 
-class Chain(val data: MutableList<Block>) {
+class Chain(private val data: MutableList<Block>) {
     fun add(block: Block) = data.add(block)
 
+    fun genesisBlock() = data.first()
     fun latestBlock() = data.last()
 
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
