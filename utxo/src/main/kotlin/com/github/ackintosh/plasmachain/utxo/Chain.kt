@@ -13,7 +13,7 @@ class Chain(private val data: MutableList<Block>) {
     fun latestBlock() = data.last()
 
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
-        val output = data.forEach {
+        data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
             if (o != null) {
                 return o
