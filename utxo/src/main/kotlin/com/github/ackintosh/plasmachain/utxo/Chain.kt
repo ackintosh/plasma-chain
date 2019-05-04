@@ -6,11 +6,16 @@ import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 
-class Chain(address: Address) {
-    val data = listOf(generateGenesisBlock(address))
+class Chain(private val data: MutableList<Block>) {
+    fun add(block: Block) = data.add(block)
+
+    fun genesisBlock() = data.first()
+    fun latestBlock() = data.last()
+
+    fun snapshot() = Chain(data.toMutableList())
 
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
-        val output = data.forEach {
+        data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
             if (o != null) {
                 return o
@@ -21,6 +26,8 @@ class Chain(address: Address) {
     }
 
     companion object {
+        fun from(address: Address) = Chain(mutableListOf(generateGenesisBlock(address)))
+
         private fun generateGenesisBlock(address: Address): Block {
             val transactions = listOf(
                 Transaction(
