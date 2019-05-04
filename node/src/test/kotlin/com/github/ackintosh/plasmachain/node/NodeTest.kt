@@ -12,7 +12,8 @@ import java.security.interfaces.ECPublicKey
 class NodeTest {
     @Test
     fun sendCoinsToBob() {
-        val genesisTransaction = Node.getGenesisBlock().transactions.first()
+        val node = Node()
+        val genesisTransaction = node.getGenesisBlock().transactions.first()
 
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
@@ -37,11 +38,12 @@ class NodeTest {
             outputs = listOf(output)
         )
 
-        Assertions.assertTrue(Node.addTransaction(transaction))
+        Assertions.assertTrue(node.addTransaction(transaction))
     }
 
     @Test
     fun incorrectTransactionInput() {
+        val node = Node()
         val incorrectTransactionHash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
 
         val input = Input(
@@ -67,12 +69,13 @@ class NodeTest {
             outputs = listOf(output)
         )
 
-        Assertions.assertFalse(Node.addTransaction(transaction))
+        Assertions.assertFalse(node.addTransaction(transaction))
     }
 
     @Test
     fun createNewBlock() {
-        val genesisTransaction = Node.getGenesisBlock().transactions.first()
+        val node = Node()
+        val genesisTransaction = node.getGenesisBlock().transactions.first()
 
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
@@ -97,7 +100,7 @@ class NodeTest {
             outputs = listOf(output)
         )
 
-        Assertions.assertTrue(Node.addTransaction(transaction))
-        Assertions.assertTrue(Node().createNewBlock())
+        Assertions.assertTrue(node.addTransaction(transaction))
+        Assertions.assertTrue(node.createNewBlock())
     }
 }
