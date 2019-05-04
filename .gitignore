@@ -25,6 +25,7 @@ utxo/build
 utxo/out
 
 web/build
+node/build
 
 classes
 /out/
