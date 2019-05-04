@@ -42,6 +42,7 @@ $ ./gradlew bootRun
 ### Deposit
 
 ```sh
+$ cd contract
 $ truffle console --network=development
 
 truffle(development)> let instance = await RootChain.deployed()
