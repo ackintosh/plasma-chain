@@ -12,6 +12,8 @@ class Chain(private val data: MutableList<Block>) {
     fun genesisBlock() = data.first()
     fun latestBlock() = data.last()
 
+    fun snapshot() = Chain(data.toMutableList())
+
     fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
         data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
