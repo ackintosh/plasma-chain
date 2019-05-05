@@ -6,8 +6,7 @@ import com.github.ackintosh.plasmachain.utxo.block.Block
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
-import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
-import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
+import com.github.ackintosh.plasmachain.utxo.transaction.*
 import org.web3j.abi.EventEncoder
 import org.web3j.abi.FunctionReturnDecoder
 import org.web3j.abi.TypeReference
@@ -17,6 +16,7 @@ import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.request.EthFilter
 import org.web3j.protocol.http.HttpService
+import java.math.BigInteger
 import java.util.logging.Logger
 
 class Node : Runnable {
@@ -104,13 +104,23 @@ class Node : Runnable {
                             log.data,
                             event.nonIndexedParameters
                         )
-                        println(params)
-                        // TODO: handle Deposited event
+                        val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
+                        val web3jAmount = params[1].value as BigInteger
+
+                        handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount)
                     }
                     else -> logger.info("Unhandled event. topic_signature: $topic")
                 }
             }
         }
+    }
+
+    private fun handleDepositedEvent(address: Address, amount: BigInteger) {
+        val generationTransaction = Transaction(
+            inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
+            outputs = listOf(Output(123, address))
+        )
+        // TODO: Add the generation transaction into transaction pool
     }
 
     companion object {
