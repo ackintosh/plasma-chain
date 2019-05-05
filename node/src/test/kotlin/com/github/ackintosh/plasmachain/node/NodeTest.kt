@@ -6,6 +6,7 @@ import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
@@ -29,7 +30,7 @@ class NodeTest {
         val bob = Address.from(Address.generateKeyPair())
 
         val output = Output(
-            amount = 10,
+            amount = BigInteger("10"),
             address = bob
         )
 
@@ -60,7 +61,7 @@ class NodeTest {
         val bob = Address.from(Address.generateKeyPair())
 
         val output = Output(
-            amount = 10,
+            amount = BigInteger("10"),
             address = bob
         )
 
@@ -91,7 +92,7 @@ class NodeTest {
         val bob = Address.from(Address.generateKeyPair())
 
         val output = Output(
-            amount = 10,
+            amount = BigInteger("10"),
             address = bob
         )
 

@@ -1,5 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo
 
+import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
+import com.github.ackintosh.plasmachain.utxo.extensions.stripHexPrefix
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.kethereum.keccakshortcut.keccak
 import java.security.KeyPair
@@ -39,5 +41,9 @@ class Address(private val value: ByteArray) {
                 publicKey.encoded.keccak().copyOfRange(12, 32)
             )
         }
+
+        fun from(prefixedHexString: String) = Address(
+            prefixedHexString.stripHexPrefix().hexStringToByteArray()
+        )
     }
 }

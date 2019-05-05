@@ -3,10 +3,11 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 import com.github.ackintosh.plasmachain.utxo.Address
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 class OutputTest {
     val output = Output(
-        10,
+        BigInteger("10"),
         Address.from(Address.generateKeyPair())
     )
 
