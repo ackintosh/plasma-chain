@@ -3,13 +3,9 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
-import com.google.common.hash.Hashing
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Base64
-import java.nio.charset.StandardCharsets
+import org.kethereum.keccakshortcut.keccak
 import java.security.KeyFactory
-import java.security.MessageDigest
-import java.security.Security
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
@@ -39,14 +35,11 @@ class TransactionVerificationService {
             utxo.lockingScript().split(' ').forEach {
                 when (it) {
                     "OP_DUP" -> stack.push(stack.first)
+                    // TODO: change operation name
                     "OP_HASH160" -> {
                         val elem = stack.pop()
-                        val s = Hashing.sha256().hashString(elem, StandardCharsets.UTF_8)
-
-                        Security.addProvider(BouncyCastleProvider())
-                        val rmd = MessageDigest.getInstance("RipeMD160", BouncyCastleProvider.PROVIDER_NAME)
-                        val r = rmd.digest(s.asBytes())
-                        stack.push(r.toHexString())
+                        val bytes = elem.hexStringToByteArray()
+                        stack.push(bytes.keccak().copyOfRange(12, 32).toHexString())
                     }
                     "OP_EQUALVERIFY" -> {
                         val elem1 = stack.pop()
