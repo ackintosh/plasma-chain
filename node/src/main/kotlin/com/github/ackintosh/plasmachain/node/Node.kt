@@ -52,11 +52,11 @@ class Node : Runnable {
         logger.info("New block: ${block.blockHash()}")
 
         if (chain.add(block)) {
-            logger.info("New block has been added into the chain")
+            logger.info("New block has been added into the chain. block_hash: ${block.blockHash()}")
             transactionPool.clear()
             logger.info("Transaction pool has been cleared")
         } else {
-            logger.warning("Failed to add new block")
+            logger.warning("Failed to add new block. block_hash: ${block.blockHash()}")
             return false
         }
 
@@ -65,8 +65,19 @@ class Node : Runnable {
 
     fun addTransaction(transaction: Transaction) =
         when (TransactionVerificationService.verify(chain, transaction)) {
-            is TransactionVerificationService.Result.Success -> transactionPool.add(transaction)
-            is TransactionVerificationService.Result.Failure -> false
+            is TransactionVerificationService.Result.Success -> {
+                val added = transactionPool.add(transaction)
+                if (added) {
+                    logger.info("Added transaction into tx pool: ${transaction.transactionHash()}")
+                } else {
+                    logger.warning("Failed to add transaction into tx pool: ${transaction.transactionHash()}")
+                }
+                added
+            }
+            is TransactionVerificationService.Result.Failure -> {
+                logger.warning("The transaction is invalid: ${transaction.transactionHash()}")
+                false
+            }
         }
 
     fun getGenesisBlock() = chain.genesisBlock()
@@ -90,6 +101,7 @@ class Node : Runnable {
         )
 
         web3.ethLogFlowable(filter).subscribe { log ->
+            logger.info("Event: $log")
             val event = Event(
                 "Deposited",
                 listOf(
@@ -107,6 +119,7 @@ class Node : Runnable {
                         val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
                         val web3jAmount = params[1].value as BigInteger
 
+                        logger.info("[Deposited] address:$web3jAddress amount:$web3jAmount")
                         handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount)
                     }
                     else -> logger.info("Unhandled event. topic_signature: $topic")
@@ -120,6 +133,7 @@ class Node : Runnable {
             inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
             outputs = listOf(Output(amount, address))
         )
+        logger.info("Generation transaction: ${generationTransaction.transactionHash().value}")
         if (!addTransaction(generationTransaction)) {
             logger.warning("Failed to add the generation transaction to transaction pool: $generationTransaction")
         }
