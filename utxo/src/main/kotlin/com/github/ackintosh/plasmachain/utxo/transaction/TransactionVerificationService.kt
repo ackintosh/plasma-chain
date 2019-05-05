@@ -13,7 +13,7 @@ import java.util.*
 class TransactionVerificationService {
     companion object {
         fun verify(chain: Chain, transaction: Transaction) : Result {
-            transaction.inputs.forEach {
+            transaction.inputs.filterIsInstance(Input::class.java).forEach {
                 val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
                 output ?: return Result.Failure()
 
@@ -22,6 +22,8 @@ class TransactionVerificationService {
                     return result
                 }
             }
+
+            // TODO: verify GenerationInput
 
             return Result.Success()
         }

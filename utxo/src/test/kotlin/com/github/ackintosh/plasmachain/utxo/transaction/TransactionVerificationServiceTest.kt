@@ -1,6 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
+import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.SignatureService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions
@@ -11,6 +12,26 @@ import java.security.interfaces.ECPublicKey
 
 class TransactionVerificationServiceTest {
     private val hash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+
+    @Nested
+    inner class `verify()` {
+        val keyPair = Address.generateKeyPair()
+        val address = Address.from(keyPair)
+
+        @Test
+        fun generationTransaction() {
+            val chain = Chain(mutableListOf())
+            val generationTransaction = Transaction(
+                inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
+                outputs = listOf(Output(100, address))
+            )
+
+            Assertions.assertTrue(
+                TransactionVerificationService.verify(chain, generationTransaction)
+                        is TransactionVerificationService.Result.Success
+            )
+        }
+    }
 
     @Nested
     inner class `verifyTransactionScript()` {
