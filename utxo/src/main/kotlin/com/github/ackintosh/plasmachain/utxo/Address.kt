@@ -7,7 +7,11 @@ import java.security.KeyPairGenerator
 import java.security.interfaces.ECPublicKey
 import java.security.spec.ECGenParameterSpec
 
-class Address(val value: String) {
+class Address(private val value: ByteArray) {
+    override fun toString() = "0x${rawString()}"
+
+    fun rawString() = value.toHexString()
+
     companion object {
         fun generateKeyPair() : KeyPair {
             // https://www.novixys.com/blog/generate-bitcoin-addresses-java/#3_Generate_an_ECDSA_Key_Pair
@@ -31,8 +35,9 @@ class Address(val value: String) {
 
             val publicKey = keyPair.public as ECPublicKey
             // 20byte
-            val bytes = publicKey.encoded.keccak().copyOfRange(12, 32)
-            return Address(bytes.toHexString())
+            return Address(
+                publicKey.encoded.keccak().copyOfRange(12, 32)
+            )
         }
     }
 }

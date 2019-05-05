@@ -10,6 +10,6 @@ class AddressTest {
             Address.generateKeyPair()
         )
 
-        Assertions.assertEquals(40, address.value.length)
+        Assertions.assertEquals(40, address.rawString().length)
     }
 }

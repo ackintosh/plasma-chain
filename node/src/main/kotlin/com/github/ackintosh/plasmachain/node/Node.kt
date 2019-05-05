@@ -73,7 +73,7 @@ class Node : Runnable {
 
     private fun onStart() {
         logger.info("Started Plasma Chain node")
-        logger.info("address: ${ALICE_ADDRESS.value}")
+        logger.info("address: $ALICE_ADDRESS")
         logger.info("private key (hex encoded): ${ALICE_KEY_PAIR.private.encoded.toHexString()}")
         logger.info("public key (hex encoded): ${ALICE_KEY_PAIR.public.encoded.toHexString()}")
         logger.info("Genesis block hash: ${getGenesisBlock().blockHash().value}")
