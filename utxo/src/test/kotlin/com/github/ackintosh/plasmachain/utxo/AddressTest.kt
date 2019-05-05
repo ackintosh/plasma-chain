@@ -10,7 +10,7 @@ class AddressTest {
             Address.generateKeyPair()
         )
 
-        Assertions.assertEquals(34, address.value.length)
+        Assertions.assertEquals(40, address.value.length)
     }
 
     @Test
