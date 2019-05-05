@@ -118,9 +118,11 @@ class Node : Runnable {
     private fun handleDepositedEvent(address: Address, amount: BigInteger) {
         val generationTransaction = Transaction(
             inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-            outputs = listOf(Output(BigInteger("123"), address))
+            outputs = listOf(Output(amount, address))
         )
-        // TODO: Add the generation transaction into transaction pool
+        if (!addTransaction(generationTransaction)) {
+            logger.warning("Failed to add the generation transaction to transaction pool: $generationTransaction")
+        }
     }
 
     companion object {
