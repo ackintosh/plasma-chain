@@ -5,6 +5,7 @@ import com.github.ackintosh.plasmachain.utxo.block.Hash
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.*
+import java.math.BigInteger
 
 class Chain(private val data: MutableList<Block>) {
     fun add(block: Block) = data.add(block)
@@ -32,7 +33,7 @@ class Chain(private val data: MutableList<Block>) {
             val transactions = listOf(
                 Transaction(
                     inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-                    outputs = listOf(Output(100, address))
+                    outputs = listOf(Output(BigInteger("100"), address))
                 )
             )
 

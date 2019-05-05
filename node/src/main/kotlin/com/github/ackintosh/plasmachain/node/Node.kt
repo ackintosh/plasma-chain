@@ -118,7 +118,7 @@ class Node : Runnable {
     private fun handleDepositedEvent(address: Address, amount: BigInteger) {
         val generationTransaction = Transaction(
             inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-            outputs = listOf(Output(123, address))
+            outputs = listOf(Output(BigInteger("123"), address))
         )
         // TODO: Add the generation transaction into transaction pool
     }

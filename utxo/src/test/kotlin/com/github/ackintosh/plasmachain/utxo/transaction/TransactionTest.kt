@@ -5,6 +5,7 @@ import com.github.ackintosh.plasmachain.utxo.SignatureService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
@@ -59,8 +60,8 @@ class TransactionTest {
         val transaction = Transaction(
             inputs = emptyList(),
             outputs = listOf(
-                Output(100, address),
-                Output(200, address)
+                Output(BigInteger("100"), address),
+                Output(BigInteger("200"), address)
             )
         )
 
@@ -72,8 +73,8 @@ class TransactionTest {
         val transaction = Transaction(
             inputs = listOf(inputX, inputY),
             outputs = listOf(
-                Output(100, address),
-                Output(200, address)
+                Output(BigInteger("100"), address),
+                Output(BigInteger("200"), address)
             )
         )
 
