@@ -1,7 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo
 
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
-import org.bitcoinj.core.Base58
 import org.kethereum.keccakshortcut.keccak
 import java.security.KeyPair
 import java.security.KeyPairGenerator
@@ -9,8 +8,6 @@ import java.security.interfaces.ECPublicKey
 import java.security.spec.ECGenParameterSpec
 
 class Address(val value: String) {
-    fun to20BytePublicKeyHash() : String = Base58.decode(value).copyOfRange(1, 21).toHexString()
-
     companion object {
         fun generateKeyPair() : KeyPair {
             // https://www.novixys.com/blog/generate-bitcoin-addresses-java/#3_Generate_an_ECDSA_Key_Pair

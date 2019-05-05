@@ -12,17 +12,4 @@ class AddressTest {
 
         Assertions.assertEquals(40, address.value.length)
     }
-
-    @Test
-    fun to20BytePublicKeyHash() {
-        val address = Address.from(
-            Address.generateKeyPair()
-        )
-
-
-        Assertions.assertEquals(
-            40,
-            address.to20BytePublicKeyHash().length
-        )
-    }
 }
