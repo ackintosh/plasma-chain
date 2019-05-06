@@ -1,10 +1,15 @@
 package com.github.ackintosh.plasmachain.utxo
 
 import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.Hash
+import com.github.ackintosh.plasmachain.utxo.block.BlockHash
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
-import com.github.ackintosh.plasmachain.utxo.transaction.*
+import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
+import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
+import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
+import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import java.math.BigInteger
 
 class Chain(private val data: MutableList<Block>) {
@@ -15,7 +20,7 @@ class Chain(private val data: MutableList<Block>) {
 
     fun snapshot() = Chain(data.toMutableList())
 
-    fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
+    fun findOutput(transactionHash: TransactionHash, outputIndex: OutputIndex) : Output? {
         data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
             if (o != null) {
@@ -39,7 +44,7 @@ class Chain(private val data: MutableList<Block>) {
 
             return Block(
                 header = Header(
-                    previousBlockHash = Hash.zero(),
+                    previousBlockHash = BlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),
                 transactions = transactions

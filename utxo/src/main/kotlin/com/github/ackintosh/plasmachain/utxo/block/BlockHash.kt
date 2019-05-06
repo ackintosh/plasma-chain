@@ -2,9 +2,9 @@ package com.github.ackintosh.plasmachain.utxo.block
 
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 
-data class Hash(val value: String) {
+data class BlockHash(val value: String) {
     companion object {
-        fun zero() = Hash(
+        fun zero() = BlockHash(
             ByteArray(32) { _ -> 0 }.toHexString()
         )
     }

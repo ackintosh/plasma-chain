@@ -1,9 +1,13 @@
 package com.github.ackintosh.plasmachain.node
 
 import com.github.ackintosh.plasmachain.utxo.Address
-import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
-import com.github.ackintosh.plasmachain.utxo.transaction.*
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
+import com.github.ackintosh.plasmachain.utxo.transaction.Input
+import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
+import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigInteger
@@ -19,7 +23,7 @@ class NodeTest {
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = genesisTransaction.transactionHash(),
                 outputIndex = OutputIndex(0u)
@@ -45,12 +49,12 @@ class NodeTest {
     @Test
     fun incorrectTransactionInput() {
         val node = Node()
-        val incorrectTransactionHash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+        val incorrectTransactionHash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
 
         val input = Input(
             transactionHash = incorrectTransactionHash,
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = incorrectTransactionHash,
                 outputIndex = OutputIndex(0u)
@@ -81,7 +85,7 @@ class NodeTest {
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = genesisTransaction.transactionHash(),
                 outputIndex = OutputIndex(0u)
