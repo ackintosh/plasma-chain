@@ -3,7 +3,11 @@ package com.github.ackintosh.plasmachain.node
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
-import com.github.ackintosh.plasmachain.utxo.transaction.*
+import com.github.ackintosh.plasmachain.utxo.transaction.Hash
+import com.github.ackintosh.plasmachain.utxo.transaction.Input
+import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
+import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigInteger

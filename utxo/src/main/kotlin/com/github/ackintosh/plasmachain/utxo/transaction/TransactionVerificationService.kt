@@ -8,7 +8,7 @@ import org.kethereum.keccakshortcut.keccak
 import java.security.KeyFactory
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
-import java.util.*
+import java.util.ArrayDeque
 
 class TransactionVerificationService {
     companion object {

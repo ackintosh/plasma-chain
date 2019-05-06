@@ -4,7 +4,11 @@ import com.github.ackintosh.plasmachain.utxo.block.Block
 import com.github.ackintosh.plasmachain.utxo.block.Hash
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
-import com.github.ackintosh.plasmachain.utxo.transaction.*
+import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
+import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
+import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
+import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import java.math.BigInteger
 
 class Chain(private val data: MutableList<Block>) {

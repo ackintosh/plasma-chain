@@ -6,7 +6,6 @@ import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Signature
 import org.bouncycastle.util.encoders.Base64
 import java.security.interfaces.ECPrivateKey
-import java.security.interfaces.ECPublicKey
 
 class SignatureCreationService {
     companion object {
