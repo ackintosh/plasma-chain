@@ -4,13 +4,13 @@ import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class Transaction(
-    val inputs: List<TransactionInput>,
+    val input1: List<TransactionInput>,
     val outputs: List<Output>
 ) {
     fun outputCount() = outputs.count()
 
     fun transactionHash() : TransactionHash {
-        val inputs = inputs.map { it.toHexString() }.joinToString("")
+        val inputs = input1.map { it.toHexString() }.joinToString("")
         val outputs = outputs.map { it.toHexString() }.joinToString("")
 
         val sha256Encoded = Hashing

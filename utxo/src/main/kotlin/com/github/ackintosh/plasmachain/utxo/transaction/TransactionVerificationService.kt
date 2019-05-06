@@ -13,7 +13,7 @@ import java.util.ArrayDeque
 class TransactionVerificationService {
     companion object {
         fun verify(chain: Chain, transaction: Transaction) : Result {
-            transaction.inputs
+            transaction.input1
                 .filterIsInstance(Input::class.java)
                 .forEach {
                     val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())

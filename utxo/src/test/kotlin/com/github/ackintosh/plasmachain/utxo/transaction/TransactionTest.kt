@@ -48,7 +48,7 @@ class TransactionTest {
     @Test
     fun outputCount() {
         val transaction = Transaction(
-            inputs = emptyList(),
+            input1 = emptyList(),
             outputs = listOf(
                 Output(BigInteger("100"), address),
                 Output(BigInteger("200"), address)
@@ -61,7 +61,7 @@ class TransactionTest {
     @Test
     fun transactionHash() {
         val transaction = Transaction(
-            inputs = listOf(inputX, inputY),
+            input1 = listOf(inputX, inputY),
             outputs = listOf(
                 Output(BigInteger("100"), address),
                 Output(BigInteger("200"), address)
@@ -77,7 +77,7 @@ class TransactionTest {
     @Test
     fun generationTransaction() {
         val transaction = Transaction(
-            inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
+            input1 = listOf(GenerationInput(CoinbaseData("xxx"))),
             outputs = emptyList()
         )
     }

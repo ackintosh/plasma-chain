@@ -9,8 +9,8 @@ class BlockTest {
     @Test
     fun transactionCounter() {
         val transactions = listOf(
-            Transaction(inputs = emptyList(), outputs = emptyList()),
-            Transaction(inputs = emptyList(), outputs = emptyList())
+            Transaction(input1 = emptyList(), outputs = emptyList()),
+            Transaction(input1 = emptyList(), outputs = emptyList())
         )
 
         val block = Block(
@@ -27,8 +27,8 @@ class BlockTest {
     @Test
     fun blockHash() {
         val transactions = listOf(
-            Transaction(inputs = emptyList(), outputs = emptyList()),
-            Transaction(inputs = emptyList(), outputs = emptyList())
+            Transaction(input1 = emptyList(), outputs = emptyList()),
+            Transaction(input1 = emptyList(), outputs = emptyList())
         )
 
         val block = Block(

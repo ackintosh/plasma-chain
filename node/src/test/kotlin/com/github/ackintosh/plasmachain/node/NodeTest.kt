@@ -39,7 +39,7 @@ class NodeTest {
         )
 
         val transaction = Transaction(
-            inputs = listOf(input),
+            input1 = listOf(input),
             outputs = listOf(output)
         )
 
@@ -70,7 +70,7 @@ class NodeTest {
         )
 
         val transaction = Transaction(
-            inputs = listOf(input),
+            input1 = listOf(input),
             outputs = listOf(output)
         )
 
@@ -101,7 +101,7 @@ class NodeTest {
         )
 
         val transaction = Transaction(
-            inputs = listOf(input),
+            input1 = listOf(input),
             outputs = listOf(output)
         )
 
