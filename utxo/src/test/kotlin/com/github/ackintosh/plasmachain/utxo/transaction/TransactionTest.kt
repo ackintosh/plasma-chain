@@ -57,7 +57,7 @@ class TransactionTest {
         )
 
         assertEquals(
-            TransactionHash("cdcc9f0f301af8669194aa811366f375cb294995192a44c80d08771cb518cc6a"),
+            TransactionHash("caa6ed633715c8fd497cbea71060a0c8708b2820a226dcefb0af3e6e729608b2"),
             transaction.transactionHash()
         )
     }

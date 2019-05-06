@@ -33,6 +33,6 @@ class BlockTest {
             transactions = transactions
         )
 
-        assertEquals("c4b7c3cf8cfcad9d85abf63d7452fc1c4174a2c95fed8ce6366fc6dadc65d2f1", block.blockHash().value)
+        assertEquals("4d03c2be8d9fc621a04945469cada5c7f878f9b90cfed222ceadaf64304cfc6b", block.blockHash().value)
     }
 }

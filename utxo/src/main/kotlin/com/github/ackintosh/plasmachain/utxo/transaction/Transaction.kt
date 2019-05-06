@@ -9,8 +9,7 @@ class Transaction(
     val outputs: List<Output>
 ) {
     fun transactionHash() : TransactionHash {
-        // TODO: input2
-        val inputs = input1.toHexString()
+        val inputs = "${input1.toHexString()}${input2?.toHexString()}"
         val outputs = outputs.map { it.toHexString() }.joinToString("")
 
         val sha256Encoded = Hashing
