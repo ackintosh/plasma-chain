@@ -14,6 +14,7 @@ import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class NodeTest {
     @Test
     fun sendCoinsToBob() {
