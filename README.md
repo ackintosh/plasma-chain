@@ -1,6 +1,8 @@
-# UTXO
+# Plasma Chain
 
 (((WIP)))
+
+This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426).
 
 ### Deploy root chain contract
 
