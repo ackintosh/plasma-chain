@@ -8,7 +8,7 @@ import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class Block(
-    private val header: Header,
+    val header: Header,
     val transactions: List<Transaction>
 ) {
     fun transactionCounter() = transactions.count()

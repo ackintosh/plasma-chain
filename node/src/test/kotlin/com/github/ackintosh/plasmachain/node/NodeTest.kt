@@ -108,4 +108,20 @@ class NodeTest {
         Assertions.assertTrue(node.addTransaction(transaction))
         Assertions.assertTrue(node.createNewBlock())
     }
+
+    @Test
+    fun handleDepositedEvent() {
+        val node = Node()
+        val address = Address.from(Address.generateKeyPair())
+        val amount = BigInteger("1000")
+        node.handleDepositedEvent(address, amount)
+
+        val block = node.getLatestBlock()
+
+        Assertions.assertEquals(node.getGenesisBlock().blockHash(), block.header.previousBlockHash)
+        Assertions.assertEquals(1, block.transactions.size)
+        Assertions.assertEquals(1, block.transactions.first().outputs.size)
+        Assertions.assertEquals(address, block.transactions.first().outputs.first().address)
+        Assertions.assertEquals(amount, block.transactions.first().outputs.first().amount)
+    }
 }

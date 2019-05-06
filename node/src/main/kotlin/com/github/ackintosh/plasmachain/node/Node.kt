@@ -86,6 +86,8 @@ class Node : Runnable {
 
     fun getGenesisBlock() = chain.genesisBlock()
 
+    fun getLatestBlock() = chain.latestBlock()
+
     private fun onStart() {
         logger.info("Started Plasma Chain node")
         logger.info("address: $ALICE_ADDRESS")
@@ -132,14 +134,25 @@ class Node : Runnable {
         }
     }
 
-    private fun handleDepositedEvent(address: Address, amount: BigInteger) {
+    // TODO: race condition
+    internal fun handleDepositedEvent(address: Address, amount: BigInteger) {
         val generationTransaction = Transaction(
             inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
             outputs = listOf(Output(amount, address))
         )
         logger.info("Generation transaction: ${generationTransaction.transactionHash().value}")
-        if (!addTransaction(generationTransaction)) {
-            logger.warning("Failed to add the generation transaction to transaction pool: $generationTransaction")
+
+        val block = Block(
+            header = Header(
+                previousBlockHash = chain.latestBlock().blockHash(),
+                merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash()))
+            ),
+            transactions = listOf(generationTransaction)
+        )
+        if (chain.add(block)) {
+            logger.info("A deposit block has been added into the chain successfully. block: ${block.blockHash()}")
+        } else {
+            logger.warning("Failed to add the the deposit block: ${block.blockHash()}")
         }
     }
 
