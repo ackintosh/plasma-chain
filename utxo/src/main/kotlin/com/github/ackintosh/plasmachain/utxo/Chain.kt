@@ -9,6 +9,7 @@ import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import java.math.BigInteger
 
 class Chain(private val data: MutableList<Block>) {
@@ -19,7 +20,7 @@ class Chain(private val data: MutableList<Block>) {
 
     fun snapshot() = Chain(data.toMutableList())
 
-    fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash, outputIndex: OutputIndex) : Output? {
+    fun findOutput(transactionHash: TransactionHash, outputIndex: OutputIndex) : Output? {
         data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
             if (o != null) {
