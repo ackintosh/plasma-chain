@@ -13,17 +13,16 @@ import java.util.ArrayDeque
 class TransactionVerificationService {
     companion object {
         fun verify(chain: Chain, transaction: Transaction) : Result {
-            transaction.input1
-                .filterIsInstance(Input::class.java)
-                .forEach {
-                    val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
-                    output ?: return Result.Failure()
+            // TODO: input2
+            if (transaction.input1 is Input) {
+                val output = chain.snapshot().findOutput(transaction.input1.transactionHash(), transaction.input1.outputIndex())
+                output ?: return Result.Failure()
 
-                    val result = verifyTransactionScript(it, output)
-                    if (result is Result.Failure) {
-                        return result
-                    }
+                val result = verifyTransactionScript(transaction.input1, output)
+                if (result is Result.Failure) {
+                    return result
                 }
+            }
 
             // TODO: verify GenerationInput
 

@@ -46,22 +46,10 @@ class TransactionTest {
     }.invoke()
 
     @Test
-    fun outputCount() {
-        val transaction = Transaction(
-            input1 = emptyList(),
-            outputs = listOf(
-                Output(BigInteger("100"), address),
-                Output(BigInteger("200"), address)
-            )
-        )
-
-        assertEquals(2, transaction.outputCount())
-    }
-
-    @Test
     fun transactionHash() {
         val transaction = Transaction(
-            input1 = listOf(inputX, inputY),
+            input1 = inputX,
+            input2 = inputY,
             outputs = listOf(
                 Output(BigInteger("100"), address),
                 Output(BigInteger("200"), address)
@@ -69,16 +57,8 @@ class TransactionTest {
         )
 
         assertEquals(
-            TransactionHash("caa6ed633715c8fd497cbea71060a0c8708b2820a226dcefb0af3e6e729608b2"),
+            TransactionHash("cdcc9f0f301af8669194aa811366f375cb294995192a44c80d08771cb518cc6a"),
             transaction.transactionHash()
-        )
-    }
-
-    @Test
-    fun generationTransaction() {
-        val transaction = Transaction(
-            input1 = listOf(GenerationInput(CoinbaseData("xxx"))),
-            outputs = emptyList()
         )
     }
 }

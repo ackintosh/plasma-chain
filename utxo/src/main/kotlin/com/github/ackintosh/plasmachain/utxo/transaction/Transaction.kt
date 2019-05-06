@@ -4,14 +4,13 @@ import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class Transaction(
-    val input1: List<TransactionInput>,
+    val input1: TransactionInput,
     val input2: TransactionInput? = null,
     val outputs: List<Output>
 ) {
-    fun outputCount() = outputs.count()
-
     fun transactionHash() : TransactionHash {
-        val inputs = input1.map { it.toHexString() }.joinToString("")
+        // TODO: input2
+        val inputs = input1.toHexString()
         val outputs = outputs.map { it.toHexString() }.joinToString("")
 
         val sha256Encoded = Hashing
@@ -27,5 +26,6 @@ class Transaction(
         )
     }
 
+    @kotlin.ExperimentalUnsignedTypes
     fun findOutput(outputIndex: OutputIndex) = outputs[outputIndex.index.toInt()]
 }

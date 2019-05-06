@@ -23,7 +23,7 @@ class TransactionVerificationServiceTest {
         fun generationTransaction() {
             val chain = Chain(mutableListOf())
             val generationTransaction = Transaction(
-                input1 = listOf(GenerationInput(CoinbaseData("xxx"))),
+                input1 = GenerationInput(CoinbaseData("xxx")),
                 outputs = listOf(Output(BigInteger("100"), address))
             )
 
