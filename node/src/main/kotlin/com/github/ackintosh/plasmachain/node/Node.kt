@@ -86,6 +86,8 @@ class Node : Runnable {
 
     fun getGenesisBlock() = chain.genesisBlock()
 
+    fun getLatestBlock() = chain.latestBlock()
+
     private fun onStart() {
         logger.info("Started Plasma Chain node")
         logger.info("address: $ALICE_ADDRESS")
@@ -133,7 +135,7 @@ class Node : Runnable {
     }
 
     // TODO: race condition
-    private fun handleDepositedEvent(address: Address, amount: BigInteger) {
+    internal fun handleDepositedEvent(address: Address, amount: BigInteger) {
         val generationTransaction = Transaction(
             inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
             outputs = listOf(Output(amount, address))
