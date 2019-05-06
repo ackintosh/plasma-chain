@@ -119,7 +119,6 @@ class NodeTest {
 
         val block = node.getLatestBlock()
 
-        Assertions.assertEquals(node.getGenesisBlock().blockHash(), block.header.previousBlockHash)
         Assertions.assertEquals(1, block.transactions.size)
         Assertions.assertNull(block.transactions.first().output2)
         Assertions.assertEquals(address, block.transactions.first().output1.address)
