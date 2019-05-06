@@ -7,8 +7,10 @@ import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
+@kotlin.ExperimentalUnsignedTypes
 class Block(
     val header: Header,
+    val number: BlockNumber,
     val transactions: List<Transaction>
 ) {
     fun blockHash() = BlockHash(

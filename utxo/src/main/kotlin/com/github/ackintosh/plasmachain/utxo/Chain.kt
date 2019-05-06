@@ -2,6 +2,7 @@ package com.github.ackintosh.plasmachain.utxo
 
 import com.github.ackintosh.plasmachain.utxo.block.Block
 import com.github.ackintosh.plasmachain.utxo.block.BlockHash
+import com.github.ackintosh.plasmachain.utxo.block.BlockNumber
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -12,7 +13,14 @@ import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import java.math.BigInteger
 
+@kotlin.ExperimentalUnsignedTypes
 class Chain(private val data: MutableList<Block>) {
+    // TODO: race condition
+    private var currentBlockNumber = 1u
+    fun currentBlockNumber() = BlockNumber(currentBlockNumber)
+    fun increaseBlockNumber() = BlockNumber(++currentBlockNumber)
+    fun decreaseBlockNumber() = BlockNumber(--currentBlockNumber)
+
     fun add(block: Block) = data.add(block)
 
     fun genesisBlock() = data.first()
@@ -34,6 +42,7 @@ class Chain(private val data: MutableList<Block>) {
     companion object {
         fun from(address: Address) = Chain(mutableListOf(generateGenesisBlock(address)))
 
+        @kotlin.ExperimentalUnsignedTypes
         private fun generateGenesisBlock(address: Address): Block {
             val transactions = listOf(
                 Transaction(
@@ -47,6 +56,7 @@ class Chain(private val data: MutableList<Block>) {
                     previousBlockHash = BlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),
+                number = BlockNumber(0u),
                 transactions = transactions
             )
         }

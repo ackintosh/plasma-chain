@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class BlockTest {
     @Test
     fun blockHash() {
@@ -36,6 +37,7 @@ class BlockTest {
                 previousBlockHash = BlockHash("xxx"),
                 merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
             ),
+            number = BlockNumber(2u),
             transactions = transactions
         )
 
