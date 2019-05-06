@@ -5,6 +5,7 @@ buildscript {
     ext.springboot_version = '2.1.4.RELEASE'
     ext.protoc_version = '3.7.1'
     ext.grpc_version = '1.20.0'
+    ext.kethereum_version = '0.75.0'
 
     repositories {
         mavenCentral()
@@ -65,7 +66,8 @@ project(':utxo') {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         implementation "com.google.guava:guava:$guava_version"
-        implementation 'com.github.komputing.KEthereum:keccak_shortcut:0.75.0'
+        implementation "com.github.komputing.KEthereum:keccak_shortcut:$kethereum_version"
+        implementation "com.github.komputing.KEthereum:rlp:$kethereum_version"
         implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
         testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
     }
