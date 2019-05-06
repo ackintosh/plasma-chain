@@ -6,7 +6,8 @@ import java.nio.charset.StandardCharsets
 class Transaction(
     val input1: TransactionInput,
     val input2: TransactionInput? = null,
-    val output1: List<Output>
+    val output1: List<Output>,
+    val output2: Output? = null
 ) {
     fun transactionHash() : TransactionHash {
         val inputs = "${input1.toHexString()}${input2?.toHexString()}"
