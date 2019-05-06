@@ -1,5 +1,6 @@
 package com.github.ackintosh.plasmachain.utxo.block
 
+import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
@@ -10,6 +11,7 @@ import java.nio.charset.StandardCharsets
 @kotlin.ExperimentalUnsignedTypes
 class Block(
     val header: Header,
+    val merkleRoot: MerkleTree.Node,
     val number: BlockNumber,
     val transactions: List<Transaction>
 ) {

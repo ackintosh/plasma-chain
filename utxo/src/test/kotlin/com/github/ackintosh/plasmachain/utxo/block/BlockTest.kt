@@ -34,9 +34,9 @@ class BlockTest {
 
         val block = Block(
             header = Header(
-                previousBlockHash = BlockHash("xxx"),
-                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
+                previousBlockHash = BlockHash("xxx")
             ),
+            merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
             number = BlockNumber(2u),
             transactions = transactions
         )

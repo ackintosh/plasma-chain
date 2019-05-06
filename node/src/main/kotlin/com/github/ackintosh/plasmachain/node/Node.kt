@@ -50,9 +50,9 @@ class Node : Runnable {
         // TODO: consistency of block number
         val block = Block(
             header = Header(
-                previousBlockHash = chain.latestBlock().blockHash(),
-                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
+                previousBlockHash = chain.latestBlock().blockHash()
             ),
+            merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
             number = chain.increaseBlockNumber(),
             transactions = transactions
         )
@@ -150,9 +150,9 @@ class Node : Runnable {
         // TODO: consistency of block number
         val block = Block(
             header = Header(
-                previousBlockHash = chain.latestBlock().blockHash(),
-                merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash()))
+                previousBlockHash = chain.latestBlock().blockHash()
             ),
+            merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash())),
             number = chain.increaseBlockNumber(),
             transactions = listOf(generationTransaction)
         )

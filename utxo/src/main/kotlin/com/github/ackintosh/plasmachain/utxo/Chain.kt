@@ -53,9 +53,9 @@ class Chain(private val data: MutableList<Block>) {
 
             return Block(
                 header = Header(
-                    previousBlockHash = BlockHash.zero(),
-                    merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
+                    previousBlockHash = BlockHash.zero()
                 ),
+                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
                 number = BlockNumber(0u),
                 transactions = transactions
             )
