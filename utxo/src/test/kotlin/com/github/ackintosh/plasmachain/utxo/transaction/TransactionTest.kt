@@ -50,10 +50,8 @@ class TransactionTest {
         val transaction = Transaction(
             input1 = inputX,
             input2 = inputY,
-            output1 = listOf(
-                Output(BigInteger("100"), address),
-                Output(BigInteger("200"), address)
-            )
+            output1 = Output(BigInteger("100"), address),
+            output2 = Output(BigInteger("200"), address)
         )
 
         assertEquals(

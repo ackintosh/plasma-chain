@@ -40,7 +40,7 @@ class NodeTest {
 
         val transaction = Transaction(
             input1 = input,
-            output1 = listOf(output)
+            output1 = output
         )
 
         Assertions.assertTrue(node.addTransaction(transaction))
@@ -71,7 +71,7 @@ class NodeTest {
 
         val transaction = Transaction(
             input1 = input,
-            output1 = listOf(output)
+            output1 = output
         )
 
         Assertions.assertFalse(node.addTransaction(transaction))
@@ -102,7 +102,7 @@ class NodeTest {
 
         val transaction = Transaction(
             input1 = input,
-            output1 = listOf(output)
+            output1 = output
         )
 
         Assertions.assertTrue(node.addTransaction(transaction))
@@ -120,8 +120,8 @@ class NodeTest {
 
         Assertions.assertEquals(node.getGenesisBlock().blockHash(), block.header.previousBlockHash)
         Assertions.assertEquals(1, block.transactions.size)
-        Assertions.assertEquals(1, block.transactions.first().output1.size)
-        Assertions.assertEquals(address, block.transactions.first().output1.first().address)
-        Assertions.assertEquals(amount, block.transactions.first().output1.first().amount)
+        Assertions.assertNull(block.transactions.first().output2)
+        Assertions.assertEquals(address, block.transactions.first().output1.address)
+        Assertions.assertEquals(amount, block.transactions.first().output1.amount)
     }
 }
