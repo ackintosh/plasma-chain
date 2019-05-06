@@ -3,9 +3,9 @@ package com.github.ackintosh.plasmachain.utxo.transaction
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import java.security.interfaces.ECPublicKey
 
-sealed class TransactionInput : TransactionInterface
+sealed class TransactionInput : TransactionInputInterface
 
-interface TransactionInterface {
+interface TransactionInputInterface {
     fun transactionHash() : TransactionHash
     fun outputIndex() : OutputIndex
     fun toHexString() : String

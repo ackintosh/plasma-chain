@@ -137,8 +137,8 @@ class Node : Runnable {
     // TODO: race condition
     internal fun handleDepositedEvent(address: Address, amount: BigInteger) {
         val generationTransaction = Transaction(
-            inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-            outputs = listOf(Output(amount, address))
+            input1 = GenerationInput(CoinbaseData("xxx")),
+            output1 = Output(amount, address)
         )
         logger.info("Generation transaction: ${generationTransaction.transactionHash().value}")
 

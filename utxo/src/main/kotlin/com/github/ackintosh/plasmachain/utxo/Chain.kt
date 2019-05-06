@@ -37,8 +37,8 @@ class Chain(private val data: MutableList<Block>) {
         private fun generateGenesisBlock(address: Address): Block {
             val transactions = listOf(
                 Transaction(
-                    inputs = listOf(GenerationInput(CoinbaseData("xxx"))),
-                    outputs = listOf(Output(BigInteger("100"), address))
+                    input1 = GenerationInput(CoinbaseData("xxx")),
+                    output1 = Output(BigInteger("100"), address)
                 )
             )
 

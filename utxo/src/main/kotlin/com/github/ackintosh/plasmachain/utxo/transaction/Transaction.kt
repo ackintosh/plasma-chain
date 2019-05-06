@@ -4,15 +4,14 @@ import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class Transaction(
-    val inputs: List<TransactionInput>,
-    val outputs: List<Output>
+    val input1: TransactionInput,
+    val input2: TransactionInput? = null,
+    val output1:Output,
+    val output2: Output? = null
 ) {
-    fun inputCount() = inputs.count()
-    fun outputCount() = outputs.count()
-
     fun transactionHash() : TransactionHash {
-        val inputs = inputs.map { it.toHexString() }.joinToString("")
-        val outputs = outputs.map { it.toHexString() }.joinToString("")
+        val inputs = "${input1.toHexString()}${input2?.toHexString()}"
+        val outputs = "${output1.toHexString()}${output2?.toHexString()}"
 
         val sha256Encoded = Hashing
                 .sha256()
@@ -27,5 +26,10 @@ class Transaction(
         )
     }
 
-    fun findOutput(outputIndex: OutputIndex) = outputs[outputIndex.index.toInt()]
+    @kotlin.ExperimentalUnsignedTypes
+    fun findOutput(outputIndex: OutputIndex) = when (outputIndex.index.toInt()) {
+        0 -> output1
+        1 -> output2
+        else -> null
+    }
 }
