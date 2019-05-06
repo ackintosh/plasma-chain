@@ -23,6 +23,7 @@ import org.web3j.protocol.http.HttpService
 import java.math.BigInteger
 import java.util.logging.Logger
 
+@kotlin.ExperimentalUnsignedTypes
 class Node : Runnable {
     private val transactionPool : MutableList<Transaction> = mutableListOf()
     private val chain = Chain.from(ALICE_ADDRESS)
@@ -46,11 +47,13 @@ class Node : Runnable {
         logger.info("Creating a new block...")
         val transactions = transactionPool.subList(0, transactionPool.size)
         // TODO: verify transactions
+        // TODO: consistency of block number
         val block = Block(
             header = Header(
                 previousBlockHash = chain.latestBlock().blockHash(),
                 merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
             ),
+            number = chain.increaseBlockNumber(),
             transactions = transactions
         )
         logger.info("New block: ${block.blockHash()}")
@@ -60,6 +63,7 @@ class Node : Runnable {
             transactionPool.clear()
             logger.info("Transaction pool has been cleared")
         } else {
+            chain.decreaseBlockNumber()
             logger.warning("Failed to add new block. block_hash: ${block.blockHash()}")
             return false
         }
@@ -142,16 +146,20 @@ class Node : Runnable {
         )
         logger.info("Generation transaction: ${generationTransaction.transactionHash().value}")
 
+        // TODO: obtain a block number from event data
+        // TODO: consistency of block number
         val block = Block(
             header = Header(
                 previousBlockHash = chain.latestBlock().blockHash(),
                 merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash()))
             ),
+            number = chain.increaseBlockNumber(),
             transactions = listOf(generationTransaction)
         )
         if (chain.add(block)) {
             logger.info("A deposit block has been added into the chain successfully. block: ${block.blockHash()}")
         } else {
+            chain.decreaseBlockNumber()
             logger.warning("Failed to add the the deposit block: ${block.blockHash()}")
         }
     }
