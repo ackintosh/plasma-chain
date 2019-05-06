@@ -19,7 +19,7 @@ class Chain(private val data: MutableList<Block>) {
 
     fun snapshot() = Chain(data.toMutableList())
 
-    fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.Hash, outputIndex: OutputIndex) : Output? {
+    fun findOutput(transactionHash: com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash, outputIndex: OutputIndex) : Output? {
         data.forEach {
             val o = it.findOutput(transactionHash, outputIndex)
             if (o != null) {

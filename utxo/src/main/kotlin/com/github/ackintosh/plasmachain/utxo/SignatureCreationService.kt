@@ -1,7 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo
 
 import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
-import com.github.ackintosh.plasmachain.utxo.transaction.Hash
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Signature
 import org.bouncycastle.util.encoders.Base64
@@ -11,7 +11,7 @@ class SignatureCreationService {
     companion object {
         fun create(
             privateKey: ECPrivateKey,
-            transactionHash: Hash,
+            transactionHash: TransactionHash,
             outputIndex: OutputIndex
         ): Signature {
             val d = "${transactionHash.value}${outputIndex.toHexString()}"

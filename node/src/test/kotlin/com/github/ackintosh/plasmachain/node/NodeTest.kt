@@ -3,7 +3,7 @@ package com.github.ackintosh.plasmachain.node
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
-import com.github.ackintosh.plasmachain.utxo.transaction.Hash
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import com.github.ackintosh.plasmachain.utxo.transaction.Input
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
@@ -49,7 +49,7 @@ class NodeTest {
     @Test
     fun incorrectTransactionInput() {
         val node = Node()
-        val incorrectTransactionHash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+        val incorrectTransactionHash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
 
         val input = Input(
             transactionHash = incorrectTransactionHash,

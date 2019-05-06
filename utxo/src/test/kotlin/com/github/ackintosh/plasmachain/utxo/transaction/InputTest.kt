@@ -10,7 +10,7 @@ import java.security.interfaces.ECPublicKey
 
 class InputTest {
     private val keyPair = Address.generateKeyPair()
-    private val hash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+    private val hash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
 
     @Test
     fun toHexString() {

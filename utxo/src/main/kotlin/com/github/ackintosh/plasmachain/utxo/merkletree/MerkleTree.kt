@@ -1,33 +1,33 @@
 package com.github.ackintosh.plasmachain.utxo.merkletree
 
-import com.github.ackintosh.plasmachain.utxo.transaction.Hash
+import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
 
 class MerkleTree {
-    data class Leaf(override val hash: Hash) :
+    data class Leaf(override val transactionHash: TransactionHash) :
         MerkleNode
 
-    data class Node(override val hash: Hash, val left: MerkleNode, val right: MerkleNode) :
+    data class Node(override val transactionHash: TransactionHash, val left: MerkleNode, val right: MerkleNode) :
         MerkleNode
 
     companion object {
-        fun build(hashes: List<Hash>) : Node {
-            val leaves = padWithZeroHash(hashes)
+        fun build(transactionHashes: List<TransactionHash>) : Node {
+            val leaves = padWithZeroHash(transactionHashes)
                 .map { Leaf(it) }
             return buildTree(leaves)
         }
 
-        private fun padWithZeroHash(hashes: List<Hash>) =
+        private fun padWithZeroHash(transactionHashes: List<TransactionHash>) =
             when {
-                hashes.size == 1 -> listOf(hashes.first(), Hash.ZERO)
-                isPowerOfTwo(hashes.size) -> hashes
+                transactionHashes.size == 1 -> listOf(transactionHashes.first(), TransactionHash.ZERO)
+                isPowerOfTwo(transactionHashes.size) -> transactionHashes
                 else -> {
-                    var n = hashes.size
-                    val padded = ArrayList<Hash>()
-                    padded.addAll(hashes)
+                    var n = transactionHashes.size
+                    val padded = ArrayList<TransactionHash>()
+                    padded.addAll(transactionHashes)
                     while (!isPowerOfTwo(n)) {
-                        padded.add(Hash.ZERO)
+                        padded.add(TransactionHash.ZERO)
                         n++
                     }
                     padded
@@ -50,7 +50,7 @@ class MerkleTree {
                     val right = nodes[i + 1]
                     combined.add(
                         Node(
-                            hash = concatHash(
+                            transactionHash = concatHash(
                                 left,
                                 right
                             ),
@@ -63,11 +63,11 @@ class MerkleTree {
             }
 
         private fun concatHash(left: MerkleNode, right: MerkleNode) =
-            Hash(
+            TransactionHash(
                 Hashing
                     .sha256()
                     .hashString(
-                        "${left.hash.value}${right.hash.value}",
+                        "${left.transactionHash.value}${right.transactionHash.value}",
                         StandardCharsets.UTF_8
                     )
                     .toString()
@@ -76,5 +76,5 @@ class MerkleTree {
 }
 
 interface MerkleNode {
-    val hash: Hash
+    val transactionHash: TransactionHash
 }

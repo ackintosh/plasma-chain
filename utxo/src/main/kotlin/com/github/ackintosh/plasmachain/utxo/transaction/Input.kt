@@ -6,14 +6,14 @@ import java.security.interfaces.ECPublicKey
 sealed class TransactionInput : TransactionInterface
 
 interface TransactionInterface {
-    fun transactionHash() : Hash
+    fun transactionHash() : TransactionHash
     fun outputIndex() : OutputIndex
     fun toHexString() : String
     fun unlockingScript() : String
 }
 
 class Input(
-    private val transactionHash: Hash,
+    private val transactionHash: TransactionHash,
     private val outputIndex: OutputIndex,
     private val signature: Signature, // TODO: investigate how create the signature
     private val publicKey: ECPublicKey
@@ -30,11 +30,11 @@ class Input(
 class GenerationInput(
     private val coinbaseData: CoinbaseData
 ) : TransactionInput() {
-    override fun transactionHash() = Hash.GENERATION
+    override fun transactionHash() = TransactionHash.GENERATION
 
     override fun outputIndex()= OutputIndex.GENERATION
 
-    override fun toHexString() = "${Hash.GENERATION}${OutputIndex.GENERATION.toHexString()}"
+    override fun toHexString() = "${TransactionHash.GENERATION}${OutputIndex.GENERATION.toHexString()}"
 
     override fun unlockingScript(): String {
         TODO("not implemented")

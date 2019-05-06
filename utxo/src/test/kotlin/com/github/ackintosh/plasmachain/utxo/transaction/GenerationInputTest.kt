@@ -7,7 +7,7 @@ class GenerationInputTest {
     @Test
     fun transactionHash() {
         assertEquals(
-            Hash.GENERATION,
+            TransactionHash.GENERATION,
             GenerationInput(
                 CoinbaseData(
                     "x"

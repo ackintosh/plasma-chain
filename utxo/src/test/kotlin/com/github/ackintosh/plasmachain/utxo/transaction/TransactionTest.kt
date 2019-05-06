@@ -12,8 +12,8 @@ import java.security.interfaces.ECPublicKey
 class TransactionTest {
     private val keyPair = Address.generateKeyPair()
     private val address = Address.from(keyPair)
-    private val hashX = Hash(ByteArray(32) { 1.toByte() }.toHexString())
-    private val hashY = Hash(ByteArray(32) { 2.toByte() }.toHexString())
+    private val hashX = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
+    private val hashY = TransactionHash(ByteArray(32) { 2.toByte() }.toHexString())
 
     private val inputX = {
         val transactionHash = hashX
@@ -79,7 +79,7 @@ class TransactionTest {
         )
 
         assertEquals(
-            Hash("caa6ed633715c8fd497cbea71060a0c8708b2820a226dcefb0af3e6e729608b2"),
+            TransactionHash("caa6ed633715c8fd497cbea71060a0c8708b2820a226dcefb0af3e6e729608b2"),
             transaction.transactionHash()
         )
     }

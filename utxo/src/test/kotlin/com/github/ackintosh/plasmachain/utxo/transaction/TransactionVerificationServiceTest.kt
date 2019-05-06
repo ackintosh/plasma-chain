@@ -12,7 +12,7 @@ import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
 class TransactionVerificationServiceTest {
-    private val hash = Hash(ByteArray(32) { 1.toByte() }.toHexString())
+    private val hash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
 
     @Nested
     inner class `verify()` {

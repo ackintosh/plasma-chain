@@ -10,7 +10,7 @@ class Transaction(
     fun inputCount() = inputs.count()
     fun outputCount() = outputs.count()
 
-    fun transactionHash() : Hash {
+    fun transactionHash() : TransactionHash {
         val inputs = inputs.map { it.toHexString() }.joinToString("")
         val outputs = outputs.map { it.toHexString() }.joinToString("")
 
@@ -18,7 +18,7 @@ class Transaction(
                 .sha256()
                 .hashString("$inputs$outputs", StandardCharsets.UTF_8)
 
-        return Hash(sha256Encoded
+        return TransactionHash(sha256Encoded
             .asBytes()
             .reversed()
             .map { String.format("%02X", it) }
