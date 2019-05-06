@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets
 
 class Transaction(
     val input1: List<TransactionInput>,
+    val input2: TransactionInput? = null,
     val outputs: List<Output>
 ) {
     fun outputCount() = outputs.count()
