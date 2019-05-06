@@ -50,7 +50,7 @@ class TransactionTest {
         val transaction = Transaction(
             input1 = inputX,
             input2 = inputY,
-            outputs = listOf(
+            output1 = listOf(
                 Output(BigInteger("100"), address),
                 Output(BigInteger("200"), address)
             )

@@ -6,11 +6,11 @@ import java.nio.charset.StandardCharsets
 class Transaction(
     val input1: TransactionInput,
     val input2: TransactionInput? = null,
-    val outputs: List<Output>
+    val output1: List<Output>
 ) {
     fun transactionHash() : TransactionHash {
         val inputs = "${input1.toHexString()}${input2?.toHexString()}"
-        val outputs = outputs.map { it.toHexString() }.joinToString("")
+        val outputs = output1.map { it.toHexString() }.joinToString("")
 
         val sha256Encoded = Hashing
                 .sha256()
@@ -26,5 +26,5 @@ class Transaction(
     }
 
     @kotlin.ExperimentalUnsignedTypes
-    fun findOutput(outputIndex: OutputIndex) = outputs[outputIndex.index.toInt()]
+    fun findOutput(outputIndex: OutputIndex) = output1[outputIndex.index.toInt()]
 }

@@ -38,7 +38,7 @@ class Chain(private val data: MutableList<Block>) {
             val transactions = listOf(
                 Transaction(
                     input1 = GenerationInput(CoinbaseData("xxx")),
-                    outputs = listOf(Output(BigInteger("100"), address))
+                    output1 = listOf(Output(BigInteger("100"), address))
                 )
             )
 

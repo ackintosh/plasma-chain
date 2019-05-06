@@ -21,8 +21,8 @@ class BlockTest {
             publicKey = Address.generateKeyPair().public as ECPublicKey
         )
         val transactions = listOf(
-            Transaction(input1 = input, outputs = emptyList()),
-            Transaction(input1 = input, outputs = emptyList())
+            Transaction(input1 = input, output1 = emptyList()),
+            Transaction(input1 = input, output1 = emptyList())
         )
 
         val block = Block(
