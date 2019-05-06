@@ -15,32 +15,5 @@ import java.security.interfaces.ECPublicKey
 
 @kotlin.ExperimentalUnsignedTypes
 class BlockTest {
-    @Test
-    fun blockHash() {
-        val input = Input(
-            transactionHash = TransactionHash.GENERATION,
-            outputIndex = OutputIndex.GENERATION,
-            signature = Signature("xxx"),
-            publicKey = Address.generateKeyPair().public as ECPublicKey
-        )
-        val output = Output(
-            amount = BigInteger("10"),
-            address = Address.from(Address.generateKeyPair())
-        )
-        val transactions = listOf(
-            Transaction(input1 = input, output1 = output),
-            Transaction(input1 = input, output1 = output)
-        )
-
-        val block = Block(
-            header = Header(
-                previousBlockHash = BlockHash("xxx"),
-                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
-            ),
-            number = BlockNumber(2u),
-            transactions = transactions
-        )
-
-        assertTrue(block.blockHash().value.length == 64)
-    }
+    // TODO
 }

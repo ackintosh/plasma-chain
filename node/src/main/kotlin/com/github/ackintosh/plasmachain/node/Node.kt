@@ -3,7 +3,6 @@ package com.github.ackintosh.plasmachain.node
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -49,22 +48,19 @@ class Node : Runnable {
         // TODO: verify transactions
         // TODO: consistency of block number
         val block = Block(
-            header = Header(
-                previousBlockHash = chain.latestBlock().blockHash(),
-                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
-            ),
+            merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
             number = chain.increaseBlockNumber(),
             transactions = transactions
         )
-        logger.info("New block: ${block.blockHash()}")
+        logger.info("New block: $block")
 
         if (chain.add(block)) {
-            logger.info("New block has been added into the chain. block_hash: ${block.blockHash()}")
+            logger.info("New block has been added into the chain. block_hash: $block")
             transactionPool.clear()
             logger.info("Transaction pool has been cleared")
         } else {
             chain.decreaseBlockNumber()
-            logger.warning("Failed to add new block. block_hash: ${block.blockHash()}")
+            logger.warning("Failed to add new block. block_hash: $block")
             return false
         }
 
@@ -97,7 +93,7 @@ class Node : Runnable {
         logger.info("address: $ALICE_ADDRESS")
         logger.info("private key (hex encoded): ${ALICE_KEY_PAIR.private.encoded.toHexString()}")
         logger.info("public key (hex encoded): ${ALICE_KEY_PAIR.public.encoded.toHexString()}")
-        logger.info("Genesis block hash: ${getGenesisBlock().blockHash().value}")
+        logger.info("Genesis block hash: ${getGenesisBlock()}")
 
         subscribeRootChainEvents()
     }
@@ -149,18 +145,15 @@ class Node : Runnable {
         // TODO: obtain a block number from event data
         // TODO: consistency of block number
         val block = Block(
-            header = Header(
-                previousBlockHash = chain.latestBlock().blockHash(),
-                merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash()))
-            ),
+            merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash())),
             number = chain.increaseBlockNumber(),
             transactions = listOf(generationTransaction)
         )
         if (chain.add(block)) {
-            logger.info("A deposit block has been added into the chain successfully. block: ${block.blockHash()}")
+            logger.info("A deposit block has been added into the chain successfully. block: $block")
         } else {
             chain.decreaseBlockNumber()
-            logger.warning("Failed to add the the deposit block: ${block.blockHash()}")
+            logger.warning("Failed to add the the deposit block: $block")
         }
     }
 

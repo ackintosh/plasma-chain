@@ -9,6 +9,7 @@ import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class TransactionEncodingServiceTest {
     private val keyPair = Address.generateKeyPair()
     private val address = Address.from(keyPair)

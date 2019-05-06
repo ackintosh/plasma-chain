@@ -14,6 +14,7 @@ import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class NodeTest {
     @Test
     fun sendCoinsToBob() {
@@ -118,7 +119,6 @@ class NodeTest {
 
         val block = node.getLatestBlock()
 
-        Assertions.assertEquals(node.getGenesisBlock().blockHash(), block.header.previousBlockHash)
         Assertions.assertEquals(1, block.transactions.size)
         Assertions.assertNull(block.transactions.first().output2)
         Assertions.assertEquals(address, block.transactions.first().output1.address)
