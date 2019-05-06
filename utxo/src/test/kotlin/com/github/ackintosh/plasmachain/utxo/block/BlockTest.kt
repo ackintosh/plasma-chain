@@ -7,24 +7,6 @@ import org.junit.jupiter.api.Test
 
 class BlockTest {
     @Test
-    fun transactionCounter() {
-        val transactions = listOf(
-            Transaction(input1 = emptyList(), outputs = emptyList()),
-            Transaction(input1 = emptyList(), outputs = emptyList())
-        )
-
-        val block = Block(
-            header = Header(
-                previousBlockHash = BlockHash("xxx"),
-                merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
-            ),
-            transactions = transactions
-        )
-
-        assertEquals(2, block.transactionCounter())
-    }
-
-    @Test
     fun blockHash() {
         val transactions = listOf(
             Transaction(input1 = emptyList(), outputs = emptyList()),

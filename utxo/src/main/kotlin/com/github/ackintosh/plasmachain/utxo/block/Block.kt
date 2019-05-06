@@ -11,8 +11,6 @@ class Block(
     val header: Header,
     val transactions: List<Transaction>
 ) {
-    fun transactionCounter() = transactions.count()
-
     fun blockHash() = BlockHash(
         Hashing.sha256()
             .hashString(
