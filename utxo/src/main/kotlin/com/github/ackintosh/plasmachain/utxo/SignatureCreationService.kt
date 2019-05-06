@@ -8,7 +8,7 @@ import org.bouncycastle.util.encoders.Base64
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
-class SignatureService {
+class SignatureCreationService {
     companion object {
         fun create(
             privateKey: ECPrivateKey,

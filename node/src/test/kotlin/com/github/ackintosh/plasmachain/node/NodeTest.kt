@@ -1,7 +1,7 @@
 package com.github.ackintosh.plasmachain.node
 
 import com.github.ackintosh.plasmachain.utxo.Address
-import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.transaction.*
 import org.junit.jupiter.api.Assertions
@@ -19,7 +19,7 @@ class NodeTest {
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = genesisTransaction.transactionHash(),
                 outputIndex = OutputIndex(0u)
@@ -50,7 +50,7 @@ class NodeTest {
         val input = Input(
             transactionHash = incorrectTransactionHash,
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = incorrectTransactionHash,
                 outputIndex = OutputIndex(0u)
@@ -81,7 +81,7 @@ class NodeTest {
         val input = Input(
             transactionHash = genesisTransaction.transactionHash(),
             outputIndex = OutputIndex(0u),
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 privateKey = Node.ALICE_KEY_PAIR.private as ECPrivateKey,
                 transactionHash = genesisTransaction.transactionHash(),
                 outputIndex = OutputIndex(0u)

@@ -1,7 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo.transaction
 
 import com.github.ackintosh.plasmachain.utxo.Address
-import com.github.ackintosh.plasmachain.utxo.SignatureService
+import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class InputTest {
             Input(
                 transactionHash = transactionHash,
                 outputIndex = outputIndex,
-                signature = SignatureService.create(
+                signature = SignatureCreationService.create(
                     keyPair.private as ECPrivateKey,
                     transactionHash,
                     outputIndex
@@ -39,7 +39,7 @@ class InputTest {
         val input = Input(
             transactionHash = transactionHash,
             outputIndex = outputIndex,
-            signature = SignatureService.create(
+            signature = SignatureCreationService.create(
                 keyPair.private as ECPrivateKey,
                 transactionHash,
                 outputIndex
