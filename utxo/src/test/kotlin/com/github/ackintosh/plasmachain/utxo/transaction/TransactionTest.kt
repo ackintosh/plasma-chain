@@ -46,16 +46,6 @@ class TransactionTest {
     }.invoke()
 
     @Test
-    fun inputCount() {
-        val transaction = Transaction(
-            inputs = listOf(inputX, inputY),
-            outputs = emptyList()
-        )
-
-        assertEquals(2, transaction.inputCount())
-    }
-
-    @Test
     fun outputCount() {
         val transaction = Transaction(
             inputs = emptyList(),

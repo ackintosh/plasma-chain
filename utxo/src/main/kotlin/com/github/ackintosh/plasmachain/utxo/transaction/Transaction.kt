@@ -7,7 +7,6 @@ class Transaction(
     val inputs: List<TransactionInput>,
     val outputs: List<Output>
 ) {
-    fun inputCount() = inputs.count()
     fun outputCount() = outputs.count()
 
     fun transactionHash() : TransactionHash {
