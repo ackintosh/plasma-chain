@@ -1,7 +1,7 @@
 package com.github.ackintosh.plasmachain.utxo
 
 import com.github.ackintosh.plasmachain.utxo.block.Block
-import com.github.ackintosh.plasmachain.utxo.block.Hash
+import com.github.ackintosh.plasmachain.utxo.block.BlockHash
 import com.github.ackintosh.plasmachain.utxo.block.Header
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -43,7 +43,7 @@ class Chain(private val data: MutableList<Block>) {
 
             return Block(
                 header = Header(
-                    previousBlockHash = Hash.zero(),
+                    previousBlockHash = BlockHash.zero(),
                     merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() })
                 ),
                 transactions = transactions

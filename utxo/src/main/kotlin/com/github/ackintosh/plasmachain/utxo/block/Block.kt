@@ -12,7 +12,7 @@ class Block(
 ) {
     fun transactionCounter() = transactions.count()
 
-    fun blockHash() = Hash(
+    fun blockHash() = BlockHash(
         Hashing.sha256()
             .hashString(
                 Hashing.sha256()
