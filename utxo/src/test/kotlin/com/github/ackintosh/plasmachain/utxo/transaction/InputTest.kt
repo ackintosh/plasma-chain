@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class InputTest {
     private val keyPair = Address.generateKeyPair()
     private val hash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())

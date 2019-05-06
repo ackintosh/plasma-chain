@@ -11,6 +11,7 @@ import java.math.BigInteger
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
+@kotlin.ExperimentalUnsignedTypes
 class TransactionVerificationServiceTest {
     private val hash = TransactionHash(ByteArray(32) { 1.toByte() }.toHexString())
 
