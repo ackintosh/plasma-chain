@@ -24,9 +24,5 @@ class SignatureService {
                 Base64.toBase64String(instance.sign())
             )
         }
-
-        fun verify(publicKey: ECPublicKey) {
-            TODO("not implemented")
-        }
     }
 }
