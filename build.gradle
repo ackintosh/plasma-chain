@@ -74,6 +74,9 @@ project(':utxo') {
 }
 
 project(':node') {
+    // generated smart contract wrappers via web3j
+    sourceSets.main.java.srcDirs = ['src/main/gen']
+    
     dependencies {
         implementation project(':utxo')
         implementation 'org.web3j:core:4.2.0'
