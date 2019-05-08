@@ -2,6 +2,7 @@ package com.github.ackintosh.plasmachain.node
 
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.SignatureCreationService
+import com.github.ackintosh.plasmachain.utxo.block.BlockNumber
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import com.github.ackintosh.plasmachain.utxo.transaction.Input
@@ -115,7 +116,8 @@ class NodeTest {
         val node = Node()
         val address = Address.from(Address.generateKeyPair())
         val amount = BigInteger("1000")
-        node.handleDepositedEvent(address, amount)
+        val depositBlockNumber = BlockNumber(2u)
+        node.handleDepositedEvent(address, amount, depositBlockNumber)
 
         val block = node.getLatestBlock()
 
