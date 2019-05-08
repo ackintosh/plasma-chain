@@ -124,7 +124,7 @@ class Node : Runnable {
             RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
         )
 
-        web3.ethLogFlowable(filter).subscribe { log ->
+        web3.ethLogFlowable(filter).subscribe({ log ->
             logger.info("Event: $log")
             val event = Event(
                 "Deposited",
@@ -148,10 +148,21 @@ class Node : Runnable {
                         logger.info("[Deposited] address:$web3jAddress amount:$web3jAmount")
                         handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount, BlockNumber.from(web3jDepositBlockNumber))
                     }
+                    EventEncoder.encode(RootChain.BLOCKSUBMITTED_EVENT) -> {
+                        val params = FunctionReturnDecoder.decode(
+                            log.data,
+                            RootChain.BLOCKSUBMITTED_EVENT.nonIndexedParameters
+                        )
+                        val web3jMerkleRoot = params[0].value as ByteArray
+                        logger.info("[BlockSubmitted] merkleRoot:$web3jMerkleRoot")
+                    }
                     else -> logger.info("Unhandled event. topic_signature: $topic")
                 }
             }
-        }
+        }, {
+            // TODO: error handling
+            println(it)
+        })
     }
 
     // TODO: race condition
@@ -183,6 +194,6 @@ class Node : Runnable {
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
 
         // see contract/build/contracts/RootChain.json
-        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557314556403"
+        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557357431302"
     }
 }
