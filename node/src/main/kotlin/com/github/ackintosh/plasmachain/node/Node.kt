@@ -3,6 +3,7 @@ package com.github.ackintosh.plasmachain.node
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.block.Block
+import com.github.ackintosh.plasmachain.utxo.block.BlockNumber
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -112,6 +113,7 @@ class Node : Runnable {
                 "Deposited",
                 listOf(
                     TypeReference.create(org.web3j.abi.datatypes.Address::class.java),
+                    TypeReference.create(Uint256::class.java),
                     TypeReference.create(Uint256::class.java)
                 )
             )
@@ -124,9 +126,10 @@ class Node : Runnable {
                         )
                         val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
                         val web3jAmount = params[1].value as BigInteger
+                        val web3jDepositBlockNumber = params[2].value as BigInteger
 
                         logger.info("[Deposited] address:$web3jAddress amount:$web3jAmount")
-                        handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount)
+                        handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount, BlockNumber.from(web3jDepositBlockNumber))
                     }
                     else -> logger.info("Unhandled event. topic_signature: $topic")
                 }
@@ -135,7 +138,7 @@ class Node : Runnable {
     }
 
     // TODO: race condition
-    internal fun handleDepositedEvent(address: Address, amount: BigInteger) {
+    internal fun handleDepositedEvent(address: Address, amount: BigInteger, depositBlockNumber: BlockNumber) {
         val generationTransaction = Transaction(
             input1 = GenerationInput(CoinbaseData("xxx")),
             output1 = Output(amount, address)
@@ -146,7 +149,7 @@ class Node : Runnable {
         // TODO: consistency of block number
         val block = Block(
             merkleRoot = MerkleTree.build(listOf(generationTransaction.transactionHash())),
-            number = chain.increaseBlockNumber(),
+            number = depositBlockNumber,
             transactions = listOf(generationTransaction)
         )
         if (chain.add(block)) {
