@@ -50,17 +50,17 @@ class Node : Runnable {
         // TODO: consistency of block number
         val block = Block(
             merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
-            number = chain.increaseBlockNumber(),
+            number = BlockNumber(chain.nextChildBlockNumber()),
             transactions = transactions
         )
         logger.info("New block: $block")
 
         if (chain.add(block)) {
             logger.info("New block has been added into the chain. block_hash: $block")
+            chain.updateNextChildBlockNumber()
             transactionPool.clear()
             logger.info("Transaction pool has been cleared")
         } else {
-            chain.decreaseBlockNumber()
             logger.warning("Failed to add new block. block_hash: $block")
             return false
         }
