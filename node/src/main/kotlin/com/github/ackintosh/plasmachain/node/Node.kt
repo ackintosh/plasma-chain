@@ -1,9 +1,11 @@
 package com.github.ackintosh.plasmachain.node
 
+import com.github.ackintosh.plasmachain.node.web3j.RootChain
 import com.github.ackintosh.plasmachain.utxo.Address
 import com.github.ackintosh.plasmachain.utxo.Chain
 import com.github.ackintosh.plasmachain.utxo.block.Block
 import com.github.ackintosh.plasmachain.utxo.block.BlockNumber
+import com.github.ackintosh.plasmachain.utxo.extensions.hexStringToByteArray
 import com.github.ackintosh.plasmachain.utxo.extensions.toHexString
 import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
@@ -20,6 +22,8 @@ import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.request.EthFilter
 import org.web3j.protocol.http.HttpService
+import org.web3j.tx.ClientTransactionManager
+import org.web3j.tx.gas.DefaultGasProvider
 import java.math.BigInteger
 import java.util.logging.Logger
 
@@ -57,6 +61,19 @@ class Node : Runnable {
 
         if (chain.add(block)) {
             logger.info("New block has been added into the chain. block_hash: $block")
+
+            block.run {
+                val web3 = Web3j.build(HttpService())
+                val txManager = ClientTransactionManager(web3, "0x627306090abaB3A6e1400e9345bC60c78a8BEf57")
+                val rootChain = RootChain.load(
+                    RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
+                    web3,
+                    txManager, DefaultGasProvider()
+                )
+                val transactionReceipt = rootChain.submit(this.merkleRoot.transactionHash.value.hexStringToByteArray()).send()
+                logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
+            }
+
             chain.updateNextChildBlockNumber()
             transactionPool.clear()
             logger.info("Transaction pool has been cleared")
@@ -104,7 +121,7 @@ class Node : Runnable {
         val filter = EthFilter(
             DefaultBlockParameterName.EARLIEST,
             DefaultBlockParameterName.LATEST,
-            ROOT_CHAIN_CONTRACT_ADDRESS
+            RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
         )
 
         web3.ethLogFlowable(filter).subscribe { log ->
@@ -164,6 +181,8 @@ class Node : Runnable {
         private val logger = Logger.getLogger(Node::class.java.name)
         val ALICE_KEY_PAIR = Address.generateKeyPair()
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
-        private const val ROOT_CHAIN_CONTRACT_ADDRESS = "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da"
+
+        // see contract/build/contracts/RootChain.json
+        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557314556403"
     }
 }
