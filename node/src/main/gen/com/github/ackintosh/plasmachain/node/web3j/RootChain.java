@@ -36,7 +36,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Generated with web3j version 4.2.0.
  */
 public class RootChain extends Contract {
-    private static final String BINARY = "0x6101ae56600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a052631f045c7660005114156100b35734156100ac57600080fd5b6001600055005b63d0e30db0600051141561012c57600034116100ce57600080fd5b60008054600182540110156100e257600080fd5b60018154018155503461014052336101605261014051610180526000546101a0527f73a19dd210f1a7f902193214c0ee91dd35ee5b4d920cba8d519eca65a7b488ca6060610160a1005b63d9caa3d2600051141561017e576020600461014037341561014d57600080fd5b61014051610160527f38ced01204841ece6186d0d51d96712da8d7553e3ef7cef2394bc185506ec03d6020610160a1005b63ade116f060005114156101a457341561019757600080fd5b60005460005260206000f3005b60006000fd5b6100046101ae036100046000396100046101ae036000f3";
+    private static final String BINARY = "0x6101ff56600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a052631f045c7660005114156100b85734156100ac57600080fd5b60006000556001600155005b63d0e30db0600051141561015257600034116100d357600080fd5b6001546000546001540110156100e857600080fd5b6000546001540161014052600180546001825401101561010757600080fd5b600181540181555034610160523361018052610160516101a052610140516101c0527f73a19dd210f1a7f902193214c0ee91dd35ee5b4d920cba8d519eca65a7b488ca6060610180a1005b63762ca84860005114156101a9576040600461014037341561017357600080fd5b600160015561014051610180527f38ced01204841ece6186d0d51d96712da8d7553e3ef7cef2394bc185506ec03d6020610180a1005b63a732668e60005114156101cf5734156101c257600080fd5b60005460005260206000f3005b639f5d8e5360005114156101f55734156101e857600080fd5b60015460005260206000f3005b60006000fd5b6100046101ff036100046000396100046101ff036000f3";
 
     public static final String FUNC___INIT = "__init";
 
@@ -44,7 +44,9 @@ public class RootChain extends Contract {
 
     public static final String FUNC_SUBMIT = "submit";
 
-    public static final String FUNC_CURRENTDEPOSITBLOCKNUMBER = "currentDepositBlockNumber";
+    public static final String FUNC_CURRENTPLASMABLOCKNUMBER = "currentPlasmaBlockNumber";
+
+    public static final String FUNC_NEXTDEPOSITBLOCKNUMBER = "nextDepositBlockNumber";
 
     public static final Event DEPOSITED_EVENT = new Event("Deposited", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
@@ -58,8 +60,7 @@ public class RootChain extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("1557314556403", "0xeec918d74c746167564401103096D45BbD494B74");
-        _addresses.put("1557357431302", "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da");
+        _addresses.put("1557357431302", "0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4");
     }
 
     @Deprecated
@@ -162,16 +163,24 @@ public class RootChain extends Contract {
         return executeRemoteCallTransaction(function, weiValue);
     }
 
-    public RemoteCall<TransactionReceipt> submit(byte[] _root) {
+    public RemoteCall<TransactionReceipt> submit(byte[] _root, BigInteger plasmaBlockNumber) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 FUNC_SUBMIT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(_root)), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(_root), 
+                new org.web3j.abi.datatypes.generated.Uint256(plasmaBlockNumber)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<BigInteger> currentDepositBlockNumber() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CURRENTDEPOSITBLOCKNUMBER, 
+    public RemoteCall<BigInteger> currentPlasmaBlockNumber() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CURRENTPLASMABLOCKNUMBER, 
+                Arrays.<Type>asList(), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
+    }
+
+    public RemoteCall<BigInteger> nextDepositBlockNumber() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_NEXTDEPOSITBLOCKNUMBER, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);

@@ -70,7 +70,10 @@ class Node : Runnable {
                     web3,
                     txManager, DefaultGasProvider()
                 )
-                val transactionReceipt = rootChain.submit(this.merkleRoot.transactionHash.value.hexStringToByteArray()).send()
+                val transactionReceipt = rootChain.submit(
+                    this.merkleRoot.transactionHash.value.hexStringToByteArray(),
+                    BigInteger(this.number.value.toString())
+                ).send()
                 logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
             }
 

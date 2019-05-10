@@ -29,7 +29,7 @@ def deposit():
 
 # @dev submit plasma block
 @public
-def submit(_root: bytes32):
+def submit(_root: bytes32, plasmaBlockNumber: uint256):
     # TODO: ensure msg.sender == operator
     # TODO: store plasma chain merkle root
     # TODO: update self.currentPlasmaBlockNumber
