@@ -23,7 +23,6 @@ class Chain(private val data: MutableList<Block>) {
     fun updateNextChildBlockNumber() {
         nextChildBlockNumber += childBlockNumberInterval
     }
-    fun decreaseBlockNumber() = BlockNumber(--currentBlockNumber)
 
     fun add(block: Block) = data.add(block)
 

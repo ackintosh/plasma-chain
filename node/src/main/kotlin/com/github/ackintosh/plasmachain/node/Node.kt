@@ -186,7 +186,6 @@ class Node : Runnable {
         if (chain.add(block)) {
             logger.info("A deposit block has been added into the chain successfully. block: $block")
         } else {
-            chain.decreaseBlockNumber()
             logger.warning("Failed to add the the deposit block: $block")
         }
     }
