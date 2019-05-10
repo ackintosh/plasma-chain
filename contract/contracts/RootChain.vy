@@ -32,6 +32,7 @@ def deposit():
 def submit(_root: bytes32, plasmaBlockNumber: uint256):
     # TODO: ensure msg.sender == operator
     # TODO: store plasma chain merkle root
-    # TODO: update self.currentPlasmaBlockNumber
+    if plasmaBlockNumber > self.currentPlasmaBlockNumber:
+        self.currentPlasmaBlockNumber = plasmaBlockNumber
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
     log.BlockSubmitted(_root)
