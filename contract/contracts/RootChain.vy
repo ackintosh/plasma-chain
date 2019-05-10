@@ -12,6 +12,7 @@ BlockSubmitted: event({
     _root: bytes32
 })
 
+operator: address
 plasmaBlocks: map(uint256, PlasmaBlock)
 currentPlasmaBlockNumber: public(uint256)
 nextDepositBlockNumber: public(uint256)
@@ -21,6 +22,7 @@ INITIAL_DEPOSIT_BLOCK_NUMBER: constant(uint256) = 1
 # @dev Constructor
 @public
 def __init():
+    self.operator = msg.sender
     self.currentPlasmaBlockNumber = 0
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
 
@@ -35,7 +37,7 @@ def deposit():
 # @dev submit plasma block
 @public
 def submit(_root: bytes32, plasmaBlockNumber: uint256):
-    # TODO: ensure msg.sender == operator
+    assert msg.sender == self.operator
     self.plasmaBlocks[plasmaBlockNumber] = PlasmaBlock({
         root: _root,
         blockNumber: plasmaBlockNumber
