@@ -23,7 +23,7 @@ def __init():
 @payable
 def deposit():
     assert msg.value > 0
-    depositBlocknumber: uint256 = self.nextDepositBlockNumber
+    depositBlocknumber: uint256 = self.nextDepositBlockNumber + self.currentPlasmaBlockNumber
     self.nextDepositBlockNumber += 1
     log.Deposited(msg.sender, as_unitless_number(msg.value), depositBlockNumber)
 
