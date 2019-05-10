@@ -21,7 +21,7 @@ INITIAL_DEPOSIT_BLOCK_NUMBER: constant(uint256) = 1
 
 # @dev Constructor
 @public
-def __init():
+def __init__():
     self.operator = msg.sender
     self.currentPlasmaBlockNumber = 0
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
