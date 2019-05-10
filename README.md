@@ -58,3 +58,11 @@ truffle(development)> let instance = await RootChain.deployed()
 truffle(development)> let accounts = await web3.eth.getAccounts()
 truffle(development)> instance.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
 ```
+
+## :memo:
+
+#### Generate smart contract wrapper with web3j
+
+```sh
+$ web3j truffle generate contract/build/contracts/RootChain.json --package com.github.ackintosh.plasmachain.node.web3j -o node/src/main/gen/
+```
