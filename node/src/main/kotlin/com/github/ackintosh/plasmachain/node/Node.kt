@@ -196,6 +196,6 @@ class Node : Runnable {
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
 
         // see contract/build/contracts/RootChain.json
-        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557357431302"
+        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557505324562"
     }
 }

@@ -36,9 +36,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Generated with web3j version 4.2.0.
  */
 public class RootChain extends Contract {
-    private static final String BINARY = "0x61024f56600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a052631f045c7660005114156100bc5734156100ac57600080fd5b3360005560006002556001600355005b63d0e30db0600051141561015657600034116100d757600080fd5b6003546002546003540110156100ec57600080fd5b6002546003540161014052600380546001825401101561010b57600080fd5b600181540181555034610160523361018052610160516101a052610140516101c0527f73a19dd210f1a7f902193214c0ee91dd35ee5b4d920cba8d519eca65a7b488ca6060610180a1005b63762ca84860005114156101f9576040600461014037341561017757600080fd5b600054331461018557600080fd5b60016101605160e05260c052604060c02060c052602060c020610140518155610160516001820155506002546101605111156101c357610160516002555b600160035561014051610180527f38ced01204841ece6186d0d51d96712da8d7553e3ef7cef2394bc185506ec03d6020610180a1005b63a732668e600051141561021f57341561021257600080fd5b60025460005260206000f3005b639f5d8e53600051141561024557341561023857600080fd5b60035460005260206000f3005b60006000fd5b61000461024f0361000460003961000461024f036000f3";
-
-    public static final String FUNC___INIT = "__init";
+    private static final String BINARY = "0x600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a052341561009e57600080fd5b33600055600060025560016003556102d356600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a05263d0e30db0600051141561012d57600034116100ae57600080fd5b6003546002546003540110156100c357600080fd5b600254600354016101405260038054600182540110156100e257600080fd5b600181540181555034610160523361018052610160516101a052610140516101c0527f73a19dd210f1a7f902193214c0ee91dd35ee5b4d920cba8d519eca65a7b488ca6060610180a1005b63762ca84860005114156101d0576040600461014037341561014e57600080fd5b600054331461015c57600080fd5b60016101605160e05260c052604060c02060c052602060c0206101405181556101605160018201555060025461016051111561019a57610160516002555b600160035561014051610180527f38ced01204841ece6186d0d51d96712da8d7553e3ef7cef2394bc185506ec03d6020610180a1005b63a732668e60005114156101f65734156101e957600080fd5b60025460005260206000f3005b639f5d8e53600051141561021c57341561020f57600080fd5b60035460005260206000f3005b60006000fd5b6100b16102d3036100b16000396100b16102d3036000f3";
 
     public static final String FUNC_DEPOSIT = "deposit";
 
@@ -60,7 +58,7 @@ public class RootChain extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("1557357431302", "0x75c35C980C0d37ef46DF04d31A140b65503c0eEd");
+        _addresses.put("1557505324562", "0x0d8cc4b8d15D4c3eF1d70af0071376fb26B5669b");
     }
 
     @Deprecated
@@ -147,14 +145,6 @@ public class RootChain extends Contract {
         return blockSubmittedEventFlowable(filter);
     }
 
-    public RemoteCall<TransactionReceipt> __init() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC___INIT, 
-                Arrays.<Type>asList(), 
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
     public RemoteCall<TransactionReceipt> deposit(BigInteger weiValue) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 FUNC_DEPOSIT, 
@@ -208,13 +198,13 @@ public class RootChain extends Contract {
         return deployRemoteCall(RootChain.class, web3j, credentials, contractGasProvider, BINARY, "");
     }
 
+    public static RemoteCall<RootChain> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return deployRemoteCall(RootChain.class, web3j, transactionManager, contractGasProvider, BINARY, "");
+    }
+
     @Deprecated
     public static RemoteCall<RootChain> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         return deployRemoteCall(RootChain.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
-    }
-
-    public static RemoteCall<RootChain> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(RootChain.class, web3j, transactionManager, contractGasProvider, BINARY, "");
     }
 
     @Deprecated
