@@ -8,11 +8,14 @@ BlockSubmitted: event({
     _root: bytes32
 })
 
+currentPlasmaBlockNumber: public(uint256)
 currentDepositBlockNumber: public(uint256)
+PLASMA_BLOCK_NUMBER_INTERVAL: constant(uint256) = 1000
 
 # @dev Constructor
 @public
 def __init():
+    self.currentPlasmaBlockNumber = 0
     self.currentDepositBlockNumber = 1
 
 @public
