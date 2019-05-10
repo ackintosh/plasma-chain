@@ -54,7 +54,7 @@ class Node : Runnable {
         // TODO: consistency of block number
         val block = Block(
             merkleRoot = MerkleTree.build(transactions.map { it.transactionHash() }),
-            number = BlockNumber(chain.nextChildBlockNumber()),
+            number = chain.nextChildBlockNumber(),
             transactions = transactions
         )
         logger.info("New block: $block")
