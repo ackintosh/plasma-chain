@@ -109,6 +109,7 @@ class NodeTest {
 
         Assertions.assertTrue(node.addTransaction(transaction))
         Assertions.assertTrue(node.createNewBlock())
+        Assertions.assertEquals(BlockNumber(1000u), node.getLatestBlock().number)
     }
 
     @Test

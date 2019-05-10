@@ -15,9 +15,14 @@ import java.math.BigInteger
 class Chain(private val data: MutableList<Block>) {
     // TODO: race condition
     private var currentBlockNumber = 1u
+    private val childBlockNumberInterval = 1000u
+    private var nextChildBlockNumber = childBlockNumberInterval
+
     fun currentBlockNumber() = BlockNumber(currentBlockNumber)
-    fun increaseBlockNumber() = BlockNumber(++currentBlockNumber)
-    fun decreaseBlockNumber() = BlockNumber(--currentBlockNumber)
+    fun nextChildBlockNumber() = BlockNumber(nextChildBlockNumber)
+    fun updateNextChildBlockNumber() {
+        nextChildBlockNumber += childBlockNumberInterval
+    }
 
     fun add(block: Block) = data.add(block)
 
