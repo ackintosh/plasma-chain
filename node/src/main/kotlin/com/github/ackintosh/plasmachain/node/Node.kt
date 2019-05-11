@@ -13,14 +13,8 @@ import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
-import org.web3j.abi.EventEncoder
-import org.web3j.abi.FunctionReturnDecoder
-import org.web3j.abi.TypeReference
-import org.web3j.abi.datatypes.Event
-import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
-import org.web3j.protocol.core.methods.request.EthFilter
 import org.web3j.protocol.http.HttpService
 import org.web3j.tx.ClientTransactionManager
 import org.web3j.tx.gas.DefaultGasProvider
@@ -63,14 +57,7 @@ class Node : Runnable {
             logger.info("New block has been added into the chain. block_hash: $block")
 
             block.run {
-                val web3 = Web3j.build(HttpService())
-                val txManager = ClientTransactionManager(web3, "0x627306090abaB3A6e1400e9345bC60c78a8BEf57")
-                val rootChain = RootChain.load(
-                    RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
-                    web3,
-                    txManager, DefaultGasProvider()
-                )
-                val transactionReceipt = rootChain.submit(
+                val transactionReceipt = rootChain().submit(
                     this.merkleRoot.transactionHash.value.hexStringToByteArray(),
                     BigInteger(this.number.value.toString())
                 ).send()
@@ -120,52 +107,33 @@ class Node : Runnable {
     }
 
     private fun subscribeRootChainEvents() {
-        val web3 = Web3j.build(HttpService())
-        val filter = EthFilter(
-            DefaultBlockParameterName.EARLIEST,
-            DefaultBlockParameterName.LATEST,
-            RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
-        )
-
-        web3.ethLogFlowable(filter).subscribe({ log ->
-            logger.info("Event: $log")
-            val event = Event(
-                "Deposited",
-                listOf(
-                    TypeReference.create(org.web3j.abi.datatypes.Address::class.java),
-                    TypeReference.create(Uint256::class.java),
-                    TypeReference.create(Uint256::class.java)
+        rootChain().run {
+            // DepositCreated
+            this
+                .depositCreatedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
                 )
-            )
-            log.topics.forEach { topic ->
-                when (topic) {
-                    EventEncoder.encode(event) -> {
-                        val params = FunctionReturnDecoder.decode(
-                            log.data,
-                            event.nonIndexedParameters
-                        )
-                        val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
-                        val web3jAmount = params[1].value as BigInteger
-                        val web3jDepositBlockNumber = params[2].value as BigInteger
+                .subscribe({ log ->
+                    logger.info("[DepositCreated] $log")
 
-                        logger.info("[Deposited] address:$web3jAddress amount:$web3jAmount")
-                        handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount, BlockNumber.from(web3jDepositBlockNumber))
-                    }
-                    EventEncoder.encode(RootChain.BLOCKSUBMITTED_EVENT) -> {
-                        val params = FunctionReturnDecoder.decode(
-                            log.data,
-                            RootChain.BLOCKSUBMITTED_EVENT.nonIndexedParameters
-                        )
-                        val web3jMerkleRoot = params[0].value as ByteArray
-                        logger.info("[BlockSubmitted] merkleRoot:$web3jMerkleRoot")
-                    }
-                    else -> logger.info("Unhandled event. topic_signature: $topic")
-                }
-            }
-        }, {
-            // TODO: error handling
-            println(it)
-        })
+                    handleDepositedEvent(
+                        Address.from(log.owner),
+                        log.amount,
+                        BlockNumber.from(log.blockNumber)
+                    )
+                }, { throw it }) // TODO: error handling
+
+            // BlockSubmitted
+            this
+                .blockSubmittedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
+                )
+                .subscribe({ log ->
+                    logger.info("[BlockSubmitted] merkleRoot:${log.blockRoot.toHexString()}")
+                }, { throw it }) // TODO: error handling
+        }
     }
 
     // TODO: race condition
@@ -184,11 +152,21 @@ class Node : Runnable {
             transactions = listOf(generationTransaction)
         )
         if (chain.add(block)) {
-            logger.info("A deposit block has been added into the chain successfully. block: $block")
+            logger.info("A deposit block has been added into plasma chain successfully. block: $block")
         } else {
             logger.warning("Failed to add the the deposit block: $block")
         }
     }
+
+    private fun web3() = Web3j.build(HttpService())
+
+    private fun rootChain() =
+        RootChain.load(
+            RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
+            web3(),
+            ClientTransactionManager(web3(), "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"),
+            DefaultGasProvider()
+        )
 
     companion object {
         private val logger = Logger.getLogger(Node::class.java.name)

@@ -2,14 +2,14 @@ struct PlasmaBlock:
     root: bytes32
     blockNumber: uint256
 
-Deposited: event({
-    _depositer: address,
-    _amount: uint256,
-    _depositBlockNumber: uint256
+DepositCreated: event({
+    owner: address,
+    amount: uint256,
+    blockNumber: uint256
 })
 
 BlockSubmitted: event({
-    _root: bytes32
+    blockRoot: bytes32
 })
 
 operator: address
@@ -32,17 +32,17 @@ def deposit():
     assert msg.value > 0
     depositBlocknumber: uint256 = self.nextDepositBlockNumber + self.currentPlasmaBlockNumber
     self.nextDepositBlockNumber += 1
-    log.Deposited(msg.sender, as_unitless_number(msg.value), depositBlocknumber)
+    log.DepositCreated(msg.sender, as_unitless_number(msg.value), depositBlocknumber)
 
 # @dev submit plasma block
 @public
-def submit(_root: bytes32, plasmaBlockNumber: uint256):
+def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
     assert msg.sender == self.operator
     self.plasmaBlocks[plasmaBlockNumber] = PlasmaBlock({
-        root: _root,
+        root: blockRoot,
         blockNumber: plasmaBlockNumber
     })
     if plasmaBlockNumber > self.currentPlasmaBlockNumber:
         self.currentPlasmaBlockNumber = plasmaBlockNumber
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
-    log.BlockSubmitted(_root)
+    log.BlockSubmitted(blockRoot)
