@@ -27,8 +27,8 @@ class Chain(private val data: SortedMap<UInt, Block>) {
 
     fun add(block: Block) = data.put(block.number.value, block)
 
-    fun genesisBlock() = data.get(0u)
-    fun latestBlock() = data.get(data.lastKey())
+    fun genesisBlock() = data.get(0u) ?: throw IllegalStateException("Genesis block don't exist")
+    fun latestBlock() = data.get(data.lastKey()) ?: throw IllegalStateException("No blocks")
 
     fun snapshot() = Chain(data.toSortedMap())
 
