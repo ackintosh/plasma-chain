@@ -3,9 +3,9 @@ struct PlasmaBlock:
     blockNumber: uint256
 
 DepositCreated: event({
-    _depositer: address,
-    _amount: uint256,
-    _depositBlockNumber: uint256
+    owner: address,
+    amount: uint256,
+    blockNumber: uint256
 })
 
 BlockSubmitted: event({

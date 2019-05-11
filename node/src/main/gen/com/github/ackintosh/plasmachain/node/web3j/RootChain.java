@@ -58,7 +58,7 @@ public class RootChain extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("1557505324562", "0xbaAA2a3237035A2c7fA2A33c76B44a8C6Fe18e87");
+        _addresses.put("1557505324562", "0x3d49d1eF2adE060a33c6E6Aa213513A7EE9a6241");
     }
 
     @Deprecated
@@ -85,9 +85,9 @@ public class RootChain extends Contract {
         for (Contract.EventValuesWithLog eventValues : valueList) {
             DepositCreatedEventResponse typedResponse = new DepositCreatedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse._depositer = (String) eventValues.getNonIndexedValues().get(0).getValue();
-            typedResponse._amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
-            typedResponse._depositBlockNumber = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+            typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+            typedResponse.blockNumber = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
             responses.add(typedResponse);
         }
         return responses;
@@ -100,9 +100,9 @@ public class RootChain extends Contract {
                 Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(DEPOSITCREATED_EVENT, log);
                 DepositCreatedEventResponse typedResponse = new DepositCreatedEventResponse();
                 typedResponse.log = log;
-                typedResponse._depositer = (String) eventValues.getNonIndexedValues().get(0).getValue();
-                typedResponse._amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
-                typedResponse._depositBlockNumber = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+                typedResponse.owner = (String) eventValues.getNonIndexedValues().get(0).getValue();
+                typedResponse.amount = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
+                typedResponse.blockNumber = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
                 return typedResponse;
             }
         });
@@ -223,11 +223,11 @@ public class RootChain extends Contract {
     public static class DepositCreatedEventResponse {
         public Log log;
 
-        public String _depositer;
+        public String owner;
 
-        public BigInteger _amount;
+        public BigInteger amount;
 
-        public BigInteger _depositBlockNumber;
+        public BigInteger blockNumber;
     }
 
     public static class BlockSubmittedEventResponse {

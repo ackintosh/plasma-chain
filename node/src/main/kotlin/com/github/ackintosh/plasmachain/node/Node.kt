@@ -115,12 +115,12 @@ class Node : Runnable {
                     DefaultBlockParameterName.LATEST
                 )
                 .subscribe({ log ->
-                    logger.info("[DepositCreated] depositer:${log._depositer} amount:${log._amount} depositBlockNumber: ${log._depositBlockNumber}")
+                    logger.info("[DepositCreated] $log")
 
                     handleDepositedEvent(
-                        Address.from(log._depositer),
-                        log._amount,
-                        BlockNumber.from(log._depositBlockNumber)
+                        Address.from(log.owner),
+                        log.amount,
+                        BlockNumber.from(log.blockNumber)
                     )
                 }, { throw it }) // TODO: error handling
 
