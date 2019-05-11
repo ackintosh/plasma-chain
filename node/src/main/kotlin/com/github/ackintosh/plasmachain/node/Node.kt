@@ -108,31 +108,33 @@ class Node : Runnable {
     }
 
     private fun subscribeRootChainEvents() {
-        // DepositCreated
-        rootChain()
-            .depositCreatedEventFlowable(
-                DefaultBlockParameterName.EARLIEST,
-                DefaultBlockParameterName.LATEST
-            )
-            .subscribe({ log ->
-                logger.info("[Deposited] depositer:${log._depositer} amount:${log._amount} depositBlockNumber: ${log._depositBlockNumber}")
-                handleDepositedEvent(
-                    Address.from(log._depositer),
-                    log._amount,
-                    BlockNumber.from(log._depositBlockNumber)
+        rootChain().run {
+            // DepositCreated
+            this
+                .depositCreatedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
                 )
-            }, { throw it }) // TODO: error handling
+                .subscribe({ log ->
+                    logger.info("[Deposited] depositer:${log._depositer} amount:${log._amount} depositBlockNumber: ${log._depositBlockNumber}")
 
-        // BlockSubmitted
-        rootChain()
-            .blockSubmittedEventFlowable(
-                DefaultBlockParameterName.EARLIEST,
-                DefaultBlockParameterName.LATEST
-            )
-            .subscribe({ log ->
-                logger.info("[BlockSubmitted] merkleRoot:${log._root.toHexString()}")
-            }, { throw it }) // TODO: error handling
+                    handleDepositedEvent(
+                        Address.from(log._depositer),
+                        log._amount,
+                        BlockNumber.from(log._depositBlockNumber)
+                    )
+                }, { throw it }) // TODO: error handling
 
+            // BlockSubmitted
+            this
+                .blockSubmittedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
+                )
+                .subscribe({ log ->
+                    logger.info("[BlockSubmitted] merkleRoot:${log._root.toHexString()}")
+                }, { throw it }) // TODO: error handling
+        }
     }
 
     // TODO: race condition
