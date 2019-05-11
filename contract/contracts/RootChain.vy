@@ -1,3 +1,4 @@
+# Structs
 struct PlasmaBlock:
     root: bytes32
     blockNumber: uint256
@@ -5,8 +6,16 @@ struct PlasmaBlock:
 struct Exit:
     owner: address
     amount: uint256
-    exitableAt: uint256
 
+# External Contracts
+contract PriorityQueue:
+    def minChild(_i: uint256) -> uint256: constant
+    def insert(_k: uint256) -> bool: modifying
+    def getMin() -> uint256: constant
+    def delMin() -> uint256: modifying
+    def getCurrentSize() -> uint256: constant
+
+# Events
 DepositCreated: event({
     owner: address,
     amount: uint256,
@@ -17,7 +26,9 @@ BlockSubmitted: event({
     blockRoot: bytes32
 })
 
+# Storage veriables
 operator: address
+priorityQueue: address
 plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
 currentPlasmaBlockNumber: public(uint256)
 nextDepositBlockNumber: public(uint256)
@@ -30,8 +41,9 @@ EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
 
 # @dev Constructor
 @public
-def __init__():
+def __init__(_priorityQueueAddress: address):
     self.operator = msg.sender
+    self.priorityQueue = _priorityQueueAddress
     self.currentPlasmaBlockNumber = 0
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
 
@@ -87,9 +99,11 @@ def exit(
     )
     assert requestRoot == self.plasmaBlocks[depositBlockNumber].root
 
-    exit: Exit = Exit({
+    exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
+    priority: uint256 = bitwise_or(shift(exitableAt, 128), depositBlockNumber)
+    assert PriorityQueue(self.priorityQueue).insert(priority)
+
+    self.exits[depositBlockNumber] = Exit({
         owner: msg.sender,
-        amount: amount,
-        exitableAt: as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
+        amount: amount
     })
-    self.exits[depositBlockNumber] = exit
