@@ -1,10 +1,16 @@
 owner: address
 heapList: map(uint256, uint256)
 currentSize: uint256
+rootChain: address
 
 @public
 def __init__():
     self.owner = msg.sender
+
+@public
+def setRootChain(_rootChain: address):
+    assert msg.sender == self.owner
+    self.rootChain = _rootChain
 
 @private
 def percUp(_i: uint256):
@@ -48,13 +54,12 @@ def percDown(_i: uint256):
 
 @public
 def insert(_k: uint256) -> bool:
-    assert msg.sender == self.owner
+    assert msg.sender == self.rootChain
     assert self.currentSize < 2 ** 30 # max size of priority queue is 2^30 - 1
     self.currentSize += 1
     self.heapList[self.currentSize] = _k
     self.percUp(self.currentSize)
     return True
-
 
 @public
 @constant

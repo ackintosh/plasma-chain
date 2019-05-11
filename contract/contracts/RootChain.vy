@@ -14,6 +14,7 @@ contract PriorityQueue:
     def getMin() -> uint256: constant
     def delMin() -> uint256: modifying
     def getCurrentSize() -> uint256: constant
+    def dd(): modifying
 
 # Events
 DepositCreated: event({
@@ -46,9 +47,9 @@ EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
 
 # @dev Constructor
 @public
-def __init__(_priorityQueueAddress: address):
+def __init__(_priorityQueue: address):
     self.operator = msg.sender
-    self.priorityQueue = _priorityQueueAddress
+    self.priorityQueue = _priorityQueue
     self.currentPlasmaBlockNumber = 0
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
 
@@ -106,7 +107,8 @@ def exit(
 
     exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
     priority: uint256 = bitwise_or(shift(exitableAt, 128), depositBlockNumber)
-    assert PriorityQueue(self.priorityQueue).insert(priority)
+    enqueued: bool = PriorityQueue(self.priorityQueue).insert(priority)
+    assert enqueued
 
     self.exits[depositBlockNumber] = Exit({
         owner: msg.sender,

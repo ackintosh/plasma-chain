@@ -133,6 +133,15 @@ class Node : Runnable {
                 .subscribe({ log ->
                     logger.info("[BlockSubmitted] merkleRoot:${log.blockRoot.toHexString()}")
                 }, { throw it }) // TODO: error handling
+
+            // ExitStarted
+            this
+                .exitStartedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
+                ).subscribe({ log ->
+                    logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber}")
+                }, { throw it }) // TODO: error handling
         }
     }
 
