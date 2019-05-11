@@ -10,9 +10,10 @@ import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionHash
 import java.math.BigInteger
+import java.util.SortedMap
 
 @kotlin.ExperimentalUnsignedTypes
-class Chain(private val data: MutableList<Block>) {
+class Chain(private val data: SortedMap<UInt, Block>) {
     // TODO: race condition
     private var currentBlockNumber = 1u
     private val childBlockNumberInterval = 1000u
@@ -24,16 +25,16 @@ class Chain(private val data: MutableList<Block>) {
         nextChildBlockNumber += childBlockNumberInterval
     }
 
-    fun add(block: Block) = data.add(block)
+    fun add(block: Block) = data.put(block.number.value, block)
 
-    fun genesisBlock() = data.first()
-    fun latestBlock() = data.last()
+    fun genesisBlock() = data.get(0u)
+    fun latestBlock() = data.get(data.lastKey())
 
-    fun snapshot() = Chain(data.toMutableList())
+    fun snapshot() = Chain(data.toSortedMap())
 
     fun findOutput(transactionHash: TransactionHash, outputIndex: OutputIndex) : Output? {
         data.forEach {
-            val o = it.findOutput(transactionHash, outputIndex)
+            val o = it.value.findOutput(transactionHash, outputIndex)
             if (o != null) {
                 return o
             }
@@ -47,7 +48,7 @@ class Chain(private val data: MutableList<Block>) {
     }
 
     companion object {
-        fun from(address: Address) = Chain(mutableListOf(generateGenesisBlock(address)))
+        fun from(address: Address) = Chain(sortedMapOf(Pair(0u, generateGenesisBlock(address))))
 
         @kotlin.ExperimentalUnsignedTypes
         private fun generateGenesisBlock(address: Address): Block {

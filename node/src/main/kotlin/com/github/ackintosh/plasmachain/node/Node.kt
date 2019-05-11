@@ -53,24 +53,20 @@ class Node : Runnable {
         )
         logger.info("New block: $block")
 
-        if (chain.add(block)) {
-            logger.info("New block has been added into the chain. block_hash: $block")
+        chain.add(block)
+        logger.info("New block has been added into the chain. block_hash: $block")
 
-            block.run {
-                val transactionReceipt = rootChain().submit(
-                    this.merkleRoot.transactionHash.value.hexStringToByteArray(),
-                    BigInteger(this.number.value.toString())
-                ).send()
-                logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
-            }
-
-            chain.updateNextChildBlockNumber()
-            transactionPool.clear()
-            logger.info("Transaction pool has been cleared")
-        } else {
-            logger.warning("Failed to add new block. block_hash: $block")
-            return false
+        block.run {
+            val transactionReceipt = rootChain().submit(
+                this.merkleRoot.transactionHash.value.hexStringToByteArray(),
+                BigInteger(this.number.value.toString())
+            ).send()
+            logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
         }
+
+        chain.updateNextChildBlockNumber()
+        transactionPool.clear()
+        logger.info("Transaction pool has been cleared")
 
         return true
     }
@@ -163,11 +159,8 @@ class Node : Runnable {
             number = depositBlockNumber,
             transactions = listOf(generationTransaction)
         )
-        if (chain.add(block)) {
-            logger.info("A deposit block has been added into plasma chain successfully. block: $block")
-        } else {
-            logger.warning("Failed to add the the deposit block: $block")
-        }
+        chain.add(block)
+        logger.info("A deposit block has been added into plasma chain successfully. block: $block")
     }
 
     private fun handleExitStartedEvent(blockNumber: BlockNumber) {
