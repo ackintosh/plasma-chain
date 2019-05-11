@@ -175,7 +175,7 @@ class Node : Runnable {
         RootChain.load(
             RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
             web3(),
-            ClientTransactionManager(web3(), "0xf17f52151EbEF6C7334FAD080c5704D77216b732"),
+            ClientTransactionManager(web3(), OPERATOR_ADDRESS),
             DefaultGasProvider()
         )
 
@@ -186,5 +186,7 @@ class Node : Runnable {
 
         // see contract/build/contracts/RootChain.json
         private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557505324562"
+
+        private const val OPERATOR_ADDRESS = "0xf17f52151EbEF6C7334FAD080c5704D77216b732"
     }
 }
