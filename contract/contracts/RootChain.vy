@@ -26,6 +26,11 @@ BlockSubmitted: event({
     blockRoot: bytes32
 })
 
+ExitStarted: event({
+    owner: address,
+    blockNumber: uint256
+})
+
 # Storage veriables
 operator: address
 priorityQueue: address
@@ -107,3 +112,4 @@ def exit(
         owner: msg.sender,
         amount: amount
     })
+    log.ExitStarted(msg.sender, depositBlockNumber)
