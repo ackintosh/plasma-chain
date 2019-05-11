@@ -15,9 +15,6 @@ import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import org.web3j.abi.EventEncoder
 import org.web3j.abi.FunctionReturnDecoder
-import org.web3j.abi.TypeReference
-import org.web3j.abi.datatypes.Event
-import org.web3j.abi.datatypes.generated.Uint256
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.request.EthFilter
@@ -63,14 +60,7 @@ class Node : Runnable {
             logger.info("New block has been added into the chain. block_hash: $block")
 
             block.run {
-                val web3 = Web3j.build(HttpService())
-                val txManager = ClientTransactionManager(web3, "0x627306090abaB3A6e1400e9345bC60c78a8BEf57")
-                val rootChain = RootChain.load(
-                    RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
-                    web3,
-                    txManager, DefaultGasProvider()
-                )
-                val transactionReceipt = rootChain.submit(
+                val transactionReceipt = rootChain().submit(
                     this.merkleRoot.transactionHash.value.hexStringToByteArray(),
                     BigInteger(this.number.value.toString())
                 ).send()
@@ -120,14 +110,13 @@ class Node : Runnable {
     }
 
     private fun subscribeRootChainEvents() {
-        val web3 = Web3j.build(HttpService())
         val filter = EthFilter(
             DefaultBlockParameterName.EARLIEST,
             DefaultBlockParameterName.LATEST,
             RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
         )
 
-        web3.ethLogFlowable(filter).subscribe({ log ->
+        web3().ethLogFlowable(filter).subscribe({ log ->
             logger.info("Event: $log")
 
             log.topics.forEach { topic ->
@@ -182,6 +171,16 @@ class Node : Runnable {
             logger.warning("Failed to add the the deposit block: $block")
         }
     }
+
+    private fun web3() = Web3j.build(HttpService())
+
+    private fun rootChain() =
+        RootChain.load(
+            RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
+            web3(),
+            ClientTransactionManager(web3(), "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"),
+            DefaultGasProvider()
+        )
 
     companion object {
         private val logger = Logger.getLogger(Node::class.java.name)
