@@ -13,8 +13,6 @@ import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
-import org.web3j.abi.EventEncoder
-import org.web3j.abi.FunctionReturnDecoder
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.request.EthFilter
@@ -116,38 +114,31 @@ class Node : Runnable {
             RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
         )
 
-        web3().ethLogFlowable(filter).subscribe({ log ->
-            logger.info("Event: $log")
+        // DepositCreated
+        rootChain()
+            .depositCreatedEventFlowable(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST
+            )
+            .subscribe({ log ->
+                logger.info("[Deposited] depositer:${log._depositer} amount:${log._amount} depositBlockNumber: ${log._depositBlockNumber}")
+                handleDepositedEvent(
+                    Address.from(log._depositer),
+                    log._amount,
+                    BlockNumber.from(log._depositBlockNumber)
+                )
+            }, { throw it }) // TODO: error handling
 
-            log.topics.forEach { topic ->
-                when (topic) {
-                    EventEncoder.encode(RootChain.DEPOSITCREATED_EVENT) -> {
-                        val params = FunctionReturnDecoder.decode(
-                            log.data,
-                            RootChain.DEPOSITCREATED_EVENT.nonIndexedParameters
-                        )
-                        val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
-                        val web3jAmount = params[1].value as BigInteger
-                        val web3jDepositBlockNumber = params[2].value as BigInteger
+        // BlockSubmitted
+        rootChain()
+            .blockSubmittedEventFlowable(
+                DefaultBlockParameterName.EARLIEST,
+                DefaultBlockParameterName.LATEST
+            )
+            .subscribe({ log ->
+                logger.info("[BlockSubmitted] merkleRoot:${log._root.toHexString()}")
+            }, { throw it }) // TODO: error handling
 
-                        logger.info("[Deposited] address:$web3jAddress amount:$web3jAmount")
-                        handleDepositedEvent(Address.from(web3jAddress.toString()), web3jAmount, BlockNumber.from(web3jDepositBlockNumber))
-                    }
-                    EventEncoder.encode(RootChain.BLOCKSUBMITTED_EVENT) -> {
-                        val params = FunctionReturnDecoder.decode(
-                            log.data,
-                            RootChain.BLOCKSUBMITTED_EVENT.nonIndexedParameters
-                        )
-                        val web3jMerkleRoot = params[0].value as ByteArray
-                        logger.info("[BlockSubmitted] merkleRoot:$web3jMerkleRoot")
-                    }
-                    else -> logger.info("Unhandled event. topic_signature: $topic")
-                }
-            }
-        }, {
-            // TODO: error handling
-            println(it)
-        })
     }
 
     // TODO: race condition
