@@ -108,12 +108,6 @@ class Node : Runnable {
     }
 
     private fun subscribeRootChainEvents() {
-        val filter = EthFilter(
-            DefaultBlockParameterName.EARLIEST,
-            DefaultBlockParameterName.LATEST,
-            RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID)
-        )
-
         // DepositCreated
         rootChain()
             .depositCreatedEventFlowable(
