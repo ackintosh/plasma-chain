@@ -43,8 +43,17 @@ class Chain(private val data: SortedMap<UInt, Block>) {
         return null
     }
 
-    fun markAsExitStarted(depositBlockNumber: BlockNumber) {
-        TODO()
+    // TODO: UTXO
+    fun markAsExitStarted(depositBlockNumber: BlockNumber) =
+        data[depositBlockNumber.value]?.transactions?.first()?.run {
+            this.output1.markAsExitStarted()
+            this.output2?.markAsExitStarted()
+            MarkAsExitStarted.Success()
+        } ?: MarkAsExitStarted.NotFound()
+
+    sealed class MarkAsExitStarted {
+        class Success : MarkAsExitStarted()
+        class NotFound : MarkAsExitStarted()
     }
 
     companion object {

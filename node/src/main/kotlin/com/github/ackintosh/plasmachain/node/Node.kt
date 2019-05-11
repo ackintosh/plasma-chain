@@ -164,7 +164,10 @@ class Node : Runnable {
     }
 
     private fun handleExitStartedEvent(blockNumber: BlockNumber) {
-        chain.markAsExitStarted(blockNumber)
+        when (chain.markAsExitStarted(blockNumber)) {
+            is Chain.MarkAsExitStarted.Success -> logger.info("$blockNumber has been marked as exit started")
+            is Chain.MarkAsExitStarted.NotFound -> logger.warning("$blockNumber doesn't found")
+        }
     }
 
     private fun web3() = Web3j.build(HttpService())
