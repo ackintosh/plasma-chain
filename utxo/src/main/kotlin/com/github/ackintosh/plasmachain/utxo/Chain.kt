@@ -44,7 +44,7 @@ class Chain(private val data: SortedMap<UInt, Block>) {
     }
 
     // TODO: UTXO
-    fun markAsExitStarted(depositBlockNumber: BlockNumber) =
+    fun markAsExitStarted(depositBlockNumber: BlockNumber) : MarkAsExitStarted =
         data[depositBlockNumber.value]?.transactions?.first()?.run {
             this.output1.markAsExitStarted()
             this.output2?.markAsExitStarted()
