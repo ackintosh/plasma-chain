@@ -141,6 +141,9 @@ class Node : Runnable {
                     DefaultBlockParameterName.LATEST
                 ).subscribe({ log ->
                     logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber}")
+                    handleExitStartedEvent(
+                        BlockNumber.from(log.blockNumber)
+                    )
                 }, { throw it }) // TODO: error handling
         }
     }
@@ -165,6 +168,10 @@ class Node : Runnable {
         } else {
             logger.warning("Failed to add the the deposit block: $block")
         }
+    }
+
+    private fun handleExitStartedEvent(blockNumber: BlockNumber) {
+        chain.markAsExitStarted(blockNumber)
     }
 
     private fun web3() = Web3j.build(HttpService())

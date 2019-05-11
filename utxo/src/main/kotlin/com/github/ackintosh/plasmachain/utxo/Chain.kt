@@ -42,6 +42,10 @@ class Chain(private val data: MutableList<Block>) {
         return null
     }
 
+    fun markAsExitStarted(depositBlockNumber: BlockNumber) {
+        TODO()
+    }
+
     companion object {
         fun from(address: Address) = Chain(mutableListOf(generateGenesisBlock(address)))
 
