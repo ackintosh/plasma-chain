@@ -129,20 +129,13 @@ class Node : Runnable {
 
         web3.ethLogFlowable(filter).subscribe({ log ->
             logger.info("Event: $log")
-            val event = Event(
-                "Deposited",
-                listOf(
-                    TypeReference.create(org.web3j.abi.datatypes.Address::class.java),
-                    TypeReference.create(Uint256::class.java),
-                    TypeReference.create(Uint256::class.java)
-                )
-            )
+
             log.topics.forEach { topic ->
                 when (topic) {
-                    EventEncoder.encode(event) -> {
+                    EventEncoder.encode(RootChain.DEPOSITCREATED_EVENT) -> {
                         val params = FunctionReturnDecoder.decode(
                             log.data,
-                            event.nonIndexedParameters
+                            RootChain.DEPOSITCREATED_EVENT.nonIndexedParameters
                         )
                         val web3jAddress = params[0] as org.web3j.abi.datatypes.Address
                         val web3jAmount = params[1].value as BigInteger
