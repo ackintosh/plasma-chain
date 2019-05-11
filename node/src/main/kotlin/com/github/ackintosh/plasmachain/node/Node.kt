@@ -131,7 +131,7 @@ class Node : Runnable {
                     DefaultBlockParameterName.LATEST
                 )
                 .subscribe({ log ->
-                    logger.info("[BlockSubmitted] merkleRoot:${log._root.toHexString()}")
+                    logger.info("[BlockSubmitted] merkleRoot:${log.blockRoot.toHexString()}")
                 }, { throw it }) // TODO: error handling
         }
     }

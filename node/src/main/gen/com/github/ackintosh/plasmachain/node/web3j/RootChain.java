@@ -58,7 +58,7 @@ public class RootChain extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("1557505324562", "0x3d49d1eF2adE060a33c6E6Aa213513A7EE9a6241");
+        _addresses.put("1557505324562", "0xBd2c938B9F6Bfc1A66368D08CB44dC3EB2aE27bE");
     }
 
     @Deprecated
@@ -120,7 +120,7 @@ public class RootChain extends Contract {
         for (Contract.EventValuesWithLog eventValues : valueList) {
             BlockSubmittedEventResponse typedResponse = new BlockSubmittedEventResponse();
             typedResponse.log = eventValues.getLog();
-            typedResponse._root = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.blockRoot = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
             responses.add(typedResponse);
         }
         return responses;
@@ -133,7 +133,7 @@ public class RootChain extends Contract {
                 Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(BLOCKSUBMITTED_EVENT, log);
                 BlockSubmittedEventResponse typedResponse = new BlockSubmittedEventResponse();
                 typedResponse.log = log;
-                typedResponse._root = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+                typedResponse.blockRoot = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
                 return typedResponse;
             }
         });
@@ -153,10 +153,10 @@ public class RootChain extends Contract {
         return executeRemoteCallTransaction(function, weiValue);
     }
 
-    public RemoteCall<TransactionReceipt> submit(byte[] _root, BigInteger plasmaBlockNumber) {
+    public RemoteCall<TransactionReceipt> submit(byte[] blockRoot, BigInteger plasmaBlockNumber) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 FUNC_SUBMIT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(_root), 
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(blockRoot), 
                 new org.web3j.abi.datatypes.generated.Uint256(plasmaBlockNumber)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
@@ -233,6 +233,6 @@ public class RootChain extends Contract {
     public static class BlockSubmittedEventResponse {
         public Log log;
 
-        public byte[] _root;
+        public byte[] blockRoot;
     }
 }

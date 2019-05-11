@@ -9,7 +9,7 @@ DepositCreated: event({
 })
 
 BlockSubmitted: event({
-    _root: bytes32
+    blockRoot: bytes32
 })
 
 operator: address
@@ -36,13 +36,13 @@ def deposit():
 
 # @dev submit plasma block
 @public
-def submit(_root: bytes32, plasmaBlockNumber: uint256):
+def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
     assert msg.sender == self.operator
     self.plasmaBlocks[plasmaBlockNumber] = PlasmaBlock({
-        root: _root,
+        root: blockRoot,
         blockNumber: plasmaBlockNumber
     })
     if plasmaBlockNumber > self.currentPlasmaBlockNumber:
         self.currentPlasmaBlockNumber = plasmaBlockNumber
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
-    log.BlockSubmitted(_root)
+    log.BlockSubmitted(blockRoot)
