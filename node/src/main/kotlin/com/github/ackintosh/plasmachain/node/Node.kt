@@ -152,7 +152,7 @@ class Node : Runnable {
             transactions = listOf(generationTransaction)
         )
         if (chain.add(block)) {
-            logger.info("A deposit block has been added into the chain successfully. block: $block")
+            logger.info("A deposit block has been added into plasma chain successfully. block: $block")
         } else {
             logger.warning("Failed to add the the deposit block: $block")
         }
