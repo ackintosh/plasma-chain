@@ -137,7 +137,7 @@ class Node : Runnable {
                     DefaultBlockParameterName.EARLIEST,
                     DefaultBlockParameterName.LATEST
                 ).subscribe({ log ->
-                    logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber}")
+                    logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber} txIndex: ${log.txIndex} outputIndex: ${log.outputIndex}")
                     handleExitStartedEvent(
                         BlockNumber.from(log.blockNumber),
                         log.txIndex,
@@ -196,7 +196,7 @@ class Node : Runnable {
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
 
         // see contract/build/contracts/RootChain.json
-        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557505324562"
+        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557660506177"
 
         private const val OPERATOR_ADDRESS = "0xf17f52151EbEF6C7334FAD080c5704D77216b732"
     }
