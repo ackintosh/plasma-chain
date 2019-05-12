@@ -72,7 +72,7 @@ class Node : Runnable {
     }
 
     fun addTransaction(transaction: Transaction) =
-        when (TransactionVerificationService.verify(chain, transaction)) {
+        when (val result = TransactionVerificationService.verify(chain, transaction)) {
             is TransactionVerificationService.Result.Success -> {
                 val added = transactionPool.add(transaction)
                 if (added) {
@@ -83,7 +83,7 @@ class Node : Runnable {
                 added
             }
             is TransactionVerificationService.Result.Failure -> {
-                logger.warning("The transaction is invalid: ${transaction.transactionHash()}")
+                logger.warning("The transaction is invalid. tx_hash: ${transaction.transactionHash()} details: ${result.message}")
                 false
             }
         }

@@ -20,7 +20,7 @@ class TransactionVerificationService {
                 .filterIsInstance(Input::class.java)
                 .forEach {
                     val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
-                    output ?: return Result.Failure()
+                    output ?: return Result.Failure("the output is not found. tx_hash: ${it.transactionHash()} oindex: ${it.outputIndex()}")
 
                     val result = verifyTransactionScript(transaction.input1, output)
                     if (result is Result.Failure) {
@@ -35,9 +35,9 @@ class TransactionVerificationService {
                 .filterNotNull()
                 .forEach {
                     val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
-                    output ?: return Result.Failure()
+                    output ?: return Result.Failure("the output is not found. tx_hash: ${it.transactionHash()} oindex: ${it.outputIndex()}")
                     if (output.exitStarted()) {
-                        return Result.Failure()
+                        return Result.Failure("the output is in Exit procedure. tx_hash: ${it.transactionHash()} oindex: ${it.outputIndex()}")
                     }
                 }
 
@@ -62,7 +62,7 @@ class TransactionVerificationService {
                     "OP_EQUALVERIFY" -> {
                         val elem1 = stack.pop()
                         val elem2 = stack.pop()
-                        if (elem1 != elem2) return Result.Failure()
+                        if (elem1 != elem2) return Result.Failure("The OP_EQUALVERIFY operation detects invalid values")
                     }
                     "OP_CHECKSIG" -> {
                         val publicKeyString = stack.pop()
@@ -89,13 +89,13 @@ class TransactionVerificationService {
             return if (stack.size == 1 && stack.pop() == "TRUE") {
                 Result.Success()
             } else {
-                Result.Failure()
+                Result.Failure("Verifying the TransactionScript has resulted in FALSE")
             }
         }
     }
 
     sealed class Result {
         class Success : Result()
-        class Failure : Result()
+        class Failure(val message: String) : Result()
     }
 }
