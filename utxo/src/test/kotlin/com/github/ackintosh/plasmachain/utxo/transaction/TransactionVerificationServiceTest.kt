@@ -22,14 +22,23 @@ class TransactionVerificationServiceTest {
 
         @Test
         fun generationTransaction() {
-            val chain = Chain(sortedMapOf())
-            val generationTransaction = Transaction(
-                input1 = GenerationInput(CoinbaseData("xxx")),
+            val chain = Chain.from(address)
+            val transaction = Transaction(
+                input1 = Input(
+                    transactionHash = chain.genesisBlock().transactions.first().transactionHash(),
+                    outputIndex = OutputIndex(0u),
+                    signature = SignatureCreationService.create(
+                        privateKey = keyPair.private as ECPrivateKey,
+                        transactionHash = chain.genesisBlock().transactions.first().transactionHash(),
+                        outputIndex = OutputIndex(0u)
+                    ),
+                    publicKey = keyPair.public as ECPublicKey
+                ),
                 output1 = Output(BigInteger("100"), address)
             )
 
             Assertions.assertTrue(
-                TransactionVerificationService.verify(chain, generationTransaction)
+                TransactionVerificationService.verify(chain, transaction)
                         is TransactionVerificationService.Result.Success
             )
         }
