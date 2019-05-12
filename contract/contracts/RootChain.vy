@@ -29,7 +29,9 @@ BlockSubmitted: event({
 
 ExitStarted: event({
     owner: address,
-    blockNumber: uint256
+    blockNumber: uint256,
+    txIndex: uint256,
+    outputIndex: uint256
 })
 
 # Storage veriables
@@ -87,10 +89,14 @@ def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
 
 # @dev exit
 # @param _txoBlockNumber - Block number in which the transaction output was created.
+# @param _txoTxIndex - Index of the transaction inside the block.
+# @param _txoOutputIndex - Index of the output inside the transaction (either 0 or 1).
 @public
 @payable
 def startExit(
     _txoBlockNumber: uint256,
+    _txoTxIndex: uint256,
+    _txoOutputIndex: uint256,
     amount: uint256
 ):
     # Check the block number is a deposit
@@ -115,4 +121,4 @@ def startExit(
         owner: msg.sender,
         amount: amount
     })
-    log.ExitStarted(msg.sender, _txoBlockNumber)
+    log.ExitStarted(msg.sender, _txoBlockNumber, _txoTxIndex, _txoOutputIndex)

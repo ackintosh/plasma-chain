@@ -11,6 +11,7 @@ import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
 import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import org.web3j.protocol.Web3j
@@ -138,7 +139,9 @@ class Node : Runnable {
                 ).subscribe({ log ->
                     logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber}")
                     handleExitStartedEvent(
-                        BlockNumber.from(log.blockNumber)
+                        BlockNumber.from(log.blockNumber),
+                        log.txIndex,
+                        OutputIndex.from(log.outputIndex)
                     )
                 }, { throw it }) // TODO: error handling
         }
@@ -163,8 +166,8 @@ class Node : Runnable {
         logger.info("A deposit block has been added into plasma chain successfully. block: $block")
     }
 
-    private fun handleExitStartedEvent(blockNumber: BlockNumber) =
-        when (chain.markAsExitStarted(blockNumber)) {
+    private fun handleExitStartedEvent(blockNumber: BlockNumber, transactionIndex: BigInteger, outputIndex: OutputIndex) =
+        when (chain.markAsExitStarted(blockNumber, transactionIndex, outputIndex)) {
             is Chain.MarkAsExitStarted.Success -> logger.info("$blockNumber has been marked as exit started")
             is Chain.MarkAsExitStarted.NotFound -> logger.warning("$blockNumber doesn't found")
         }
