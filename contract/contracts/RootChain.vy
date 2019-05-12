@@ -91,12 +91,20 @@ def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
 # @param _txoBlockNumber - Block number in which the transaction output was created.
 # @param _txoTxIndex - Index of the transaction inside the block.
 # @param _txoOutputIndex - Index of the output inside the transaction (either 0 or 1).
+# @param _encodedTx - RLP encoded transaction that created the output.
+# @param _txInclusionProof - Merkle proof that _encodedTx was included at _txoBlockNumber and _txoTxIndex.
+# @param _txSignatures - Initial signatures by the owners of each input to the transaction.
+# @param _txConfirmationSignatures - Confirmation signatures by the owners of each input to the transaction.
 @public
 @payable
 def startExit(
     _txoBlockNumber: uint256,
     _txoTxIndex: uint256,
     _txoOutputIndex: uint256,
+    _encodedTx: bytes32, # TODO
+    _txInclusionProof: bytes32, # TODO
+    _txSignatures: bytes32, # TODO
+    _txConfirmationSignatures: bytes32, # TODO
     amount: uint256
 ):
     # Check the block number is a deposit
@@ -111,6 +119,15 @@ def startExit(
         )
     )
     assert requestRoot == self.plasmaBlocks[_txoBlockNumber].root
+
+    # TODO: Check msg.sender is the same as the exitor
+    # see https://github.com/ackintosh/plasma-chain/pull/35
+    # - decode the _encodedTx parameter with RLP decoder
+    # - check the decoded exitor address is equal to msg.sender
+
+    # TODO: Validate merkle proof
+
+    # TODO: Validate signatures
 
     exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
     priority: uint256 = bitwise_or(shift(exitableAt, 128), _txoBlockNumber)
