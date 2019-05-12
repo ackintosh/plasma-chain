@@ -150,11 +150,12 @@ def getNextExit() -> (uint256, uint256):
 
 @public
 @payable
-def processExits():
+def processExits() -> uint256:
     utxoPos: uint256
     exitableAt: uint256
     (utxoPos, exitableAt) = self.getNextExit()
     processingExit: Exit
+    processed: uint256 = 0
     for i in range(1073741824):
         if not exitableAt < as_unitless_number(block.timestamp):
             break
@@ -166,8 +167,9 @@ def processExits():
         PriorityQueue(self.exitQueue).delMin()
         # Delete owner of the utxo
         self.exits[utxoPos].owner = ZERO_ADDRESS
-
+        processed += 1
         if PriorityQueue(self.exitQueue).getCurrentSize() > 0:
             (utxoPos, exitableAt) = self.getNextExit()
         else:
-            return
+            return processed
+    return processed
