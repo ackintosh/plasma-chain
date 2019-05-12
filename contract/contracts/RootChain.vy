@@ -85,15 +85,16 @@ def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
     log.BlockSubmitted(blockRoot)
 
-# @dev exit deposit
+# @dev exit
+# @param _txoBlockNumber - Block number in which the transaction output was created.
 @public
 @payable
-def exit(
-    depositBlockNumber: uint256,
+def startExit(
+    _txoBlockNumber: uint256,
     amount: uint256
 ):
     # Check the block number is a deposit
-    assert depositBlockNumber % PLASMA_BLOCK_NUMBER_INTERVAL != 0
+    assert _txoBlockNumber % PLASMA_BLOCK_NUMBER_INTERVAL != 0
 
     # Validate the given owner and amount
     requestRoot: bytes32 = sha3(
@@ -103,15 +104,15 @@ def exit(
             convert(amount, bytes32)
         )
     )
-    assert requestRoot == self.plasmaBlocks[depositBlockNumber].root
+    assert requestRoot == self.plasmaBlocks[_txoBlockNumber].root
 
     exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
-    priority: uint256 = bitwise_or(shift(exitableAt, 128), depositBlockNumber)
+    priority: uint256 = bitwise_or(shift(exitableAt, 128), _txoBlockNumber)
     enqueued: bool = PriorityQueue(self.priorityQueue).insert(priority)
     assert enqueued
 
-    self.exits[depositBlockNumber] = Exit({
+    self.exits[_txoBlockNumber] = Exit({
         owner: msg.sender,
         amount: amount
     })
-    log.ExitStarted(msg.sender, depositBlockNumber)
+    log.ExitStarted(msg.sender, _txoBlockNumber)
