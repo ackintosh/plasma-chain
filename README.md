@@ -54,10 +54,11 @@ $ ./gradlew bootRun
 $ cd contract
 $ truffle console --network=development
 
-truffle(development)> let instance = await RootChain.deployed()
 truffle(development)> let accounts = await web3.eth.getAccounts()
-truffle(development)> instance.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
-truffle(development)> instance.startExit(1, 0, 0, "0x00", "0x00", "0x00", "0x00", web3.utils.toWei("0.001"), {from: accounts[0]})
+truffle(development)> let rootChain = await RootChain.deployed()
+truffle(development)> rootChain.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
+truffle(development)> rootChain.startExit(1, 0, 0, "0x00", "0x00", "0x00", "0x00", web3.utils.toWei("0.001"), {from: accounts[0]})
+truffle(development)> rootChain.processExits()
 ```
 
 ## :memo:
