@@ -10,5 +10,6 @@ class Output(val amount: BigInteger, val address: Address) {
 
     fun toHexString() = amount.toString(16).padStart(16, '0')
 
+    fun exitStarted() = exitStarted
     fun markAsExitStarted() { exitStarted = true }
 }

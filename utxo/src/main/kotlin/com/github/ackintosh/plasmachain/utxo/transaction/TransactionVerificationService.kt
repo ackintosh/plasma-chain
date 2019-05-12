@@ -11,8 +11,10 @@ import java.security.spec.X509EncodedKeySpec
 import java.util.ArrayDeque
 
 class TransactionVerificationService {
+    @kotlin.ExperimentalUnsignedTypes
     companion object {
         fun verify(chain: Chain, transaction: Transaction) : Result {
+            // Input
             listOf(transaction.input1, transaction.input2)
                 .filterNotNull()
                 .filterIsInstance(Input::class.java)
@@ -27,6 +29,17 @@ class TransactionVerificationService {
                 }
 
             // TODO: verify GenerationInput
+
+            // Ensure that Exit isn't started
+            listOf(transaction.input1, transaction.input2)
+                .filterNotNull()
+                .forEach {
+                    val output = chain.snapshot().findOutput(it.transactionHash(), it.outputIndex())
+                    output ?: return Result.Failure()
+                    if (output.exitStarted()) {
+                        return Result.Failure()
+                    }
+                }
 
             return Result.Success()
         }
