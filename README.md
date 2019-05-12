@@ -2,9 +2,7 @@
 
 (((WIP)))
 
-This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) at the moment but will step forward to a evolutionary protocol when it has done.
-
-Plasma MVP [Milestone](https://github.com/ackintosh/plasma-chain/milestone/1)
+This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426).
 
 ### Deploy root chain contract
 
