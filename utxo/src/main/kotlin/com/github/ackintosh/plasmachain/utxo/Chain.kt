@@ -43,7 +43,11 @@ class Chain(private val data: SortedMap<UInt, Block>) {
         return null
     }
 
-    fun markAsExitStarted(depositBlockNumber: BlockNumber, transactionIndex: BigInteger, outputIndex: OutputIndex) : MarkAsExitStarted =
+    fun markAsExitStarted(
+        depositBlockNumber: BlockNumber,
+        transactionIndex: BigInteger,
+        outputIndex: OutputIndex
+    ) : MarkAsExitStarted =
         data[depositBlockNumber.value]
             ?.transactions
             ?.get(transactionIndex.toInt())

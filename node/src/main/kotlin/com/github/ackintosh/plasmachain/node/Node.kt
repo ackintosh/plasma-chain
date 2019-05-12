@@ -148,7 +148,11 @@ class Node : Runnable {
     }
 
     // TODO: race condition
-    internal fun handleDepositedEvent(address: Address, amount: BigInteger, depositBlockNumber: BlockNumber) {
+    internal fun handleDepositedEvent(
+        address: Address,
+        amount: BigInteger,
+        depositBlockNumber: BlockNumber
+    ) {
         val generationTransaction = Transaction(
             input1 = GenerationInput(CoinbaseData("xxx")),
             output1 = Output(amount, address)
@@ -166,7 +170,11 @@ class Node : Runnable {
         logger.info("A deposit block has been added into plasma chain successfully. block: $block")
     }
 
-    private fun handleExitStartedEvent(blockNumber: BlockNumber, transactionIndex: BigInteger, outputIndex: OutputIndex) =
+    private fun handleExitStartedEvent(
+        blockNumber: BlockNumber,
+        transactionIndex: BigInteger,
+        outputIndex: OutputIndex
+    ) =
         when (chain.markAsExitStarted(blockNumber, transactionIndex, outputIndex)) {
             is Chain.MarkAsExitStarted.Success -> logger.info("$blockNumber has been marked as exit started")
             is Chain.MarkAsExitStarted.NotFound -> logger.warning("$blockNumber doesn't found")
