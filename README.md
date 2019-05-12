@@ -66,3 +66,10 @@ truffle(development)> instance.deposit({from: accounts[0], value: web3.utils.toW
 ```sh
 $ web3j truffle generate contract/build/contracts/RootChain.json --package com.github.ackintosh.plasmachain.node.web3j -o node/src/main/gen/
 ```
+
+#### Deploy RLPencoder
+
+```sh
+$ cd contract
+$ truffle exec helper/deployRLPdecoder.test.js  --network development
+```
