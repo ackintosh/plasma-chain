@@ -11,6 +11,7 @@ import com.github.ackintosh.plasmachain.utxo.merkletree.MerkleTree
 import com.github.ackintosh.plasmachain.utxo.transaction.CoinbaseData
 import com.github.ackintosh.plasmachain.utxo.transaction.GenerationInput
 import com.github.ackintosh.plasmachain.utxo.transaction.Output
+import com.github.ackintosh.plasmachain.utxo.transaction.OutputIndex
 import com.github.ackintosh.plasmachain.utxo.transaction.Transaction
 import com.github.ackintosh.plasmachain.utxo.transaction.TransactionVerificationService
 import org.web3j.protocol.Web3j
@@ -53,30 +54,26 @@ class Node : Runnable {
         )
         logger.info("New block: $block")
 
-        if (chain.add(block)) {
-            logger.info("New block has been added into the chain. block_hash: $block")
+        chain.add(block)
+        logger.info("New block has been added into the chain. block_hash: $block")
 
-            block.run {
-                val transactionReceipt = rootChain().submit(
-                    this.merkleRoot.transactionHash.value.hexStringToByteArray(),
-                    BigInteger(this.number.value.toString())
-                ).send()
-                logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
-            }
-
-            chain.updateNextChildBlockNumber()
-            transactionPool.clear()
-            logger.info("Transaction pool has been cleared")
-        } else {
-            logger.warning("Failed to add new block. block_hash: $block")
-            return false
+        block.run {
+            val transactionReceipt = rootChain().submit(
+                this.merkleRoot.transactionHash.value.hexStringToByteArray(),
+                BigInteger(this.number.value.toString())
+            ).send()
+            logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
         }
+
+        chain.updateNextChildBlockNumber()
+        transactionPool.clear()
+        logger.info("Transaction pool has been cleared")
 
         return true
     }
 
     fun addTransaction(transaction: Transaction) =
-        when (TransactionVerificationService.verify(chain, transaction)) {
+        when (val result = TransactionVerificationService.verify(chain, transaction)) {
             is TransactionVerificationService.Result.Success -> {
                 val added = transactionPool.add(transaction)
                 if (added) {
@@ -87,7 +84,7 @@ class Node : Runnable {
                 added
             }
             is TransactionVerificationService.Result.Failure -> {
-                logger.warning("The transaction is invalid: ${transaction.transactionHash()}")
+                logger.warning("The transaction is invalid. tx_hash: ${transaction.transactionHash()} details: ${result.message}")
                 false
             }
         }
@@ -133,11 +130,29 @@ class Node : Runnable {
                 .subscribe({ log ->
                     logger.info("[BlockSubmitted] merkleRoot:${log.blockRoot.toHexString()}")
                 }, { throw it }) // TODO: error handling
+
+            // ExitStarted
+            this
+                .exitStartedEventFlowable(
+                    DefaultBlockParameterName.EARLIEST,
+                    DefaultBlockParameterName.LATEST
+                ).subscribe({ log ->
+                    logger.info("[ExitStarted] owner:${log.owner} blockNumber: ${log.blockNumber} txIndex: ${log.txIndex} outputIndex: ${log.outputIndex}")
+                    handleExitStartedEvent(
+                        BlockNumber.from(log.blockNumber),
+                        log.txIndex,
+                        OutputIndex.from(log.outputIndex)
+                    )
+                }, { throw it }) // TODO: error handling
         }
     }
 
     // TODO: race condition
-    internal fun handleDepositedEvent(address: Address, amount: BigInteger, depositBlockNumber: BlockNumber) {
+    internal fun handleDepositedEvent(
+        address: Address,
+        amount: BigInteger,
+        depositBlockNumber: BlockNumber
+    ) {
         val generationTransaction = Transaction(
             input1 = GenerationInput(CoinbaseData("xxx")),
             output1 = Output(amount, address)
@@ -151,12 +166,19 @@ class Node : Runnable {
             number = depositBlockNumber,
             transactions = listOf(generationTransaction)
         )
-        if (chain.add(block)) {
-            logger.info("A deposit block has been added into plasma chain successfully. block: $block")
-        } else {
-            logger.warning("Failed to add the the deposit block: $block")
-        }
+        chain.add(block)
+        logger.info("A deposit block has been added into plasma chain successfully. block: $block")
     }
+
+    private fun handleExitStartedEvent(
+        blockNumber: BlockNumber,
+        transactionIndex: BigInteger,
+        outputIndex: OutputIndex
+    ) =
+        when (chain.markAsExitStarted(blockNumber, transactionIndex, outputIndex)) {
+            is Chain.MarkAsExitStarted.Success -> logger.info("$blockNumber has been marked as exit started")
+            is Chain.MarkAsExitStarted.NotFound -> logger.warning("$blockNumber doesn't found")
+        }
 
     private fun web3() = Web3j.build(HttpService())
 
@@ -164,7 +186,7 @@ class Node : Runnable {
         RootChain.load(
             RootChain.getPreviouslyDeployedAddress(ROOT_CHAIN_CONTRACT_NETWORK_ID),
             web3(),
-            ClientTransactionManager(web3(), "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"),
+            ClientTransactionManager(web3(), OPERATOR_ADDRESS),
             DefaultGasProvider()
         )
 
@@ -174,6 +196,8 @@ class Node : Runnable {
         private val ALICE_ADDRESS = Address.from(ALICE_KEY_PAIR)
 
         // see contract/build/contracts/RootChain.json
-        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557505324562"
+        private const val ROOT_CHAIN_CONTRACT_NETWORK_ID = "1557660506177"
+
+        private const val OPERATOR_ADDRESS = "0xf17f52151EbEF6C7334FAD080c5704D77216b732"
     }
 }

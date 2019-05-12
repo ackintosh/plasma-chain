@@ -6,7 +6,7 @@ import org.kethereum.keccakshortcut.keccak
 class Transaction(
     val input1: TransactionInput,
     val input2: TransactionInput? = null,
-    val output1:Output,
+    val output1: Output,
     val output2: Output? = null
 ) {
     @kotlin.ExperimentalUnsignedTypes
