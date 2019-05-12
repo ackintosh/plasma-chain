@@ -36,7 +36,7 @@ ExitStarted: event({
 
 # Storage veriables
 operator: address
-priorityQueue: address
+exitQueue: address
 plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
 currentPlasmaBlockNumber: public(uint256)
 nextDepositBlockNumber: public(uint256)
@@ -49,9 +49,9 @@ EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
 
 # @dev Constructor
 @public
-def __init__(_priorityQueue: address):
+def __init__(_exitQueue: address):
     self.operator = msg.sender
-    self.priorityQueue = _priorityQueue
+    self.exitQueue = _exitQueue
     self.currentPlasmaBlockNumber = 0
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
 
@@ -131,11 +131,43 @@ def startExit(
 
     exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
     priority: uint256 = bitwise_or(shift(exitableAt, 128), _txoBlockNumber)
-    enqueued: bool = PriorityQueue(self.priorityQueue).insert(priority)
+    enqueued: bool = PriorityQueue(self.exitQueue).insert(priority)
     assert enqueued
 
-    self.exits[_txoBlockNumber] = Exit({
+    utxoPos: uint256 = (_txoBlockNumber * 1000000000) + (_txoTxIndex * 10000) + _txoOutputIndex
+    self.exits[utxoPos] = Exit({
         owner: msg.sender,
         amount: amount
     })
     log.ExitStarted(msg.sender, _txoBlockNumber, _txoTxIndex, _txoOutputIndex)
+
+@private
+def getNextExit() -> (uint256, uint256):
+    priority: uint256 = PriorityQueue(self.exitQueue).getMin()
+    utxoPos: uint256 = shift(shift(priority, 128), -128)
+    exitableAt: uint256 = shift(priority, -128)
+    return utxoPos, exitableAt
+
+@public
+@payable
+def processExits():
+    utxoPos: uint256
+    exitableAt: uint256
+    (utxoPos, exitableAt) = self.getNextExit()
+    processingExit: Exit
+    for i in range(1073741824):
+        if not exitableAt < as_unitless_number(block.timestamp):
+            break
+        
+        processingExit = self.exits[utxoPos]
+        send(processingExit.owner, as_wei_value(processingExit.amount, "wei"))
+
+        # Delete the exit from exit queue
+        PriorityQueue(self.exitQueue).delMin()
+        # Delete owner of the utxo
+        self.exits[utxoPos].owner = ZERO_ADDRESS
+
+        if PriorityQueue(self.exitQueue).getCurrentSize() > 0:
+            (utxoPos, exitableAt) = self.getNextExit()
+        else:
+            return
