@@ -200,3 +200,23 @@ def processExits() -> uint256:
         else:
             return processed
     return processed
+
+# Allows any user to prove that a given exit is invalid.
+# @param _exitingTxoBlockNumber - Block in which the exiting output was created.
+# @param _exitingTxoTxIndex - Index of the transaction (within the block) that created the exiting output.
+# @param _exitingTxoOutputIndex - Index of the exiting output within the transaction that created it (either 0 or 1).
+# @param _encodedSpendingTx - RLP encoded transaction that spends the exiting output.
+# @param _spendingTxConfirmationSignature - Confirmation signature by the owner of the exiting output over _encodedSpendingTx.
+@public
+@payable
+def challengeExit(
+    _exitingTxoBlockNumber: uint256,
+    _exitingTxoTxIndex: uint256,
+    _exitingTxoOutputIndex: uint256,
+    _encodedSpendingTx: bytes32,
+    _spendingTxConfirmationSignature: bytes32
+) -> bool:
+    # MUST check that _encodedSpendingTx spends the specified output.
+    # MUST check that _spendingTxConfirmationSignature is correctly signed by the owner of the PlasmaExit.
+    # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
+    return True
