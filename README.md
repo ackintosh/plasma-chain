@@ -1,8 +1,8 @@
-# Plasma Chain
+# Plasma MVP
 
 (((WIP)))
 
-This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426).
+This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) according to [Plasma MVP Specification](https://www.learnplasma.org/en/resources/#plasma-mvp-specification).
 
 ### Deploy root chain contract
 
