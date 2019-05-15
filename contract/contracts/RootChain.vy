@@ -91,7 +91,7 @@ def deposit():
 # Allows operator to submit the latest block root.
 # @param _blockRoot - Root hash of the Merkle tree of transactions in the block.
 @public
-def submit(blockRoot: bytes32, plasmaBlockNumber: uint256):
+def submitBlock(blockRoot: bytes32, plasmaBlockNumber: uint256):
     # MUST check that msg.sender is operator.
     assert msg.sender == self.operator
     # MUST insert a new PlasmaBlock with _blockRoot and block.timestamp.
