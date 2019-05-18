@@ -59,6 +59,8 @@ PLASMA_BLOCK_NUMBER_INTERVAL: constant(uint256) = 1000
 INITIAL_DEPOSIT_BLOCK_NUMBER: constant(uint256) = 1
 TOKEN_ID: constant(uint256) = 0
 EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
+# Amount in ETH that must be provided as a bond when starting an exit.
+EXIT_BOND: constant(uint256) = 1000
 
 ###### Methods ######
 
@@ -130,6 +132,9 @@ def startExit(
     _txConfirmationSignatures: bytes32, # TODO
     amount: uint256
 ):
+    # Check a bond is provided
+    assert msg.value == EXIT_BOND
+
     # Check the block number is a deposit
     assert _txoBlockNumber % PLASMA_BLOCK_NUMBER_INTERVAL != 0
 
@@ -194,7 +199,7 @@ def processExits() -> uint256:
         # MUST NOT pay any withdrawals where isBlocked is true.
         if processingExit.isBlocked:
             continue
-        send(processingExit.owner, as_wei_value(processingExit.amount, "wei"))
+        send(processingExit.owner, as_wei_value(processingExit.amount + EXIT_BOND, "wei"))
 
         # Delete the exit from exit queue
         PriorityQueue(self.exitQueue).delMin()
@@ -226,4 +231,6 @@ def challengeExit(
     # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
     utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
     self.exits[utxoPos].isBlocked = True
+
+    send(msg.sender, as_wei_value(EXIT_BOND, "wei"))
     return True
