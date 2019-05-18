@@ -6,6 +6,7 @@ struct PlasmaBlock:
 struct PlasmaExit:
     owner: address
     amount: uint256
+    isBlocked: bool
 
 ###### External Contracts ######
 contract PriorityQueue:
@@ -158,7 +159,8 @@ def startExit(
     utxoPos: uint256 = (_txoBlockNumber * 1000000000) + (_txoTxIndex * 10000) + _txoOutputIndex
     self.exits[utxoPos] = PlasmaExit({
         owner: msg.sender,
-        amount: amount
+        amount: amount,
+        isBlocked: False
     })
     # MUST emit ExitStarted.
     log.ExitStarted(msg.sender, _txoBlockNumber, _txoTxIndex, _txoOutputIndex)
@@ -216,7 +218,11 @@ def challengeExit(
     _encodedSpendingTx: bytes32,
     _spendingTxConfirmationSignature: bytes32
 ) -> bool:
-    # MUST check that _encodedSpendingTx spends the specified output.
-    # MUST check that _spendingTxConfirmationSignature is correctly signed by the owner of the PlasmaExit.
+    # TODO: MUST check that _encodedSpendingTx spends the specified output.
+    # TODO: MUST check that _spendingTxConfirmationSignature is correctly signed by the owner of the PlasmaExit.
+
     # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
+
+    utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
+    self.exits[utxoPos].isBlocked = True
     return True
