@@ -231,4 +231,6 @@ def challengeExit(
     # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
     utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
     self.exits[utxoPos].isBlocked = True
+
+    send(msg.sender, as_wei_value(EXIT_BOND, "wei"))
     return True
