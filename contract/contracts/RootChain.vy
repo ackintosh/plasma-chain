@@ -199,7 +199,7 @@ def processExits() -> uint256:
         # MUST NOT pay any withdrawals where isBlocked is true.
         if processingExit.isBlocked:
             continue
-        send(processingExit.owner, as_wei_value(processingExit.amount, "wei"))
+        send(processingExit.owner, as_wei_value(processingExit.amount + self.EXIT_BOND, "wei"))
 
         # Delete the exit from exit queue
         PriorityQueue(self.exitQueue).delMin()
