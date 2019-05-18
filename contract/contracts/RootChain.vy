@@ -190,9 +190,10 @@ def processExits() -> uint256:
         if not exitableAt < as_unitless_number(block.timestamp):
             break
         
-        # TODO: MUST NOT pay any withdrawals where isBlocked is true.
-
         processingExit = self.exits[utxoPos]
+        # MUST NOT pay any withdrawals where isBlocked is true.
+        if processingExit.isBlocked:
+            continue
         send(processingExit.owner, as_wei_value(processingExit.amount, "wei"))
 
         # Delete the exit from exit queue
