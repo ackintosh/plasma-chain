@@ -6,6 +6,9 @@ struct PlasmaBlock:
 struct PlasmaExit:
     owner: address
     amount: uint256
+    # There's "isActive" property in Plasma MVP Specification on www.learnplasma.org
+    # but it's not refer to how the property is used. 
+    # isActive: bool
     isBlocked: bool
 
 ###### External Contracts ######
