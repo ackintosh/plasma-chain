@@ -3,9 +3,13 @@ struct PlasmaBlock:
     root: bytes32
     blockNumber: uint256
 
-struct Exit:
+struct PlasmaExit:
     owner: address
     amount: uint256
+    # There's "isActive" property in Plasma MVP Specification on www.learnplasma.org
+    # but it's not refer to how the property is used. 
+    # isActive: bool
+    isBlocked: bool
 
 ###### External Contracts ######
 contract PriorityQueue:
@@ -47,7 +51,7 @@ operator: address
 # A mapping from block number to PlasmaBlock structs that represent each block. Should only be modified when the operator calls SubmitBlock.
 plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
 # A mapping from exit IDs to PlasmaExit structs, to be modified when users start or challenge exits.
-exits: public(map(uint256, Exit)) # "public" is just for debugging
+exits: public(map(uint256, PlasmaExit)) # "public" is just for debugging
 nextDepositBlockNumber: public(uint256)
 
 ###### Storage constants ######
@@ -156,9 +160,10 @@ def startExit(
     assert enqueued
 
     utxoPos: uint256 = (_txoBlockNumber * 1000000000) + (_txoTxIndex * 10000) + _txoOutputIndex
-    self.exits[utxoPos] = Exit({
+    self.exits[utxoPos] = PlasmaExit({
         owner: msg.sender,
-        amount: amount
+        amount: amount,
+        isBlocked: False
     })
     # MUST emit ExitStarted.
     log.ExitStarted(msg.sender, _txoBlockNumber, _txoTxIndex, _txoOutputIndex)
@@ -177,17 +182,18 @@ def getNextExit() -> (uint256, uint256):
 def processExits() -> uint256:
     utxoPos: uint256
     exitableAt: uint256
-    # MUST process exits in priority order, based on minimum of exitQueue.
-    (utxoPos, exitableAt) = self.getNextExit()
-    processingExit: Exit
+    processingExit: PlasmaExit
     processed: uint256 = 0
+    # MUST process exits in priority order, based on minimum of exitQueue.
     for i in range(1073741824):
+        (utxoPos, exitableAt) = self.getNextExit()
         if not exitableAt < as_unitless_number(block.timestamp):
             break
         
-        # TODO: MUST NOT pay any withdrawals where isBlocked is true.
-
         processingExit = self.exits[utxoPos]
+        # MUST NOT pay any withdrawals where isBlocked is true.
+        if processingExit.isBlocked:
+            continue
         send(processingExit.owner, as_wei_value(processingExit.amount, "wei"))
 
         # Delete the exit from exit queue
@@ -195,8 +201,29 @@ def processExits() -> uint256:
         # Delete owner of the utxo
         self.exits[utxoPos].owner = ZERO_ADDRESS
         processed += 1
-        if PriorityQueue(self.exitQueue).getCurrentSize() > 0:
-            (utxoPos, exitableAt) = self.getNextExit()
-        else:
+        if PriorityQueue(self.exitQueue).getCurrentSize() <= 0:
             return processed
     return processed
+
+# Allows any user to prove that a given exit is invalid.
+# @param _exitingTxoBlockNumber - Block in which the exiting output was created.
+# @param _exitingTxoTxIndex - Index of the transaction (within the block) that created the exiting output.
+# @param _exitingTxoOutputIndex - Index of the exiting output within the transaction that created it (either 0 or 1).
+# @param _encodedSpendingTx - RLP encoded transaction that spends the exiting output.
+# @param _spendingTxConfirmationSignature - Confirmation signature by the owner of the exiting output over _encodedSpendingTx.
+# @return  - true if the challenge was successful, false otherwise.
+@public
+def challengeExit(
+    _exitingTxoBlockNumber: uint256,
+    _exitingTxoTxIndex: uint256,
+    _exitingTxoOutputIndex: uint256,
+    _encodedSpendingTx: bytes32,
+    _spendingTxConfirmationSignature: bytes32
+) -> bool:
+    # TODO: MUST check that _encodedSpendingTx spends the specified output.
+    # TODO: MUST check that _spendingTxConfirmationSignature is correctly signed by the owner of the PlasmaExit.
+
+    # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
+    utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
+    self.exits[utxoPos].isBlocked = True
+    return True
