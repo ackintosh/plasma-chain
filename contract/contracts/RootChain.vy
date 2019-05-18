@@ -133,7 +133,7 @@ def startExit(
     amount: uint256
 ):
     # Check a bond is provided
-    assert msg.value == self.EXIT_BOND
+    assert msg.value == EXIT_BOND
 
     # Check the block number is a deposit
     assert _txoBlockNumber % PLASMA_BLOCK_NUMBER_INTERVAL != 0
@@ -199,7 +199,7 @@ def processExits() -> uint256:
         # MUST NOT pay any withdrawals where isBlocked is true.
         if processingExit.isBlocked:
             continue
-        send(processingExit.owner, as_wei_value(processingExit.amount + self.EXIT_BOND, "wei"))
+        send(processingExit.owner, as_wei_value(processingExit.amount + EXIT_BOND, "wei"))
 
         # Delete the exit from exit queue
         PriorityQueue(self.exitQueue).delMin()
