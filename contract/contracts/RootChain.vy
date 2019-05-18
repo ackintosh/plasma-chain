@@ -182,11 +182,11 @@ def getNextExit() -> (uint256, uint256):
 def processExits() -> uint256:
     utxoPos: uint256
     exitableAt: uint256
-    # MUST process exits in priority order, based on minimum of exitQueue.
-    (utxoPos, exitableAt) = self.getNextExit()
     processingExit: PlasmaExit
     processed: uint256 = 0
+    # MUST process exits in priority order, based on minimum of exitQueue.
     for i in range(1073741824):
+        (utxoPos, exitableAt) = self.getNextExit()
         if not exitableAt < as_unitless_number(block.timestamp):
             break
         
@@ -200,9 +200,7 @@ def processExits() -> uint256:
         # Delete owner of the utxo
         self.exits[utxoPos].owner = ZERO_ADDRESS
         processed += 1
-        if PriorityQueue(self.exitQueue).getCurrentSize() > 0:
-            (utxoPos, exitableAt) = self.getNextExit()
-        else:
+        if PriorityQueue(self.exitQueue).getCurrentSize() <= 0:
             return processed
     return processed
 
@@ -225,7 +223,6 @@ def challengeExit(
     # TODO: MUST check that _spendingTxConfirmationSignature is correctly signed by the owner of the PlasmaExit.
 
     # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
-
     utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
     self.exits[utxoPos].isBlocked = True
     return True
