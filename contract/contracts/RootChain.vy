@@ -59,6 +59,8 @@ PLASMA_BLOCK_NUMBER_INTERVAL: constant(uint256) = 1000
 INITIAL_DEPOSIT_BLOCK_NUMBER: constant(uint256) = 1
 TOKEN_ID: constant(uint256) = 0
 EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
+# Amount in ETH that must be provided as a bond when starting an exit.
+EXIT_BOND: constant(uint256) = 1000
 
 ###### Methods ######
 
@@ -130,6 +132,9 @@ def startExit(
     _txConfirmationSignatures: bytes32, # TODO
     amount: uint256
 ):
+    # Check a bond is provided
+    assert msg.value == self.EXIT_BOND
+
     # Check the block number is a deposit
     assert _txoBlockNumber % PLASMA_BLOCK_NUMBER_INTERVAL != 0
 
