@@ -207,8 +207,8 @@ def processExits() -> uint256:
 # @param _exitingTxoOutputIndex - Index of the exiting output within the transaction that created it (either 0 or 1).
 # @param _encodedSpendingTx - RLP encoded transaction that spends the exiting output.
 # @param _spendingTxConfirmationSignature - Confirmation signature by the owner of the exiting output over _encodedSpendingTx.
+# @return  - true if the challenge was successful, false otherwise.
 @public
-@payable
 def challengeExit(
     _exitingTxoBlockNumber: uint256,
     _exitingTxoTxIndex: uint256,
