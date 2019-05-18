@@ -3,7 +3,7 @@ struct PlasmaBlock:
     root: bytes32
     blockNumber: uint256
 
-struct Exit:
+struct PlasmaExit:
     owner: address
     amount: uint256
 
@@ -47,7 +47,7 @@ operator: address
 # A mapping from block number to PlasmaBlock structs that represent each block. Should only be modified when the operator calls SubmitBlock.
 plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
 # A mapping from exit IDs to PlasmaExit structs, to be modified when users start or challenge exits.
-exits: public(map(uint256, Exit)) # "public" is just for debugging
+exits: public(map(uint256, PlasmaExit)) # "public" is just for debugging
 nextDepositBlockNumber: public(uint256)
 
 ###### Storage constants ######
@@ -156,7 +156,7 @@ def startExit(
     assert enqueued
 
     utxoPos: uint256 = (_txoBlockNumber * 1000000000) + (_txoTxIndex * 10000) + _txoOutputIndex
-    self.exits[utxoPos] = Exit({
+    self.exits[utxoPos] = PlasmaExit({
         owner: msg.sender,
         amount: amount
     })
@@ -179,7 +179,7 @@ def processExits() -> uint256:
     exitableAt: uint256
     # MUST process exits in priority order, based on minimum of exitQueue.
     (utxoPos, exitableAt) = self.getNextExit()
-    processingExit: Exit
+    processingExit: PlasmaExit
     processed: uint256 = 0
     for i in range(1073741824):
         if not exitableAt < as_unitless_number(block.timestamp):
