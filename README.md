@@ -2,7 +2,7 @@
 
 (((WIP)))
 
-This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) according to [Plasma MVP Specification](https://www.learnplasma.org/en/resources/#plasma-mvp-specification).
+This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) according to [Plasma MVP Specification](https://www.learnplasma.org/en/resources/#plasma-mvp-specification), with lots of respect to [OmiseGO's research implementation](https://github.com/omisego/plasma-mvp) and [LayerX's Vyper implementation](https://github.com/LayerXcom/plasma-mvp-vyper).
 
 ### Deploy root chain contract
 
