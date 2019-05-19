@@ -44,6 +44,18 @@ contract("RootChain", accounts => {
                         assert.equal(nextDepositBlockNumber, 2 )
                     })
             })
+
+            it("should emit a DepositCreated event", () => {
+                return RootChain.deployed()
+                    .then(async instance => {
+                        const result = await instance.deposit({
+                            from: accounts[0],
+                            value: web3.utils.toWei("0.001")
+                        })
+
+                        assert.equal(result.logs[0].event, "DepositCreated")
+                    })
+            })
         })
     })
 })
