@@ -24,5 +24,26 @@ contract("RootChain", accounts => {
                     ))
             })
         })
+
+        describe("with appropriate values", () => {
+            it("should create a new plasma block", () => {
+                return RootChain.deployed()
+                    .then(async instance => {
+                        await instance.deposit({
+                            from: accounts[0],
+                            value: web3.utils.toWei("0.001")
+                        })
+
+                        const blocknumber = (await instance.plasmaBlocks__blockNumber(1)).toNumber()
+                        assert.equal(blocknumber, 1)
+
+                        const root = await instance.plasmaBlocks__root(1)
+                        assert.notEqual(root, web3.utils.bytesToHex(new Array(32)))
+
+                        const nextDepositBlockNumber = (await instance.nextDepositBlockNumber()).toNumber()
+                        assert.equal(nextDepositBlockNumber, 2 )
+                    })
+            })
+        })
     })
 })
