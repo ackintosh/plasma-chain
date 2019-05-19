@@ -58,9 +58,9 @@ class Node : Runnable {
         logger.info("New block has been added into the chain. block_hash: $block")
 
         block.run {
-            val transactionReceipt = rootChain().submitBlock(
-                this.merkleRoot.transactionHash.value.hexStringToByteArray()
-            ).send()
+            val transactionReceipt = rootChain()
+                .submitBlock(this.merkleRoot.transactionHash.value.hexStringToByteArray())
+                .send()
             logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
         }
 
