@@ -48,11 +48,11 @@ exitQueue: address
 # Current Plasma chain block height. Should only ever be incremented so a block can’t be later rewritten.
 currentPlasmaBlockNumber: public(uint256)
 # Address of the operator. Although the operator does not necessarily need to remain constant, it’s likely easier if this is the case.
-operator: address
+operator: public(address)
 # A mapping from block number to PlasmaBlock structs that represent each block. Should only be modified when the operator calls SubmitBlock.
-plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
+plasmaBlocks: public(map(uint256, PlasmaBlock))
 # A mapping from exit IDs to PlasmaExit structs, to be modified when users start or challenge exits.
-exits: public(map(uint256, PlasmaExit)) # "public" is just for debugging
+plasmaExits: public(map(uint256, PlasmaExit))
 nextDepositBlockNumber: public(uint256)
 
 ###### Storage constants ######
@@ -168,7 +168,7 @@ def startExit(
     assert enqueued
 
     utxoPos: uint256 = (_txoBlockNumber * 1000000000) + (_txoTxIndex * 10000) + _txoOutputIndex
-    self.exits[utxoPos] = PlasmaExit({
+    self.plasmaExits[utxoPos] = PlasmaExit({
         owner: msg.sender,
         amount: amount,
         isBlocked: False
@@ -198,7 +198,7 @@ def processExits() -> uint256:
         if not exitableAt < as_unitless_number(block.timestamp):
             break
         
-        processingExit = self.exits[utxoPos]
+        processingExit = self.plasmaExits[utxoPos]
         # MUST NOT pay any withdrawals where isBlocked is true.
         if processingExit.isBlocked:
             continue
@@ -207,7 +207,7 @@ def processExits() -> uint256:
         # Delete the exit from exit queue
         PriorityQueue(self.exitQueue).delMin()
         # Delete owner of the utxo
-        self.exits[utxoPos].owner = ZERO_ADDRESS
+        self.plasmaExits[utxoPos].owner = ZERO_ADDRESS
         processed += 1
         if PriorityQueue(self.exitQueue).getCurrentSize() <= 0:
             return processed
@@ -233,7 +233,7 @@ def challengeExit(
 
     # MUST block the PlasmaExit by setting isBlocked to true if the above conditions pass.
     utxoPos: uint256 = (_exitingTxoBlockNumber * 1000000000) + (_exitingTxoTxIndex * 10000) + _exitingTxoOutputIndex
-    self.exits[utxoPos].isBlocked = True
+    self.plasmaExits[utxoPos].isBlocked = True
 
     send(msg.sender, as_wei_value(EXIT_BOND, "wei"))
     return True
