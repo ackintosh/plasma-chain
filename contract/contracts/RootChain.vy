@@ -97,7 +97,7 @@ def deposit():
 # Allows operator to submit the latest block root.
 # @param _blockRoot - Root hash of the Merkle tree of transactions in the block.
 @public
-def submitBlock(blockRoot: bytes32):
+def submitBlock(_blockRoot: bytes32):
     # MUST check that msg.sender is operator.
     assert msg.sender == self.operator
 
@@ -106,13 +106,13 @@ def submitBlock(blockRoot: bytes32):
 
     # MUST insert a new PlasmaBlock with _blockRoot and block.timestamp.
     self.plasmaBlocks[self.currentPlasmaBlockNumber] = PlasmaBlock({
-        root: blockRoot,
+        root: _blockRoot,
         blockNumber: self.currentPlasmaBlockNumber
     })
 
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
     # MUST emit BlockSubmitted.
-    log.BlockSubmitted(blockRoot)
+    log.BlockSubmitted(_blockRoot)
 
 # Allows any user to attempt to withdraw funds from the contract by pointing to a transaction output.
 # @param _txoBlockNumber - Block number in which the transaction output was created.
