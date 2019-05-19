@@ -1,7 +1,8 @@
 ###### Structs ######
 struct PlasmaBlock:
     root: bytes32
-    blockNumber: uint256
+    # "timestamp" is a reserved keyword (EVM opcode)
+    blockTimestamp: uint256
 
 struct PlasmaExit:
     owner: address
@@ -88,7 +89,7 @@ def deposit():
     # MUST create a new PlasmaBlock consisting of a single transaction with an output of msg.value
     self.plasmaBlocks[depositBlocknumber] = PlasmaBlock({
         root: root,
-        blockNumber: depositBlocknumber
+        blockTimestamp: depositBlocknumber
     })
     self.nextDepositBlockNumber += 1
     # MUST emit DepositCreated.
@@ -107,7 +108,7 @@ def submitBlock(_blockRoot: bytes32):
     # MUST insert a new PlasmaBlock with _blockRoot and block.timestamp.
     self.plasmaBlocks[self.currentPlasmaBlockNumber] = PlasmaBlock({
         root: _blockRoot,
-        blockNumber: self.currentPlasmaBlockNumber
+        blockTimestamp: as_unitless_number(block.timestamp)
     })
 
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
