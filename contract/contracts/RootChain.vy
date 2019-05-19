@@ -48,11 +48,11 @@ exitQueue: address
 # Current Plasma chain block height. Should only ever be incremented so a block can’t be later rewritten.
 currentPlasmaBlockNumber: public(uint256)
 # Address of the operator. Although the operator does not necessarily need to remain constant, it’s likely easier if this is the case.
-operator: address
+operator: public(address)
 # A mapping from block number to PlasmaBlock structs that represent each block. Should only be modified when the operator calls SubmitBlock.
-plasmaBlocks: public(map(uint256, PlasmaBlock)) # "public" is just for debugging
+plasmaBlocks: public(map(uint256, PlasmaBlock))
 # A mapping from exit IDs to PlasmaExit structs, to be modified when users start or challenge exits.
-plasmaExits: public(map(uint256, PlasmaExit)) # "public" is just for debugging
+plasmaExits: public(map(uint256, PlasmaExit))
 nextDepositBlockNumber: public(uint256)
 
 ###### Storage constants ######
