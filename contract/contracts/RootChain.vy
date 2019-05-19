@@ -97,17 +97,19 @@ def deposit():
 # Allows operator to submit the latest block root.
 # @param _blockRoot - Root hash of the Merkle tree of transactions in the block.
 @public
-def submitBlock(blockRoot: bytes32, plasmaBlockNumber: uint256):
+def submitBlock(blockRoot: bytes32):
     # MUST check that msg.sender is operator.
     assert msg.sender == self.operator
+
+    # MUST increment currentPlasmaBlockNumber by one.
+    self.currentPlasmaBlockNumber += 1
+
     # MUST insert a new PlasmaBlock with _blockRoot and block.timestamp.
-    self.plasmaBlocks[plasmaBlockNumber] = PlasmaBlock({
+    self.plasmaBlocks[self.currentPlasmaBlockNumber] = PlasmaBlock({
         root: blockRoot,
-        blockNumber: plasmaBlockNumber
+        blockNumber: self.currentPlasmaBlockNumber
     })
-    # TODO: MUST increment currentPlasmaBlockNumber by one.
-    if plasmaBlockNumber > self.currentPlasmaBlockNumber:
-        self.currentPlasmaBlockNumber = plasmaBlockNumber
+
     self.nextDepositBlockNumber = INITIAL_DEPOSIT_BLOCK_NUMBER
     # MUST emit BlockSubmitted.
     log.BlockSubmitted(blockRoot)
