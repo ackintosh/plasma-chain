@@ -59,8 +59,7 @@ class Node : Runnable {
 
         block.run {
             val transactionReceipt = rootChain().submitBlock(
-                this.merkleRoot.transactionHash.value.hexStringToByteArray(),
-                BigInteger(this.number.value.toString())
+                this.merkleRoot.transactionHash.value.hexStringToByteArray()
             ).send()
             logger.info("Submitted the plasma block to root chain. transaction receipt: $transactionReceipt")
         }
