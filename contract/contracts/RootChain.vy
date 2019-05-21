@@ -59,7 +59,8 @@ nextDepositBlockNumber: public(uint256)
 PLASMA_BLOCK_NUMBER_INTERVAL: constant(uint256) = 1000
 INITIAL_DEPOSIT_BLOCK_NUMBER: constant(uint256) = 1
 TOKEN_ID: constant(uint256) = 0
-EXIT_PERIOD_SECONDS: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
+# Time in seconds an exit must wait before it can be processed.
+CHALLENGE_PERIOD: constant(uint256) = 1 * 7 * 24 * 60 * 60 # 1 week
 # Amount in ETH that must be provided as a bond when starting an exit.
 EXIT_BOND: constant(uint256) = 1000
 
@@ -133,7 +134,7 @@ def startExit(
     _txInclusionProof: bytes32, # TODO
     _txSignatures: bytes32, # TODO
     _txConfirmationSignatures: bytes32, # TODO
-    amount: uint256
+    amount: uint256 # TODO: Delete this parameter when the RLPdecoder gets available as the amount can be took from _encodedTx.
 ):
     # Check a bond is provided
     assert msg.value == EXIT_BOND
@@ -162,7 +163,7 @@ def startExit(
     # TODO: Validate signatures
     # TODO: MUST check that msg.sender owns the output of _encodedTx given by _txoOutputIndex.
 
-    exitableAt: uint256 = as_unitless_number(block.timestamp) + EXIT_PERIOD_SECONDS
+    exitableAt: uint256 = as_unitless_number(block.timestamp) + CHALLENGE_PERIOD
     priority: uint256 = bitwise_or(shift(exitableAt, 128), _txoBlockNumber)
     enqueued: bool = PriorityQueue(self.exitQueue).insert(priority)
     assert enqueued

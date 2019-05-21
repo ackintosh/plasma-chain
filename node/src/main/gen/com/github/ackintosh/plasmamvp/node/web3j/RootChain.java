@@ -82,7 +82,7 @@ public class RootChain extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("1557660506177", "0xe055DbC42A0473cFB659972D73BFE89c4C561e01");
+        _addresses.put("1557660506177", "0x4D2D24899c0B115a1fce8637FCa610Fe02f1909e");
     }
 
     @Deprecated
