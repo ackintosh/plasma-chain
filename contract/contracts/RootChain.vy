@@ -133,7 +133,7 @@ def startExit(
     _txInclusionProof: bytes32, # TODO
     _txSignatures: bytes32, # TODO
     _txConfirmationSignatures: bytes32, # TODO
-    amount: uint256
+    amount: uint256 # TODO: Delete this parameter when the RLPdecoder gets available as the amount can be took from _encodedTx.
 ):
     # Check a bond is provided
     assert msg.value == EXIT_BOND
