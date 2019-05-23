@@ -1,10 +1,8 @@
-# Plasma Chain
+# Plasma MVP
 
 (((WIP)))
 
-This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) at the moment but will step forward to a evolutionary protocol when it has done.
-
-Plasma MVP [Milestone](https://github.com/ackintosh/plasma-chain/milestone/1)
+This project is implementing [Minimal Viable Plasma](https://ethresear.ch/t/minimal-viable-plasma/426) according to [Plasma MVP Specification](https://www.learnplasma.org/en/resources/#plasma-mvp-specification), with lots of respect to [OmiseGO's research implementation](https://github.com/omisego/plasma-mvp) and [LayerX's Vyper implementation](https://github.com/LayerXcom/plasma-mvp-vyper).
 
 ### Deploy root chain contract
 
@@ -19,7 +17,7 @@ $ pip install vyper==0.1.0b9
 
 ```sh
 # Deploy root chain contract
-$ ganache-cli --mnemonic 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
+$ ganache-cli --mnemonic 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --networkId 1557660506177
 $ cd contract
 $ truffle migrate --network development
 ```
@@ -48,15 +46,17 @@ $ ./gradlew bootRun
 ...
 ```
 
-### Deposit
+### Deposit - Exit
 
 ```sh
 $ cd contract
 $ truffle console --network=development
 
-truffle(development)> let instance = await RootChain.deployed()
 truffle(development)> let accounts = await web3.eth.getAccounts()
-truffle(development)> instance.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
+truffle(development)> let rootChain = await RootChain.deployed()
+truffle(development)> rootChain.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
+truffle(development)> rootChain.startExit(1, 0, 0, "0x00", "0x00", "0x00", "0x00", web3.utils.toWei("0.001"), {from: accounts[0]})
+truffle(development)> rootChain.processExits()
 ```
 
 ## :memo:
