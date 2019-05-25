@@ -11,7 +11,15 @@ const assertReverted = async (promise) => {
     assert.fail('Expected revert not received')
 }
 
+const { deployRLPdecoder } = require('./helper/deployRLPdecoder')
+
 contract("RootChain", accounts => {
+
+    before(async () => {
+        const rlpDecoderAddress = await deployRLPdecoder(accounts[9])
+        console.log("info: RLPdecoder has been deployed at " + rlpDecoderAddress)
+    })
+
     describe("#deposit()", () => {
         describe("is called with 0 values", () => {
             it("should fails", () => {
