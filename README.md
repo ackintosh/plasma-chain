@@ -19,7 +19,7 @@ $ pip install vyper==0.1.0b9
 # Deploy root chain contract
 $ ganache-cli --mnemonic 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --networkId 1557660506177
 $ cd contract
-$ truffle migrate --network development
+$ truffle migrate --network local
 ```
 
 ### Run plasma chain
@@ -50,13 +50,13 @@ $ ./gradlew bootRun
 
 ```sh
 $ cd contract
-$ truffle console --network=development
+$ truffle console --network=local
 
-truffle(development)> let accounts = await web3.eth.getAccounts()
-truffle(development)> let rootChain = await RootChain.deployed()
-truffle(development)> rootChain.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
-truffle(development)> rootChain.startExit(1, 0, 0, "0x00", "0x00", "0x00", "0x00", web3.utils.toWei("0.001"), {from: accounts[0]})
-truffle(development)> rootChain.processExits()
+truffle(local)> let accounts = await web3.eth.getAccounts()
+truffle(local)> let rootChain = await RootChain.deployed()
+truffle(local)> rootChain.deposit({from: accounts[0], value: web3.utils.toWei("0.001")})
+truffle(local)> rootChain.startExit(1, 0, 0, "0x00", "0x00", "0x00", "0x00", web3.utils.toWei("0.001"), {from: accounts[0]})
+truffle(local)> rootChain.processExits()
 ```
 
 ## :memo:
@@ -65,4 +65,11 @@ truffle(development)> rootChain.processExits()
 
 ```sh
 $ web3j truffle generate contract/build/contracts/RootChain.json --package com.github.ackintosh.plasmachain.node.web3j -o node/src/main/gen/
+```
+
+#### Deploy RLPencoder
+
+```sh
+$ cd contract
+$ truffle exec helper/deployRLPdecoder.test.js  --network local
 ```

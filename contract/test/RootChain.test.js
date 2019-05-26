@@ -11,7 +11,15 @@ const assertReverted = async (promise) => {
     assert.fail('Expected revert not received')
 }
 
+const { deployRLPdecoder } = require('./helper/deployRLPdecoder')
+
 contract("RootChain", accounts => {
+
+    before(async () => {
+        const rlpDecoderAddress = await deployRLPdecoder(accounts[9])
+        console.log("info: RLPdecoder has been deployed at " + rlpDecoderAddress)
+    })
+
     describe("#deposit()", () => {
         describe("is called with 0 values", () => {
             it("should fails", () => {
@@ -33,9 +41,6 @@ contract("RootChain", accounts => {
                             from: accounts[0],
                             value: web3.utils.toWei("0.001")
                         })
-
-                        const blocknumber = (await instance.plasmaBlocks__blockNumber(1)).toNumber()
-                        assert.equal(blocknumber, 1)
 
                         const root = await instance.plasmaBlocks__root(1)
                         assert.notEqual(root, web3.utils.bytesToHex(new Array(32)))

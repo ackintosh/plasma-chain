@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "description": "",
+  "author": {
+    "name": "Akihito Nakano",
+    "url": "https://ackintosh.github.io/about"
+  },
+  "scripts": {
+    "build": "truffle compile",
+    "test": "npm run build && truffle test"
+  },
+  "dependencies": {
+    "ethereumjs-util": "^6.1.0",
+    "truffle": "5.0.17"
+  }
+}
